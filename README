@@ -1,0 +1,12 @@
+libhangul
+
+How to build:
+    $ ./autogen.sh
+    $ ./configure
+    $ make
+
+How to install python module 'pyhangul':
+    $ cd pyhangul
+    $ make
+    login as root
+    # make install
