@@ -22,13 +22,14 @@ if sys.platform == "win32": # for MinGW
 	
 else:
 	include_dirs = [
-		'/usr/include'
+		'../hangul',
+		'/usr/include',
 		'/usr/local/include'
 	]
 	library_dirs = [
+		'../hangul',
 		'/usr/lib',
 		'/usr/local/lib',
-		'../hangul'
 	]
 	libraries = ['hangul']
 	data_files = []

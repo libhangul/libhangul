@@ -6,7 +6,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "../hangul/hangul.h"
+#include "hangul.h"
 
 static PyObject *_pyhangul_error;
 
