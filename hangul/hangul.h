@@ -21,7 +21,7 @@
 
 #include <wchar.h>
 #include <stdbool.h>
-#include <stdint.h>
+#include <inttypes.h>
 
 #ifdef __cplusplus
 extern "C" {
