@@ -451,8 +451,8 @@ hangul_ic_filter(HangulInputContext *hic, int ascii, bool capslock)
 
     ch = hangul_ic_translate_jamo(hic, ascii);
 
-    hic->preedit_string[0] = 0;
-    hic->commit_string[0] = 0;
+    hic->preedit_string[0] = L'\0';
+    hic->commit_string[0] = L'\0';
 
     if (hic->type == HANGUL_INPUT_FILTER_2)
 	return hangul_ic_filter_2(hic, ch);
@@ -484,6 +484,7 @@ hangul_ic_reset(HangulInputContext *hic)
     if (hic == NULL)
 	return;
 
+    hic->preedit_string[0] = L'\0';
     hangul_ic_save_commit_string(hic);
 }
 
@@ -507,7 +508,8 @@ hangul_ic_set_output_mode(HangulInputContext *hic, int mode)
     if (hic == NULL)
 	return;
 
-    hic->output_mode = mode;
+    if (hic->output_mode != HANGUL_KEYBOARD_3YETGUL)
+	hic->output_mode = mode;
 }
 
 void
@@ -547,6 +549,13 @@ hangul_ic_set_keyboard(HangulInputContext *hic, int keyboard)
 	hic->combination_table = hangul_combination_table_default;
 	hic->combination_table_size = N_ELEMENTS(hangul_combination_table_default);
 	break;
+    case HANGUL_KEYBOARD_3YETGUL:
+	hic->type = HANGUL_INPUT_FILTER_3;
+	hic->keyboard_table = hangul_keyboard_table_3yet;
+	hic->combination_table = hangul_combination_table_full;
+	hic->combination_table_size = N_ELEMENTS(hangul_combination_table_default);
+	hic->output_mode = HANGUL_OUTPUT_JAMO;
+	break;
     default:
 	hic->type = HANGUL_INPUT_FILTER_2;
 	hic->keyboard_table = hangul_keyboard_table_2;
@@ -564,8 +573,6 @@ hangul_ic_new(int keyboard)
     hic = malloc(sizeof(HangulInputContext));
     if (hic == NULL)
 	return NULL;
-
-    hic->output_mode = HANGUL_OUTPUT_SYLLABLE;
 
     hangul_ic_set_output_mode(hic, HANGUL_OUTPUT_SYLLABLE);
     hangul_ic_set_keyboard(hic, keyboard);
