@@ -434,20 +434,12 @@ hangul_ic_filter_3(HangulInputContext *hic, wchar_t ch)
 }
 
 bool
-hangul_ic_filter(HangulInputContext *hic, int ascii, bool capslock)
+hangul_ic_filter(HangulInputContext *hic, int ascii)
 {
     wchar_t ch;
 
     if (hic == NULL)
 	return false;
-
-    if (capslock) {
-	if (isupper(ascii)) {
-	    ascii = tolower(ascii);
-	} else {
-	    ascii = toupper(ascii);
-	}
-    }
 
     ch = hangul_ic_translate_jamo(hic, ascii);
 
@@ -513,7 +505,7 @@ hangul_ic_set_output_mode(HangulInputContext *hic, int mode)
 }
 
 void
-hangul_ic_set_keyboard(HangulInputContext *hic, int keyboard)
+hangul_ic_set_keyboard(HangulInputContext *hic, HangulKeyboardType keyboard)
 {
     if (hic == NULL)
 	return;
@@ -566,7 +558,7 @@ hangul_ic_set_keyboard(HangulInputContext *hic, int keyboard)
 }
 
 HangulInputContext*
-hangul_ic_new(int keyboard)
+hangul_ic_new(HangulKeyboardType keyboard)
 {
     HangulInputContext *hic;
 

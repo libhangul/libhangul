@@ -32,7 +32,7 @@ main(int argc, char *argv[])
     }
 
     for (ascii = getchar(); ascii != EOF; ascii = getchar()) {
-	int ret = hangul_ic_filter(hic, ascii, 0);
+	int ret = hangul_ic_filter(hic, ascii);
 	n = wcstombs(commit, hangul_ic_get_commit_string(hic), sizeof(commit));
 	commit[n] = '\0';
 	if (strlen(commit) > 0) {

@@ -54,14 +54,14 @@ typedef struct _HangulJamoCombination HangulJamoCombination;
 typedef struct _HangulBuffer HangulBuffer;
 typedef struct _HangulInputContext HangulInputContext;
 
-enum {
+typedef enum {
     HANGUL_KEYBOARD_2,
     HANGUL_KEYBOARD_32,
     HANGUL_KEYBOARD_3FINAL,
     HANGUL_KEYBOARD_390,
     HANGUL_KEYBOARD_3NOSHIFT,
     HANGUL_KEYBOARD_3YETGUL
-};
+} HangulKeyboardType;
 
 enum {
     HANGUL_OUTPUT_SYLLABLE,
@@ -99,14 +99,15 @@ struct _HangulInputContext {
     wchar_t commit_string[64];
 };
 
-HangulInputContext* hangul_ic_new(int keyboard);
+HangulInputContext* hangul_ic_new(HangulKeyboardType keyboard);
 void hangul_ic_delete(HangulInputContext *hic);
-bool hangul_ic_filter(HangulInputContext *hic, int ascii, bool capslock);
+bool hangul_ic_filter(HangulInputContext *hic, int ascii);
 void hangul_ic_reset(HangulInputContext *hic);
 bool hangul_ic_backspace(HangulInputContext *hic);
 
 void hangul_ic_set_output_mode(HangulInputContext *hic, int mode);
-void hangul_ic_set_keyboard(HangulInputContext *hic, int keyboard);
+void hangul_ic_set_keyboard(HangulInputContext *hic,
+			    HangulKeyboardType keyboard);
 const wchar_t* hangul_ic_get_preedit_string(HangulInputContext *hic);
 const wchar_t* hangul_ic_get_commit_string(HangulInputContext *hic);
 

@@ -72,14 +72,14 @@ void inithangul(void)
 static PyObject *_pyhangulic_filter(PY_HANGULIC *self, PyObject *args)
 {
     int ret;
-    int ascii, capslock; 
+    int ascii; 
 
-    if(!PyArg_ParseTuple(args,"ii", &ascii, &capslock)) {
-	PyErr_SetString(_pyhangul_error,"Usage: filter(ascii, capslock)");
+    if(!PyArg_ParseTuple(args,"i", &ascii)) {
+	PyErr_SetString(_pyhangul_error,"Usage: filter(ascii)");
 	return NULL;
     }
 
-    ret = hangul_ic_filter(self->hic, ascii, capslock);
+    ret = hangul_ic_filter(self->hic, ascii);
 
     return Py_BuildValue("i", ret);
 }
