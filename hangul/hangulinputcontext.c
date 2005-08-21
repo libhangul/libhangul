@@ -264,6 +264,23 @@ hangul_ic_save_preedit_string(HangulInputContext *hic)
 }
 
 static inline void
+hangul_ic_append_commit_string(HangulInputContext *hic, wchar_t ch)
+{
+    int i;
+    wchar_t *s = hic->commit_string;
+
+    for (i = 0; i < N_ELEMENTS(hic->commit_string); i++) {
+	if (hic->commit_string[i] == L'\0')
+	    break;
+    }
+
+    if (i + 1 < N_ELEMENTS(hic->commit_string)) {
+	hic->commit_string[i++] = ch;
+	hic->commit_string[i] = L'\0';
+    }
+}
+
+static inline void
 hangul_ic_save_commit_string(HangulInputContext *hic)
 {
     if (hic->output_mode == HANGUL_OUTPUT_JAMO) {
@@ -424,6 +441,9 @@ hangul_ic_filter_3(HangulInputContext *hic, wchar_t ch)
 		}
 	    }
 	}
+    } else if (ch > 0) {
+	hangul_ic_save_commit_string(hic);
+	hangul_ic_append_commit_string(hic, ch);
     } else {
 	hangul_ic_save_commit_string(hic);
 	return false;
