@@ -93,20 +93,20 @@ hangul_buffer_get_jamo_string(HangulBuffer *buffer, wchar_t *buf, int buflen)
 {
     int n = 0;
 
-    if (buffer->choseong) {
-	buf[n++] = buffer->choseong;
-    } else {
-	buf[n++] = HANGUL_CHOSEONG_FILLER;
-    }
-
-    if (buffer->jungseong) {
-	buf[n++] = buffer->jungseong;
-    } else {
-	buf[n++] = HANGUL_JUNGSEONG_FILLER;
-    }
-
-    if (buffer->jongseong) {
-	buf[n++] = buffer->jongseong;
+    if (buffer->choseong || buffer->jungseong || buffer->jongseong) {
+	if (buffer->choseong) {
+	    buf[n++] = buffer->choseong;
+	} else {
+	    buf[n++] = HANGUL_CHOSEONG_FILLER;
+	}
+	if (buffer->jungseong) {
+	    buf[n++] = buffer->jungseong;
+	} else {
+	    buf[n++] = HANGUL_JUNGSEONG_FILLER;
+	}
+	if (buffer->jongseong) {
+	    buf[n++] = buffer->jongseong;
+	}
     }
 
     buf[n] = L'\0';
