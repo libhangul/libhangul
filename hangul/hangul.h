@@ -112,6 +112,39 @@ void hangul_ic_set_keyboard(HangulInputContext *hic,
 const wchar_t* hangul_ic_get_preedit_string(HangulInputContext *hic);
 const wchar_t* hangul_ic_get_commit_string(HangulInputContext *hic);
 
+/* hanja.c */
+enum {
+    HANJA_MATCH_EXACT,
+    HANJA_MATCH_PREFIX
+};
+
+typedef struct _Hanja Hanja;
+typedef struct _HanjaList HanjaList;
+typedef struct _HanjaTable HanjaTable;
+
+struct _Hanja {
+    const char *key;
+    const char *value;
+    const char *comment;
+};
+
+struct _HanjaList {
+    const char *key;
+    int nitems;
+    Hanja **items; 
+};
+
+struct _HanjaTable {
+    int nmember;
+    HanjaList **base;
+};
+
+HanjaTable* hanja_table_load(const char *filename);
+HanjaList*  hanja_table_match(const HanjaTable* table,
+			      int option, const char *key);
+void hanja_table_destroy(HanjaTable *table);
+void hanja_list_destroy(HanjaList *list);
+
 #ifdef __cplusplus
 }
 #endif
