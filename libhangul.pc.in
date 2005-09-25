@@ -1,0 +1,10 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: libhangul
+Description: Hangul hanja input support
+Version: @LIBHANGUL_VERSION@
+Libs: -L${libdir} -lhangul
+Cflags: -I${includedir}/hangul-1.0
