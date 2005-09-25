@@ -25,6 +25,12 @@
 #include "hangul.h"
 
 bool
+hangul_is_syllable(wchar_t ch)
+{
+    return ch >= 0xac00 && ch <= 0xd7a3;
+}
+
+bool
 hangul_is_choseong(wchar_t ch)
 {
     return ch >= 0x1100 && ch <= 0x1159;

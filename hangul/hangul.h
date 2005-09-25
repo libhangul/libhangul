@@ -33,6 +33,7 @@ enum {
     HANGUL_JUNGSEONG_FILLER = 0x1160    /* hangul jungseong filler */
 };
 
+bool hangul_is_syllable(wchar_t ch);
 bool hangul_is_choseong(wchar_t ch);
 bool hangul_is_jungseong(wchar_t ch);
 bool hangul_is_jongseong(wchar_t ch);
