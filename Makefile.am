@@ -1,4 +1,4 @@
-SUBDIRS = hangul
+SUBDIRS = hangul data
 
 EXTRA_DIST = \
     pyhangul/Makefile \

@@ -44,6 +44,8 @@ AC_C_INLINE
 AC_CONFIG_FILES([
 Makefile
 hangul/Makefile
+data/Makefile
+data/hanja/Makefile
 test/Makefile
 libhangul.pc
 ])

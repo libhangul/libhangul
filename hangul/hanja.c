@@ -187,6 +187,9 @@ hanja_table_load(const char *filename)
     struct slist *items = NULL;
     struct slist *lists = NULL;
 
+    if (filename == NULL)
+	filename = LIBHANGUL_DEFAULT_HANJA_DIC;
+
     file = fopen(filename, "r");
     if (file == NULL)
 	return NULL;
