@@ -33,22 +33,29 @@ enum {
     HANGUL_JUNGSEONG_FILLER = 0x1160    /* hangul jungseong filler */
 };
 
-bool hangul_is_syllable(wchar_t ch);
-bool hangul_is_choseong(wchar_t ch);
-bool hangul_is_jungseong(wchar_t ch);
-bool hangul_is_jongseong(wchar_t ch);
+typedef uint32_t ucschar;
 
-wchar_t hangul_choseong_to_cjamo(wchar_t ch);
-wchar_t hangul_jungseong_to_cjamo(wchar_t ch);
-wchar_t hangul_jongseong_to_cjamo(wchar_t ch);
+bool hangul_is_choseong(ucschar c);
+bool hangul_is_jungseong(ucschar c);
+bool hangul_is_jongseong(ucschar c);
+bool hangul_is_choseong_conjoinable(ucschar c);
+bool hangul_is_jungseong_conjoinable(ucschar c);
+bool hangul_is_jongseong_conjoinable(ucschar c);
+bool hangul_is_syllable(ucschar c);
+bool hangul_is_jaso(ucschar c);
+bool hangul_is_jamo(ucschar c);
 
-wchar_t hangul_choseong_to_jongseong(wchar_t ch);
-wchar_t hangul_jongseong_to_choseong(wchar_t ch);
-void    hangul_jongseong_dicompose(wchar_t ch, wchar_t* jong, wchar_t* cho);
+ucschar hangul_choseong_to_jamo(ucschar ch);
+ucschar hangul_jungseong_to_jamo(ucschar ch);
+ucschar hangul_jongseong_to_jamo(ucschar ch);
 
-wchar_t hangul_jamo_to_syllable(wchar_t choseong,
-				wchar_t jungseong,
-				wchar_t jongseong);
+ucschar hangul_choseong_to_jongseong(ucschar ch);
+ucschar hangul_jongseong_to_choseong(ucschar ch);
+void    hangul_jongseong_dicompose(ucschar ch, ucschar* jong, ucschar* cho);
+
+ucschar hangul_jaso_to_syllable(ucschar choseong,
+				ucschar jungseong,
+				ucschar jongseong);
 
 /* hangulinputcontext.c */
 typedef struct _HangulJamoCombination HangulJamoCombination;
@@ -76,28 +83,28 @@ enum {
 
 struct _HangulJamoCombination {
     uint32_t key;
-    wchar_t code;
+    ucschar code;
 };
 
 struct _HangulBuffer {
-    wchar_t choseong;
-    wchar_t jungseong;
-    wchar_t jongseong;
+    ucschar choseong;
+    ucschar jungseong;
+    ucschar jongseong;
 
-    wchar_t stack[12];
+    ucschar stack[12];
     int     index;
 };
 
 struct _HangulInputContext {
     int type;
-    const wchar_t *keyboard_table;
+    const ucschar *keyboard_table;
     const HangulJamoCombination *combination_table;
     int combination_table_size;
     HangulBuffer buffer;
     int output_mode;
 
-    wchar_t preedit_string[64];
-    wchar_t commit_string[64];
+    ucschar preedit_string[64];
+    ucschar commit_string[64];
 };
 
 HangulInputContext* hangul_ic_new(HangulKeyboardType keyboard);
@@ -109,8 +116,8 @@ bool hangul_ic_backspace(HangulInputContext *hic);
 void hangul_ic_set_output_mode(HangulInputContext *hic, int mode);
 void hangul_ic_set_keyboard(HangulInputContext *hic,
 			    HangulKeyboardType keyboard);
-const wchar_t* hangul_ic_get_preedit_string(HangulInputContext *hic);
-const wchar_t* hangul_ic_get_commit_string(HangulInputContext *hic);
+const ucschar* hangul_ic_get_preedit_string(HangulInputContext *hic);
+const ucschar* hangul_ic_get_commit_string(HangulInputContext *hic);
 
 /* hanja.c */
 enum {

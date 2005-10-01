@@ -28,19 +28,19 @@
 
 #define N_ELEMENTS(array) (sizeof(array) / sizeof(array[0]))
 
-static void    hangul_buffer_push(HangulBuffer *buffer, wchar_t ch);
-static wchar_t hangul_buffer_pop (HangulBuffer *buffer);
-static wchar_t hangul_buffer_peek(HangulBuffer *buffer);
+static void    hangul_buffer_push(HangulBuffer *buffer, ucschar ch);
+static ucschar hangul_buffer_pop (HangulBuffer *buffer);
+static ucschar hangul_buffer_peek(HangulBuffer *buffer);
 
 static void    hangul_buffer_clear(HangulBuffer *buffer);
-static int     hangul_buffer_get_string(HangulBuffer *buffer, wchar_t*buf, int buflen);
-static int     hangul_buffer_get_jamo_string(HangulBuffer *buffer, wchar_t *buf, int buflen);
+static int     hangul_buffer_get_string(HangulBuffer *buffer, ucschar*buf, int buflen);
+static int     hangul_buffer_get_jamo_string(HangulBuffer *buffer, ucschar *buf, int buflen);
 
-static wchar_t hangul_ic_translate_jamo(HangulInputContext *hic, int ascii);
-static wchar_t hangul_ic_combine_jamo(HangulInputContext *hic, wchar_t	first, wchar_t second);
+static ucschar hangul_ic_translate_jamo(HangulInputContext *hic, int ascii);
+static ucschar hangul_ic_combine_jamo(HangulInputContext *hic, ucschar	first, ucschar second);
 
 static void
-hangul_buffer_push(HangulBuffer *buffer, wchar_t ch)
+hangul_buffer_push(HangulBuffer *buffer, ucschar ch)
 {
     if (hangul_is_choseong(ch)) {
 	buffer->choseong = ch;
@@ -54,13 +54,13 @@ hangul_buffer_push(HangulBuffer *buffer, wchar_t ch)
     buffer->stack[++buffer->index] = ch;
 }
 
-static wchar_t
+static ucschar
 hangul_buffer_pop(HangulBuffer *buffer)
 {
     return buffer->stack[buffer->index--];
 }
 
-static wchar_t
+static ucschar
 hangul_buffer_peek(HangulBuffer *buffer)
 {
     return buffer->stack[buffer->index];
@@ -89,7 +89,7 @@ hangul_buffer_clear(HangulBuffer *buffer)
 }
 
 static int
-hangul_buffer_get_jamo_string(HangulBuffer *buffer, wchar_t *buf, int buflen)
+hangul_buffer_get_jamo_string(HangulBuffer *buffer, ucschar *buf, int buflen)
 {
     int n = 0;
 
@@ -115,28 +115,28 @@ hangul_buffer_get_jamo_string(HangulBuffer *buffer, wchar_t *buf, int buflen)
 }
 
 static int
-hangul_buffer_get_string(HangulBuffer *buffer, wchar_t *buf, int buflen)
+hangul_buffer_get_string(HangulBuffer *buffer, ucschar *buf, int buflen)
 {
-    wchar_t ch = L'\0';
+    ucschar ch = L'\0';
     int n = 0;
 
     if (buffer->choseong) {
 	if (buffer->jungseong) {
 	    /* have cho, jung, jong or no jong */
-	    ch = hangul_jamo_to_syllable(buffer->choseong,
+	    ch = hangul_jaso_to_syllable(buffer->choseong,
 					 buffer->jungseong, 
 					 buffer->jongseong);
 	    buf[n++] = ch;
 	} else {
 	    if (buffer->jongseong) {
 		/* have cho, jong */
-		ch = hangul_choseong_to_cjamo(buffer->choseong);
+		ch = hangul_choseong_to_jamo(buffer->choseong);
 		buf[n++] = ch;
-		ch = hangul_jongseong_to_cjamo(buffer->jongseong);
+		ch = hangul_jongseong_to_jamo(buffer->jongseong);
 		buf[n++] = ch;
 	    } else {
 		/* have cho */
-		ch = hangul_choseong_to_cjamo(buffer->choseong);
+		ch = hangul_choseong_to_jamo(buffer->choseong);
 		buf[n++] = ch;
 	    }
 	}
@@ -144,19 +144,19 @@ hangul_buffer_get_string(HangulBuffer *buffer, wchar_t *buf, int buflen)
 	if (buffer->jungseong) {
 	    if (buffer->jongseong) {
 		/* have jung, jong */
-		ch = hangul_jungseong_to_cjamo(buffer->jungseong);
+		ch = hangul_jungseong_to_jamo(buffer->jungseong);
 		buf[n++] = ch;
-		ch = hangul_jongseong_to_cjamo(buffer->jongseong);
+		ch = hangul_jongseong_to_jamo(buffer->jongseong);
 		buf[n++] = ch;
 	    } else {
 		/* have jung */
-		ch = hangul_jungseong_to_cjamo(buffer->jungseong);
+		ch = hangul_jungseong_to_jamo(buffer->jungseong);
 		buf[n++] = ch;
 	    }
 	} else {
 	    if (buffer->jongseong) { 
 		/* have jong */
-		ch = hangul_jongseong_to_cjamo(buffer->jongseong);
+		ch = hangul_jongseong_to_jamo(buffer->jongseong);
 		buf[n++] = ch;
 	    } else {
 		/* have nothing */
@@ -173,7 +173,7 @@ static bool
 hangul_buffer_backspace(HangulBuffer *buffer)
 {
     if (buffer->index >= 0) {
-	wchar_t ch = hangul_buffer_pop(buffer);
+	ucschar ch = hangul_buffer_pop(buffer);
 	if (ch == 0)
 	    return false;
 
@@ -194,10 +194,10 @@ hangul_buffer_backspace(HangulBuffer *buffer)
     return false;
 }
 
-static wchar_t
+static ucschar
 hangul_ic_translate_jamo(HangulInputContext *hic, int ascii)
 {
-    wchar_t ch = ascii;
+    ucschar ch = ascii;
 
     if (ascii >= '!' && ascii <= '~') {
 	ch = hic->keyboard_table[ascii - '!'];
@@ -206,8 +206,8 @@ hangul_ic_translate_jamo(HangulInputContext *hic, int ascii)
     return ch;
 }
 
-static wchar_t
-hangul_ic_combine_jamo(HangulInputContext *hic, wchar_t first, wchar_t second)
+static ucschar
+hangul_ic_combine_jamo(HangulInputContext *hic, ucschar first, ucschar second)
 {
     int min, max, mid;
     uint32_t key;
@@ -232,18 +232,18 @@ hangul_ic_combine_jamo(HangulInputContext *hic, wchar_t first, wchar_t second)
 }
 
 static inline void
-hangul_ic_push(HangulInputContext *hic, wchar_t ch)
+hangul_ic_push(HangulInputContext *hic, ucschar ch)
 {
     hangul_buffer_push(&hic->buffer, ch);
 }
 
-static inline wchar_t
+static inline ucschar
 hangul_ic_pop(HangulInputContext *hic)
 {
     return hangul_buffer_pop(&hic->buffer);
 }
 
-static inline wchar_t
+static inline ucschar
 hangul_ic_peek(HangulInputContext *hic)
 {
     return hangul_buffer_peek(&hic->buffer);
@@ -264,19 +264,18 @@ hangul_ic_save_preedit_string(HangulInputContext *hic)
 }
 
 static inline void
-hangul_ic_append_commit_string(HangulInputContext *hic, wchar_t ch)
+hangul_ic_append_commit_string(HangulInputContext *hic, ucschar ch)
 {
     int i;
-    wchar_t *s = hic->commit_string;
 
     for (i = 0; i < N_ELEMENTS(hic->commit_string); i++) {
-	if (hic->commit_string[i] == L'\0')
+	if (hic->commit_string[i] == 0)
 	    break;
     }
 
     if (i + 1 < N_ELEMENTS(hic->commit_string)) {
 	hic->commit_string[i++] = ch;
-	hic->commit_string[i] = L'\0';
+	hic->commit_string[i] = 0;
     }
 }
 
@@ -296,10 +295,10 @@ hangul_ic_save_commit_string(HangulInputContext *hic)
 }
 
 static bool
-hangul_ic_filter_2(HangulInputContext *hic, wchar_t ch)
+hangul_ic_filter_2(HangulInputContext *hic, ucschar ch)
 {
-    wchar_t jong;
-    wchar_t combined;
+    ucschar jong;
+    ucschar combined;
 
     if (hic->buffer.jongseong) {
 	if (hangul_is_choseong(ch)) {
@@ -313,7 +312,7 @@ hangul_ic_filter_2(HangulInputContext *hic, wchar_t ch)
 		hangul_ic_push(hic, ch);
 	    }
 	} else if (hangul_is_jungseong(ch)) {
-	    wchar_t pop, peek;
+	    ucschar pop, peek;
 	    pop = hangul_ic_pop(hic);
 	    peek = hangul_ic_peek(hic);
 
@@ -323,7 +322,7 @@ hangul_ic_filter_2(HangulInputContext *hic, wchar_t ch)
 		hangul_ic_push(hic, hangul_jongseong_to_choseong(pop));
 		hangul_ic_push(hic, ch);
 	    } else {
-		wchar_t choseong = 0, jongseong = 0; 
+		ucschar choseong = 0, jongseong = 0; 
 		hangul_jongseong_dicompose(hic->buffer.jongseong,
 					   &jongseong, &choseong);
 		hangul_ic_push(hic, jongseong);
@@ -391,13 +390,13 @@ none_hangul:
 }
 
 static bool
-hangul_ic_filter_3(HangulInputContext *hic, wchar_t ch)
+hangul_ic_filter_3(HangulInputContext *hic, ucschar ch)
 {
     if (hangul_is_choseong(ch)) {
 	if (hic->buffer.choseong == 0) {
 	    hangul_ic_push(hic, ch);
 	} else {
-	    wchar_t choseong = 0;
+	    ucschar choseong = 0;
 	    if (hangul_is_choseong(hangul_ic_peek(hic))) {
 		choseong = hangul_ic_combine_jamo(hic,
 						  hic->buffer.choseong, ch);
@@ -413,7 +412,7 @@ hangul_ic_filter_3(HangulInputContext *hic, wchar_t ch)
 	if (hic->buffer.jungseong == 0) {
 	    hangul_ic_push(hic, ch);
 	} else {
-	    wchar_t jungseong = 0;
+	    ucschar jungseong = 0;
 	    if (hangul_is_jungseong(hangul_ic_peek(hic))) {
 		jungseong = hangul_ic_combine_jamo(hic,
 						  hic->buffer.jungseong, ch);
@@ -429,7 +428,7 @@ hangul_ic_filter_3(HangulInputContext *hic, wchar_t ch)
 	if (hic->buffer.jongseong == 0) {
 	    hangul_ic_push(hic, ch);
 	} else {
-	    wchar_t jongseong = 0;
+	    ucschar jongseong = 0;
 	    if (hangul_is_jongseong(hangul_ic_peek(hic))) {
 		jongseong = hangul_ic_combine_jamo(hic,
 						   hic->buffer.jongseong, ch);
@@ -456,15 +455,15 @@ hangul_ic_filter_3(HangulInputContext *hic, wchar_t ch)
 bool
 hangul_ic_filter(HangulInputContext *hic, int ascii)
 {
-    wchar_t ch;
+    ucschar ch;
 
     if (hic == NULL)
 	return false;
 
     ch = hangul_ic_translate_jamo(hic, ascii);
 
-    hic->preedit_string[0] = L'\0';
-    hic->commit_string[0] = L'\0';
+    hic->preedit_string[0] = 0;
+    hic->commit_string[0] = 0;
 
     if (hic->type == HANGUL_INPUT_FILTER_2)
 	return hangul_ic_filter_2(hic, ch);
@@ -472,7 +471,7 @@ hangul_ic_filter(HangulInputContext *hic, int ascii)
 	return hangul_ic_filter_3(hic, ch);
 }
 
-const wchar_t*
+const ucschar*
 hangul_ic_get_preedit_string(HangulInputContext *hic)
 {
     if (hic == NULL)
@@ -481,7 +480,7 @@ hangul_ic_get_preedit_string(HangulInputContext *hic)
     return hic->preedit_string;
 }
 
-const wchar_t*
+const ucschar*
 hangul_ic_get_commit_string(HangulInputContext *hic)
 {
     if (hic == NULL)

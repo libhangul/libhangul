@@ -1,6 +1,6 @@
 #include "hangul.h"
 
-static const wchar_t hangul_keyboard_table_2[] = {
+static const ucschar hangul_keyboard_table_2[] = {
     0x0021,     /* exclam:       exclamation mark               */
     0x0022,     /* quotedbl:     quotation mark                 */
     0x0023,     /* numbersign:   number sign                    */
@@ -97,7 +97,7 @@ static const wchar_t hangul_keyboard_table_2[] = {
     0x007e      /* asciitilde:   tilde                          */
 };
 
-static const wchar_t hangul_keyboard_table_32[] = {
+static const ucschar hangul_keyboard_table_32[] = {
     0x0021,	/* exclam:	exclamation mark		*/
     0x0022,	/* quotedbl:	quotation mark 			*/
     0x0023,	/* numbersign:	number sign	 		*/
@@ -194,7 +194,7 @@ static const wchar_t hangul_keyboard_table_32[] = {
     0x203b,	/* asciitilde:	tilde				*/
 };
 
-static const wchar_t hangul_keyboard_table_390[] = {
+static const ucschar hangul_keyboard_table_390[] = {
     0x11bd,	/* exclam:		jongseong cieuc			*/
     0x0022,	/* quotedbl:	quotatioin mark			*/
     0x0023,	/* numbersign:	number sign	 		*/
@@ -291,7 +291,7 @@ static const wchar_t hangul_keyboard_table_390[] = {
     0x007e,	/* asciitilde:	tilde				*/
 };
 
-static const wchar_t hangul_keyboard_table_3final[] = {
+static const ucschar hangul_keyboard_table_3final[] = {
     0x11a9,	/* exclam:		jongseong ssangkiyeok		*/
     0x00b7,	/* quotedbl:	middle dot 			*/
     0x11bd,	/* numbersign:	jognseong cieuc 		*/
@@ -388,7 +388,7 @@ static const wchar_t hangul_keyboard_table_3final[] = {
     0x203b,	/* asciitilde:	reference mark			*/
 };
 
-static const wchar_t hangul_keyboard_table_3sun[] = {
+static const ucschar hangul_keyboard_table_3sun[] = {
     0x0021,	/* exclam:		exclamation mark		*/
     0x0022,	/* quotedbl:	quotatioin mark			*/
     0x0023,	/* numbersign:	number sign	 		*/
@@ -485,7 +485,7 @@ static const wchar_t hangul_keyboard_table_3sun[] = {
     0x007e,	/* asciitilde:	tilde				*/
 };
 
-static const wchar_t hangul_keyboard_table_3yet[] = {
+static const ucschar hangul_keyboard_table_3yet[] = {
     0x11bd,	/* exclam:		jongseong cieuc			*/
     0x0022,	/* quotedbl:	quotatioin mark			*/
     0x0023,	/* numbersign:	number sign	 		*/
