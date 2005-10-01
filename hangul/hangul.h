@@ -77,8 +77,8 @@ enum {
 };
 
 enum {
-    HANGUL_INPUT_FILTER_2,
-    HANGUL_INPUT_FILTER_3
+    HANGUL_INPUT_FILTER_JAMO,
+    HANGUL_INPUT_FILTER_JASO
 };
 
 struct _HangulJamoCombination {

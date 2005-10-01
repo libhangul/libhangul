@@ -295,7 +295,7 @@ hangul_ic_save_commit_string(HangulInputContext *hic)
 }
 
 static bool
-hangul_ic_filter_2(HangulInputContext *hic, ucschar ch)
+hangul_ic_filter_jamo(HangulInputContext *hic, ucschar ch)
 {
     ucschar jong;
     ucschar combined;
@@ -390,7 +390,7 @@ none_hangul:
 }
 
 static bool
-hangul_ic_filter_3(HangulInputContext *hic, ucschar ch)
+hangul_ic_filter_jaso(HangulInputContext *hic, ucschar ch)
 {
     if (hangul_is_choseong(ch)) {
 	if (hic->buffer.choseong == 0) {
@@ -465,10 +465,10 @@ hangul_ic_filter(HangulInputContext *hic, int ascii)
     hic->preedit_string[0] = 0;
     hic->commit_string[0] = 0;
 
-    if (hic->type == HANGUL_INPUT_FILTER_2)
-	return hangul_ic_filter_2(hic, ch);
+    if (hic->type == HANGUL_INPUT_FILTER_JAMO)
+	return hangul_ic_filter_jamo(hic, ch);
     else
-	return hangul_ic_filter_3(hic, ch);
+	return hangul_ic_filter_jaso(hic, ch);
 }
 
 const ucschar*
@@ -531,44 +531,44 @@ hangul_ic_set_keyboard(HangulInputContext *hic, HangulKeyboardType keyboard)
 
     switch (keyboard) {
     case HANGUL_KEYBOARD_2:
-	hic->type = HANGUL_INPUT_FILTER_2;
+	hic->type = HANGUL_INPUT_FILTER_JAMO;
 	hic->keyboard_table = hangul_keyboard_table_2;
 	hic->combination_table = hangul_combination_table_default;
 	hic->combination_table_size = N_ELEMENTS(hangul_combination_table_default);
 	break;
     case HANGUL_KEYBOARD_32:
-	hic->type = HANGUL_INPUT_FILTER_3;
+	hic->type = HANGUL_INPUT_FILTER_JASO;
 	hic->keyboard_table = hangul_keyboard_table_32;
 	hic->combination_table = hangul_combination_table_default;
 	hic->combination_table_size = N_ELEMENTS(hangul_combination_table_default);
 	break;
     case HANGUL_KEYBOARD_3FINAL:
-	hic->type = HANGUL_INPUT_FILTER_3;
+	hic->type = HANGUL_INPUT_FILTER_JASO;
 	hic->keyboard_table = hangul_keyboard_table_3final;
 	hic->combination_table = hangul_combination_table_default;
 	hic->combination_table_size = N_ELEMENTS(hangul_combination_table_default);
 	break;
     case HANGUL_KEYBOARD_390:
-	hic->type = HANGUL_INPUT_FILTER_3;
+	hic->type = HANGUL_INPUT_FILTER_JASO;
 	hic->keyboard_table = hangul_keyboard_table_390;
 	hic->combination_table = hangul_combination_table_default;
 	hic->combination_table_size = N_ELEMENTS(hangul_combination_table_default);
 	break;
     case HANGUL_KEYBOARD_3NOSHIFT:
-	hic->type = HANGUL_INPUT_FILTER_3;
+	hic->type = HANGUL_INPUT_FILTER_JASO;
 	hic->keyboard_table = hangul_keyboard_table_3sun;
 	hic->combination_table = hangul_combination_table_default;
 	hic->combination_table_size = N_ELEMENTS(hangul_combination_table_default);
 	break;
     case HANGUL_KEYBOARD_3YETGUL:
-	hic->type = HANGUL_INPUT_FILTER_3;
+	hic->type = HANGUL_INPUT_FILTER_JASO;
 	hic->keyboard_table = hangul_keyboard_table_3yet;
 	hic->combination_table = hangul_combination_table_full;
 	hic->combination_table_size = N_ELEMENTS(hangul_combination_table_default);
 	hic->output_mode = HANGUL_OUTPUT_JAMO;
 	break;
     default:
-	hic->type = HANGUL_INPUT_FILTER_2;
+	hic->type = HANGUL_INPUT_FILTER_JAMO;
 	hic->keyboard_table = hangul_keyboard_table_2;
 	hic->combination_table = hangul_combination_table_default;
 	hic->combination_table_size = N_ELEMENTS(hangul_combination_table_default);

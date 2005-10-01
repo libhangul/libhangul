@@ -20,8 +20,6 @@
 #include <config.h>
 #endif
 
-#include <wchar.h>
-
 #include "hangul.h"
 
 bool
@@ -81,7 +79,7 @@ hangul_is_jamo(ucschar c)
 }
 
 ucschar
-hangul_choseong_to_jamo(ucschar ch)
+hangul_choseong_to_jamo(ucschar c)
 {
     static ucschar table[] = {
 	0x3131,	    /* 0x1100 */
@@ -105,13 +103,13 @@ hangul_choseong_to_jamo(ucschar ch)
 	0x314e,	    /* 0x1112 */
     };
 
-    if (ch < 0x1100 || ch > 0x1112)
-	return ch;
-    return table[ch - 0x1100];
+    if (c < 0x1100 || c > 0x1112)
+	return c;
+    return table[c - 0x1100];
 }
 
 ucschar
-hangul_jungseong_to_jamo(ucschar ch)
+hangul_jungseong_to_jamo(ucschar c)
 {
     static ucschar table[] = {
 	0x314f,	    /* 0x1161 */
@@ -137,13 +135,13 @@ hangul_jungseong_to_jamo(ucschar ch)
 	0x3163	    /* 0x1175 */
     };
 
-    if (ch < 0x1161 || ch > 0x1175)
+    if (c < 0x1161 || c > 0x1175)
 	return 0;
-    return table[ch - 0x1161];
+    return table[c - 0x1161];
 }
 
 ucschar
-hangul_jongseong_to_jamo(ucschar ch)
+hangul_jongseong_to_jamo(ucschar c)
 {
     static ucschar table[] = {
 	0x3131,	    /* 0x11a8 */
@@ -175,13 +173,13 @@ hangul_jongseong_to_jamo(ucschar ch)
 	0x314e	    /* 0x11c2 */
     };
 
-    if (ch < 0x11a8 || ch > 0x11c2)
+    if (c < 0x11a8 || c > 0x11c2)
 	return 0;
-    return table[ch - 0x11a8];
+    return table[c - 0x11a8];
 }
 
 ucschar
-hangul_choseong_to_jongseong(ucschar ch)
+hangul_choseong_to_jongseong(ucschar c)
 {
     static ucschar table[] = {
 	0x11a8,  /* choseong kiyeok      -> jongseong kiyeok      */
@@ -204,13 +202,13 @@ hangul_choseong_to_jongseong(ucschar ch)
 	0x11c1,  /* choseong phieuph     -> jongseong phieuph     */
 	0x11c2   /* choseong hieuh       -> jongseong hieuh       */
     };
-    if (ch < 0x1100 || ch > 0x1112)
+    if (c < 0x1100 || c > 0x1112)
 	return 0;
-    return table[ch - 0x1100];
+    return table[c - 0x1100];
 }
 
 ucschar
-hangul_jongseong_to_choseong(ucschar ch)
+hangul_jongseong_to_choseong(ucschar c)
 {
     static ucschar table[] = {
       0x1100,  /* jongseong kiyeok        -> choseong kiyeok       */
@@ -241,13 +239,13 @@ hangul_jongseong_to_choseong(ucschar ch)
       0x1111,  /* jongseong phieuph       -> choseong phieuph      */
       0x1112   /* jongseong hieuh         -> choseong hieuh        */
     };
-    if (ch < 0x11a8 || ch > 0x11c2)
+    if (c < 0x11a8 || c > 0x11c2)
 	return 0;
-    return table[ch - 0x11a8];
+    return table[c - 0x11a8];
 }
 
 void
-hangul_jongseong_dicompose(ucschar ch, ucschar* jong, ucschar* cho)
+hangul_jongseong_dicompose(ucschar c, ucschar* jong, ucschar* cho)
 {
     static ucschar table[][2] = {
     { 0,      0x1100 }, /* jong kiyeok	      = cho  kiyeok               */
@@ -279,8 +277,8 @@ hangul_jongseong_dicompose(ucschar ch, ucschar* jong, ucschar* cho)
     { 0,      0x1112 }  /* jong hieuh         = cho  hieuh                */
     };
 
-    *jong = table[ch - 0x11a8][0];
-    *cho  = table[ch - 0x11a8][1];
+    *jong = table[c - 0x11a8][0];
+    *cho  = table[c - 0x11a8][1];
 }
 
 ucschar
@@ -292,7 +290,7 @@ hangul_jaso_to_syllable(ucschar choseong, ucschar jungseong, ucschar jongseong)
     static const ucschar jongseong_base = 0x11a7;
     static const int njungseong = 21;
     static const int njongseong = 28;
-    ucschar ch;
+    ucschar c;
 
     /* we use 0x11a7 like a Jongseong filler */
     if (jongseong == 0)
@@ -309,7 +307,7 @@ hangul_jaso_to_syllable(ucschar choseong, ucschar jungseong, ucschar jongseong)
     jungseong -= jungseong_base;
     jongseong -= jongseong_base;
 
-    ch = ((choseong * njungseong) + jungseong) * njongseong + jongseong
+    c = ((choseong * njungseong) + jungseong) * njongseong + jongseong
 	+ hangul_base;
-    return ch;
+    return c;
 }
