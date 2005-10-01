@@ -490,7 +490,7 @@ hangul_ic_get_commit_string(HangulInputContext *hic)
 }
 
 void
-hangul_ic_reset(HangulInputContext *hic)
+hangul_ic_flush(HangulInputContext *hic)
 {
     if (hic == NULL)
 	return;
