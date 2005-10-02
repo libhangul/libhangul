@@ -111,7 +111,6 @@ slist_length(struct slist *head)
 static Hanja *
 hanja_new(const char *key, const char *value, const char *comment)
 {
-    return NULL;
     Hanja *item;
 
     item = malloc(sizeof(Hanja));
@@ -121,7 +120,7 @@ hanja_new(const char *key, const char *value, const char *comment)
 	if (comment != NULL)
 	    item->comment = strdup(comment);
 	else
-	    item->comment = NULL;
+	    item->comment = strdup("");
     }
 
     return item;
@@ -130,7 +129,6 @@ hanja_new(const char *key, const char *value, const char *comment)
 static HanjaList *
 hanja_list_new_from_slist(const char *key, struct slist *items)
 {
-    return NULL;
     HanjaList *list;
 
     list = malloc(sizeof(HanjaList));
@@ -152,8 +150,6 @@ hanja_list_new_from_slist(const char *key, struct slist *items)
 static HanjaTable *
 hanja_table_new_from_slist(struct slist *lists)
 {
-    return NULL;
-
     HanjaTable *table;
 
     table = malloc(sizeof(HanjaTable));
@@ -191,8 +187,10 @@ hanja_table_load(const char *filename)
 	filename = LIBHANGUL_DEFAULT_HANJA_DIC;
 
     file = fopen(filename, "r");
-    if (file == NULL)
+    if (file == NULL) {
+	printf("cant open file: %s\n", filename);
 	return NULL;
+    }
     
     while (fgets(buf, sizeof(buf), file) != NULL) {
 	save_ptr = NULL;
@@ -322,29 +320,4 @@ hanja_list_destroy(HanjaList *list)
 	h_free((char*)list->key);
 	h_free(list);
     }
-}
-
-int main(int argc, char *argv[])
-{
-    char *key = argv[1];
-
-    HanjaTable *table = hanja_table_load("hanja.txt");
-    if (table == NULL)
-	return 0;
-
-    HanjaList *candidates = hanja_table_match(table, HANJA_MATCH_PREFIX, key);
-    if (candidates) {
-	int i;
-	for (i = 0; i < candidates->nitems; i++) {
-	    printf("candidate: %s:%s:%s\n",
-		    candidates->items[i]->key,
-		    candidates->items[i]->value,
-		    candidates->items[i]->comment);
-	}
-	hanja_list_destroy(candidates);
-    }
-
-    hanja_table_destroy(table);
-
-    return 0;
 }
