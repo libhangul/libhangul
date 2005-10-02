@@ -110,6 +110,7 @@ struct _HangulInputContext {
 HangulInputContext* hangul_ic_new(HangulKeyboardType keyboard);
 void hangul_ic_delete(HangulInputContext *hic);
 bool hangul_ic_filter(HangulInputContext *hic, int ascii);
+void hangul_ic_reset(HangulInputContext *hic);
 void hangul_ic_flush(HangulInputContext *hic);
 bool hangul_ic_backspace(HangulInputContext *hic);
 

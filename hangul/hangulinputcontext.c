@@ -490,12 +490,24 @@ hangul_ic_get_commit_string(HangulInputContext *hic)
 }
 
 void
+hangul_ic_reset(HangulInputContext *hic)
+{
+    if (hic == NULL)
+	return;
+
+    hic->preedit_string[0] = 0;
+    hic->commit_string[0] = 0;
+
+    hangul_buffer_clear(&hic->buffer);
+}
+
+void
 hangul_ic_flush(HangulInputContext *hic)
 {
     if (hic == NULL)
 	return;
 
-    hic->preedit_string[0] = L'\0';
+    hic->preedit_string[0] = 0;
     hangul_ic_save_commit_string(hic);
 }
 
