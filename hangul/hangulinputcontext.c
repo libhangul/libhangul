@@ -197,7 +197,7 @@ hangul_buffer_backspace(HangulBuffer *buffer)
 static ucschar
 hangul_ic_translate_jamo(HangulInputContext *hic, int ascii)
 {
-    ucschar ch = ascii;
+    ucschar ch = 0;
 
     if (ascii >= '!' && ascii <= '~') {
 	ch = hic->keyboard_table[ascii - '!'];
