@@ -27,7 +27,7 @@ else:
 		'/usr/local/include'
 	]
 	library_dirs = [
-		'../hangul',
+		'../hangul/.libs',
 		'/usr/lib',
 		'/usr/local/lib',
 	]
