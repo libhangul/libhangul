@@ -91,6 +91,13 @@ static PyObject *_pyhangulic_reset(PY_HANGULIC *self, PyObject *args)
     return Py_None;
 }
 
+static PyObject *_pyhangulic_flush(PY_HANGULIC *self, PyObject *args)
+{
+    hangul_ic_flush(self->hic);
+
+    return Py_None;
+}
+
 static PyObject *_pyhangulic_backspace(PY_HANGULIC *self, PyObject *args)
 {
     int ret;
@@ -124,6 +131,7 @@ static PyObject *_pyhangulic_commit_string(PY_HANGULIC *self, PyObject *args)
 static PyMethodDef PY_HANGULIC_methods[] = {
     { "filter",        (PyCFunction)_pyhangulic_filter,         METH_VARARGS, NULL},
     { "reset",         (PyCFunction)_pyhangulic_reset,          METH_VARARGS, NULL},
+    { "flush",         (PyCFunction)_pyhangulic_flush,          METH_VARARGS, NULL},
     { "backspace",     (PyCFunction)_pyhangulic_backspace,      METH_VARARGS, NULL},
     { "preedit_string",(PyCFunction)_pyhangulic_preedit_string, METH_VARARGS, NULL},
     { "commit_string", (PyCFunction)_pyhangulic_commit_string,  METH_VARARGS, NULL},
