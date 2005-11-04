@@ -5,6 +5,7 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <alloca.h>
 
 #include "../hangul/hangul.h"
 
@@ -22,6 +23,14 @@ typedef struct {
 } PY_HANGULIC;
 
 extern PyTypeObject PY_HANGULIC_Type;
+
+static int ucscharlen(const ucschar *str)
+{
+    const ucschar *end = str;
+    while (*end != 0)
+	end++;
+    return end - str;
+} 
 
 static PyObject *_create_ic(PY_HANGUL *self, PyObject *args)
 { 
@@ -109,22 +118,46 @@ static PyObject *_pyhangulic_backspace(PY_HANGULIC *self, PyObject *args)
 
 static PyObject *_pyhangulic_preedit_string(PY_HANGULIC *self, PyObject *args)
 {
+#ifndef Py_UNICODE_WIDE
+    int i;
+    Py_UNICODE *buf;
+#endif /* !Py_UNICODE_WIDE */
     int len;
-    const wchar_t *str;
+    const ucschar *str;
 
     str = hangul_ic_get_preedit_string(self->hic);
-    len = wcslen(str);
-    return PyUnicode_FromWideChar(str, len);
+    len = ucscharlen(str);
+
+#ifdef Py_UNICODE_WIDE
+    return PyUnicode_FromUnicode((Py_UNICODE*)str, len);
+#else  /* Py_UNICODE_WIDE */
+    buf = alloca(sizeof(Py_UNICODE) * len);
+    for (i = 0; i < len; i++)
+	buf[i] = str[i];
+    return PyUnicode_FromUnicode(buf, len);
+#endif /* Py_UNICODE_WIDE */
 }
 
 static PyObject *_pyhangulic_commit_string(PY_HANGULIC *self, PyObject *args)
 {
+#ifndef Py_UNICODE_WIDE
+    int i;
+    Py_UNICODE *buf;
+#endif /* !Py_UNICODE_WIDE */
     int len;
-    const wchar_t *str;
+    const ucschar *str;
 
     str = hangul_ic_get_commit_string(self->hic);
-    len = wcslen(str);
-    return PyUnicode_FromWideChar(str, len);
+    len = ucscharlen(str);
+
+#ifdef Py_UNICODE_WIDE
+    return PyUnicode_FromUnicode((Py_UNICODE*)str, len);
+#else  /* Py_UNICODE_WIDE */
+    buf = alloca(sizeof(Py_UNICODE) * len);
+    for (i = 0; i < len; i++)
+	buf[i] = str[i];
+    return PyUnicode_FromUnicode(buf, len);
+#endif /* Py_UNICODE_WIDE */
 }
 
 // PY_HANGULIC methods
