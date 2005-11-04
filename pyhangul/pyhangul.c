@@ -11,7 +11,7 @@
 
 static PyObject *_pyhangul_error;
 
-// User defined Object
+/* User defined Object */
 typedef struct {
     PyObject_HEAD
 } PY_HANGUL;
@@ -70,14 +70,14 @@ void inithangul(void)
     PyModule_AddIntConstant(m, "hangul390", HANGUL_KEYBOARD_390);
     PyModule_AddIntConstant(m, "hangul3f", HANGUL_KEYBOARD_3FINAL);
     PyModule_AddIntConstant(m, "hangul3s", HANGUL_KEYBOARD_3NOSHIFT);
-    //PyModule_AddIntConstant(m, "Hangul3_Yetgeul", HANGUL_KEYBOARD_3YETGUL);
+    /* PyModule_AddIntConstant(m, "Hangul3_Yetgeul", HANGUL_KEYBOARD_3YETGUL); */
 
     d = PyModule_GetDict(m);
     _pyhangul_error = PyErr_NewException("_pyhangul.error", NULL, NULL);
     PyDict_SetItemString(d, "error", _pyhangul_error);
 } 
 
-// im's member function
+/* im's member function */
 static PyObject *_pyhangulic_filter(PY_HANGULIC *self, PyObject *args)
 {
     int ret;
@@ -160,7 +160,7 @@ static PyObject *_pyhangulic_commit_string(PY_HANGULIC *self, PyObject *args)
 #endif /* Py_UNICODE_WIDE */
 }
 
-// PY_HANGULIC methods
+/* PY_HANGULIC methods */
 static PyMethodDef PY_HANGULIC_methods[] = {
     { "filter",        (PyCFunction)_pyhangulic_filter,         METH_VARARGS, NULL},
     { "reset",         (PyCFunction)_pyhangulic_reset,          METH_VARARGS, NULL},
@@ -171,7 +171,7 @@ static PyMethodDef PY_HANGULIC_methods[] = {
     { NULL, NULL, 0, NULL }
 };
 
-// PY_HANGULIC dealloc
+/* PY_HANGULIC dealloc */
 static void PY_HANGULIC_dealloc(PY_HANGULIC *self)
 {
     hangul_ic_delete(self->hic);
@@ -179,7 +179,7 @@ static void PY_HANGULIC_dealloc(PY_HANGULIC *self)
     PyMem_Free((char *) self);
 }
 
-// PY_HANGULIC getattr
+/* PY_HANGULIC getattr */
 static PyObject * PY_HANGULIC_getattr(PY_HANGULIC *self, char *name)
 {
     PyObject *res;
@@ -191,7 +191,7 @@ static PyObject * PY_HANGULIC_getattr(PY_HANGULIC *self, char *name)
     return NULL;
 }
 
-// PY_HANGULIC repr
+/* PY_HANGULIC repr */
 static PyObject * PY_HANGULIC_repr(PY_HANGULIC *self)
 {
     char buf[300];
@@ -200,7 +200,7 @@ static PyObject * PY_HANGULIC_repr(PY_HANGULIC *self)
 }
 
 
-// PY_HANGUL Type
+/* PY_HANGUL Type */
 PyTypeObject PY_HANGULIC_Type = {
 #ifndef MS_WIN32
     PyObject_HEAD_INIT(&PyType_Type)
