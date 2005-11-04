@@ -1,7 +1,3 @@
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -17,6 +13,7 @@ main(int argc, char *argv[])
     int ascii;
     int keyboard = HANGUL_KEYBOARD_2;
     char commit[32] = { '\0', };
+    wchar_t *commit_string;
     HangulInputContext *hic;
 
     if (argc > 1) {
@@ -33,7 +30,8 @@ main(int argc, char *argv[])
 
     for (ascii = getchar(); ascii != EOF; ascii = getchar()) {
 	int ret = hangul_ic_filter(hic, ascii);
-	n = wcstombs(commit, hangul_ic_get_commit_string(hic), sizeof(commit));
+	commit_string = (wchar_t*)hangul_ic_get_commit_string(hic);
+	n = wcstombs(commit, commit_string, sizeof(commit));
 	commit[n] = '\0';
 	if (strlen(commit) > 0) {
 	    printf("%s", commit);
@@ -42,8 +40,9 @@ main(int argc, char *argv[])
 	    printf("%c", ascii);
 	}
     } 
-    hangul_ic_reset(hic);
-    n = wcstombs(commit, hangul_ic_get_commit_string(hic), sizeof(commit));
+    hangul_ic_flush(hic);
+    commit_string = (wchar_t*)hangul_ic_get_commit_string(hic);
+    n = wcstombs(commit, commit_string, sizeof(commit));
     commit[n] = '\0';
     if (strlen(commit) > 0) {
 	printf("%s", commit);
