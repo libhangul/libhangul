@@ -1,3 +1,8 @@
+/**
+ * @file    hangulctype.c
+ * @brief   hangulctype source file
+ */
+
 /* libhangul
  * Copyright (C) 2004,2005 Choe Hwanjin
  *
@@ -22,18 +27,42 @@
 
 #include "hangul.h"
 
+/**
+ * @brief check for a choseong
+ * @param c ucs4 code value
+ * @return true if the character c falls into choseong class
+ *
+ * This function check whether c, which must have ucs4 value, falls into
+ * choseong (leading consonants) class.
+ */
 bool
 hangul_is_choseong(ucschar c)
 {
     return c >= 0x1100 && c <= 0x1159;
 }
 
+/**
+ * @brief check for a jungseong
+ * @param c ucs4 code value
+ * @return true if the character c falls into jungseong class
+ *
+ * This function check whether c, which must have ucs4 value, falls into
+ * jungseong (vowels) class.
+ */
 bool
 hangul_is_jungseong(ucschar c)
 {
     return c >= 0x1161 && c <= 0x11a2;
 }
 
+/**
+ * @brief check for a jongseong
+ * @param c ucs4 code value
+ * @return true if the character c falls into jongseong class
+ *
+ * This function check whether c, which must have ucs4 value, falls into
+ * jongseong (trailing consonants) class.
+ */
 bool
 hangul_is_jongseong(ucschar c)
 {
@@ -58,12 +87,28 @@ hangul_is_jongseong_conjoinable(ucschar c)
     return c >= 0x11a7 && c <= 0x11c2;
 }
 
+/**
+ * @brief check for a syllable
+ * @param c ucs4 code value
+ * @return true if the character c falls into syllable class
+ *
+ * This function check whether c, which must have ucs4 value, falls into
+ * syllable class; that is from U+AC00 to 0xD7A3.
+ */
 bool
 hangul_is_syllable(ucschar c)
 {
     return c >= 0xac00 && c <= 0xd7a3;
 }
 
+/**
+ * @brief check for a jaso
+ * @param c ucs4 code value
+ * @return true if the character c falls into jaso class
+ *
+ * This function check whether c, which must have ucs4 value, falls into
+ * jaso class; that is choseong, jungseong or jongseong.
+ */
 bool
 hangul_is_jaso(ucschar c)
 {
@@ -72,12 +117,28 @@ hangul_is_jaso(ucschar c)
 	   hangul_is_jongseong(c);
 }
 
+/**
+ * @brief check for a compatibility jamo
+ * @param c ucs4 code value
+ * @return true if the character c falls into compatibility class
+ *
+ * This function check whether c, which must have ucs4 value, falls into
+ * compatibility jamo class.
+ */
 bool
 hangul_is_jamo(ucschar c)
 {
     return c >= 0x3131 && c <= 0x318e;
 }
 
+/**
+ * @brief convert a choseong to the compatibility jamo
+ * @param c ucs4 code value
+ * @return converted value, or c
+ *
+ * This function converts the choseong c, which must have ucs4 value, to
+ * comaptibility jamo or c if the conversion is failed
+ */
 ucschar
 hangul_choseong_to_jamo(ucschar c)
 {
@@ -108,6 +169,14 @@ hangul_choseong_to_jamo(ucschar c)
     return table[c - 0x1100];
 }
 
+/**
+ * @brief convert a jungseong to the compatibility jamo
+ * @param c ucs4 code value
+ * @return converted value, or c
+ *
+ * This function converts the jungseong c, which must have ucs4 value, to
+ * comaptibility jamo or c if the conversion is failed
+ */
 ucschar
 hangul_jungseong_to_jamo(ucschar c)
 {
@@ -140,6 +209,14 @@ hangul_jungseong_to_jamo(ucschar c)
     return table[c - 0x1161];
 }
 
+/**
+ * @brief convert a jongseong to the compatibility jamo
+ * @param c ucs4 code value
+ * @return converted value, or c
+ *
+ * This function converts the jongseong c, which must have ucs4 value, to
+ * comaptibility jamo or c if the conversion is failed
+ */
 ucschar
 hangul_jongseong_to_jamo(ucschar c)
 {
@@ -281,6 +358,16 @@ hangul_jongseong_dicompose(ucschar c, ucschar* jong, ucschar* cho)
     *cho  = table[c - 0x11a8][1];
 }
 
+/**
+ * @brief compose a hangul syllable
+ * @param choseong UCS4 code value
+ * @param jungseong UCS4 code value
+ * @param jongseong UCS4 code value
+ * @return syllable code compose from choseong, jungseong and jongseong
+ *
+ * This function compose hangul jaso choseong, jungseong and jongseong and
+ * return the syllable code.
+ */
 ucschar
 hangul_jaso_to_syllable(ucschar choseong, ucschar jungseong, ucschar jongseong)
 {
