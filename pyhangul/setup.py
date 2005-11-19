@@ -4,9 +4,9 @@ import sys
 from distutils.core import setup, Extension 
 
 classifiers = """\
-Development Status :: 5 - Production/Stable
+Development Status :: 4 - Beta
 Intended Audience :: Developers
-License :: OSI Approved :: GNU GPL
+License :: OSI Approved :: GNU Library or Lesser General Public License (LGPL)
 Programming Language :: Python
 Programming Language :: C
 Topic :: Software Development :: Libraries :: Python Modules
@@ -21,16 +21,8 @@ if sys.platform == "win32": # for MinGW
 	data_files = []
 	
 else:
-	include_dirs = [
-		'../hangul',
-		'/usr/include',
-		'/usr/local/include'
-	]
-	library_dirs = [
-		'../hangul/.libs',
-		'/usr/lib',
-		'/usr/local/lib',
-	]
+	include_dirs = [ '../hangul' ]
+	library_dirs = [ '../hangul/.libs' ]
 	libraries = ['hangul']
 	data_files = []
 
@@ -46,7 +38,7 @@ setup(name = "pyhangul",
 	description="libhangul for Python.",
 	author = "Joon-cheol Park", 
 	author_email="jooncheol@gmail.com", 
-	license = "GPL",
+	license = "LGPL",
 	url="http://hangul.kldp.net", 
 	ext_modules=[Extension("hangul", ["pyhangul.c"],
                                 include_dirs = include_dirs,
