@@ -325,7 +325,7 @@ hangul_ic_filter_jamo(HangulInputContext *hic, ucschar ch)
 		ucschar choseong = 0, jongseong = 0; 
 		hangul_jongseong_dicompose(hic->buffer.jongseong,
 					   &jongseong, &choseong);
-		hangul_ic_push(hic, jongseong);
+		hic->buffer.jongseong = jongseong;
 		hangul_ic_save_commit_string(hic);
 		hangul_ic_push(hic, choseong);
 		hangul_ic_push(hic, ch);
