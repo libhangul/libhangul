@@ -63,6 +63,9 @@ hangul_buffer_pop(HangulBuffer *buffer)
 static ucschar
 hangul_buffer_peek(HangulBuffer *buffer)
 {
+    if (buffer->index < 0)
+	return 0;
+
     return buffer->stack[buffer->index];
 }
 
