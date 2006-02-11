@@ -29,7 +29,7 @@ main(int argc, char *argv[])
     }
 
     for (ascii = getchar(); ascii != EOF; ascii = getchar()) {
-	int ret = hangul_ic_filter(hic, ascii);
+	int ret = hangul_ic_process(hic, ascii);
 	commit_string = (wchar_t*)hangul_ic_get_commit_string(hic);
 	n = wcstombs(commit, commit_string, sizeof(commit));
 	commit[n] = '\0';

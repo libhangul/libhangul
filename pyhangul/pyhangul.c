@@ -78,17 +78,17 @@ void inithangul(void)
 } 
 
 /* im's member function */
-static PyObject *_pyhangulic_filter(PY_HANGULIC *self, PyObject *args)
+static PyObject *_pyhangulic_process(PY_HANGULIC *self, PyObject *args)
 {
     int ret;
     int ascii; 
 
     if(!PyArg_ParseTuple(args,"i", &ascii)) {
-	PyErr_SetString(_pyhangul_error,"Usage: filter(ascii)");
+	PyErr_SetString(_pyhangul_error,"Usage: process(ascii)");
 	return NULL;
     }
 
-    ret = hangul_ic_filter(self->hic, ascii);
+    ret = hangul_ic_process(self->hic, ascii);
 
     return Py_BuildValue("i", ret);
 }
@@ -162,7 +162,7 @@ static PyObject *_pyhangulic_commit_string(PY_HANGULIC *self, PyObject *args)
 
 /* PY_HANGULIC methods */
 static PyMethodDef PY_HANGULIC_methods[] = {
-    { "filter",        (PyCFunction)_pyhangulic_filter,         METH_VARARGS, NULL},
+    { "process",       (PyCFunction)_pyhangulic_process,        METH_VARARGS, NULL},
     { "reset",         (PyCFunction)_pyhangulic_reset,          METH_VARARGS, NULL},
     { "flush",         (PyCFunction)_pyhangulic_flush,          METH_VARARGS, NULL},
     { "backspace",     (PyCFunction)_pyhangulic_backspace,      METH_VARARGS, NULL},

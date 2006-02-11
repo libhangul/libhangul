@@ -298,7 +298,7 @@ hangul_ic_save_commit_string(HangulInputContext *hic)
 }
 
 static bool
-hangul_ic_filter_jamo(HangulInputContext *hic, ucschar ch)
+hangul_ic_process_jamo(HangulInputContext *hic, ucschar ch)
 {
     ucschar jong;
     ucschar combined;
@@ -393,7 +393,7 @@ none_hangul:
 }
 
 static bool
-hangul_ic_filter_jaso(HangulInputContext *hic, ucschar ch)
+hangul_ic_process_jaso(HangulInputContext *hic, ucschar ch)
 {
     if (hangul_is_choseong(ch)) {
 	if (hic->buffer.choseong == 0) {
@@ -456,7 +456,7 @@ hangul_ic_filter_jaso(HangulInputContext *hic, ucschar ch)
 }
 
 bool
-hangul_ic_filter(HangulInputContext *hic, int ascii)
+hangul_ic_process(HangulInputContext *hic, int ascii)
 {
     ucschar ch;
 
@@ -469,9 +469,9 @@ hangul_ic_filter(HangulInputContext *hic, int ascii)
     hic->commit_string[0] = 0;
 
     if (hic->type == HANGUL_INPUT_FILTER_JAMO)
-	return hangul_ic_filter_jamo(hic, ch);
+	return hangul_ic_process_jamo(hic, ch);
     else
-	return hangul_ic_filter_jaso(hic, ch);
+	return hangul_ic_process_jaso(hic, ch);
 }
 
 const ucschar*
