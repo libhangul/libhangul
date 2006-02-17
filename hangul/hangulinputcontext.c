@@ -250,7 +250,7 @@ hangul_ic_push(HangulInputContext *hic, ucschar ch)
 	if (hangul_is_choseong(ch)) {
 	    cho  = ch;
 	    jung = hic->buffer.jungseong;
-	    jong = hic->buffer.jungseong;
+	    jong = hic->buffer.jongseong;
 	} else if (hangul_is_jungseong(ch)) {
 	    cho  = hic->buffer.choseong;
 	    jung = ch;
