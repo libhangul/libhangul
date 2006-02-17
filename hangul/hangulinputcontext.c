@@ -268,6 +268,11 @@ hangul_ic_push(HangulInputContext *hic, ucschar ch)
 	    hangul_ic_flush_internal(hic);
 	    return false;
 	}
+    } else {
+	if (!hangul_is_jaso(ch)) {
+	    hangul_ic_flush_internal(hic);
+	    return false;
+	}
     }
 
     hangul_buffer_push(&hic->buffer, ch);
@@ -446,7 +451,6 @@ hangul_ic_process_jamo(HangulInputContext *hic, ucschar ch)
     return true;
 
 flush:
-none_hangul:
     hangul_ic_flush_internal(hic);
     return false;
 }
@@ -687,6 +691,7 @@ hangul_ic_new(HangulKeyboardType keyboard)
 
     hangul_ic_set_output_mode(hic, HANGUL_OUTPUT_SYLLABLE);
     hangul_ic_set_keyboard(hic, keyboard);
+    hangul_ic_set_filter(hic, NULL, NULL);
 
     hangul_buffer_clear(&hic->buffer);
 
