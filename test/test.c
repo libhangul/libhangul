@@ -6,6 +6,13 @@
 
 #include "../hangul/hangul.h"
 
+bool filter(ucschar cho, ucschar jung, ucschar jong, void *data)
+{
+    //printf("Filter: %x %x %x\n", cho, jung, jong);
+    //return jong == 0;
+    return true;
+}
+
 int
 main(int argc, char *argv[])
 {
@@ -27,6 +34,7 @@ main(int argc, char *argv[])
 	printf("hic is null\n");
 	return -1;
     }
+    hangul_ic_set_filter(hic, filter, NULL);
 
     for (ascii = getchar(); ascii != EOF; ascii = getchar()) {
 	int ret = hangul_ic_process(hic, ascii);
@@ -40,12 +48,14 @@ main(int argc, char *argv[])
 	    printf("%c", ascii);
 	}
     } 
-    hangul_ic_flush(hic);
-    commit_string = (wchar_t*)hangul_ic_get_commit_string(hic);
-    n = wcstombs(commit, commit_string, sizeof(commit));
-    commit[n] = '\0';
-    if (strlen(commit) > 0) {
-	printf("%s", commit);
+    if (!hangul_ic_is_empty(hic)) {
+	hangul_ic_flush(hic);
+	commit_string = (wchar_t*)hangul_ic_get_commit_string(hic);
+	n = wcstombs(commit, commit_string, sizeof(commit));
+	commit[n] = '\0';
+	if (strlen(commit) > 0) {
+	    printf("%s", commit);
+	}
     }
 
     hangul_ic_delete(hic);

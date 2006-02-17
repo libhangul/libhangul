@@ -59,8 +59,9 @@ ucschar hangul_jaso_to_syllable(ucschar choseong,
 
 /* hangulinputcontext.c */
 typedef struct _HangulJamoCombination HangulJamoCombination;
-typedef struct _HangulBuffer HangulBuffer;
-typedef struct _HangulInputContext HangulInputContext;
+typedef struct _HangulBuffer          HangulBuffer;
+typedef struct _HangulInputContext    HangulInputContext;
+typedef bool (*HangulICFilter) (ucschar, ucschar, ucschar, void*);
 
 typedef enum {
     HANGUL_KEYBOARD_2,
@@ -101,6 +102,8 @@ struct _HangulInputContext {
     const HangulJamoCombination *combination_table;
     int combination_table_size;
     HangulBuffer buffer;
+    HangulICFilter filter;
+    void *filter_data;
     int output_mode;
 
     ucschar preedit_string[64];
@@ -113,10 +116,14 @@ bool hangul_ic_process(HangulInputContext *hic, int ascii);
 void hangul_ic_reset(HangulInputContext *hic);
 void hangul_ic_flush(HangulInputContext *hic);
 bool hangul_ic_backspace(HangulInputContext *hic);
+bool hangul_ic_is_empty(HangulInputContext *hic);
 
 void hangul_ic_set_output_mode(HangulInputContext *hic, int mode);
 void hangul_ic_set_keyboard(HangulInputContext *hic,
 			    HangulKeyboardType keyboard);
+void hangul_ic_set_filter(HangulInputContext *hic,
+			  HangulICFilter func, void *user_data);
+
 const ucschar* hangul_ic_get_preedit_string(HangulInputContext *hic);
 const ucschar* hangul_ic_get_commit_string(HangulInputContext *hic);
 
