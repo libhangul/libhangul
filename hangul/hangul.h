@@ -45,6 +45,7 @@ bool hangul_is_syllable(ucschar c);
 bool hangul_is_jaso(ucschar c);
 bool hangul_is_jamo(ucschar c);
 
+ucschar hangul_jaso_to_jamo(ucschar ch);
 ucschar hangul_choseong_to_jamo(ucschar ch);
 ucschar hangul_jungseong_to_jamo(ucschar ch);
 ucschar hangul_jongseong_to_jamo(ucschar ch);
@@ -61,7 +62,7 @@ ucschar hangul_jaso_to_syllable(ucschar choseong,
 typedef struct _HangulJamoCombination HangulJamoCombination;
 typedef struct _HangulBuffer          HangulBuffer;
 typedef struct _HangulInputContext    HangulInputContext;
-typedef bool (*HangulICFilter) (ucschar, ucschar, ucschar, void*);
+typedef bool (*HangulICFilter) (ucschar*, ucschar, ucschar, ucschar, void*);
 
 typedef enum {
     HANGUL_KEYBOARD_2,
