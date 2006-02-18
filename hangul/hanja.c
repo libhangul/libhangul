@@ -193,6 +193,10 @@ hanja_table_load(const char *filename)
     }
     
     while (fgets(buf, sizeof(buf), file) != NULL) {
+	/* skip comments and empty lines */
+	if (buf[0] == '#' || buf[0] == '\r' || buf[0] == '\n' || buf[0] == '\0')
+	    continue;
+
 	save_ptr = NULL;
 	key = strtok_r(buf, ":", &save_ptr);
 	value = strtok_r(NULL, ":", &save_ptr);
