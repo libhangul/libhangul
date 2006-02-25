@@ -420,7 +420,9 @@ hangul_ic_process_jamo(HangulInputContext *hic, ucschar ch)
 		}
 	    } else {
 		if (!hangul_ic_push(hic, ch)) {
-		    return false;
+		    if (!hangul_ic_push(hic, ch)) {
+			return false;
+		    }
 		}
 	    }
 	} else if (hangul_is_jungseong(ch)) {
@@ -448,7 +450,9 @@ hangul_ic_process_jamo(HangulInputContext *hic, ucschar ch)
 	    }
 	} else {
 	    if (!hangul_ic_push(hic, ch)) {
-		return false;
+		if (!hangul_ic_push(hic, ch)) {
+		    return false;
+		}
 	    }
 	}
     } else {
