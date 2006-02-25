@@ -6,7 +6,7 @@
 
 #include "../hangul/hangul.h"
 
-bool filter(ucschar cho, ucschar jung, ucschar jong, void *data)
+bool filter(ucschar *str, ucschar cho, ucschar jung, ucschar jong, void *data)
 {
     //printf("Filter: %x %x %x\n", cho, jung, jong);
     //return jong == 0;
