@@ -220,137 +220,13 @@ hangul_jaso_to_jamo(ucschar c)
 
     if (c >= 0x1100 && c <= 0x1112) {
 	return choseong[c - 0x1100];
-    } else if (c >= 0x1161 || c <= 0x1175) {
+    } else if (c >= 0x1161 && c <= 0x1175) {
 	return jungseong[c - 0x1161];
-    } else if (c >= 0x11a8 || c <= 0x11c2) {
+    } else if (c >= 0x11a8 && c <= 0x11c2) {
 	return jongseong[c - 0x11a8];
     }
 
     return c;
-}
-
-/**
- * @brief convert a choseong to the compatibility jamo
- * @param c ucs4 code value
- * @return converted value, or c
- *
- * This function converts the choseong c, which must have ucs4 value, to
- * comaptibility jamo or c if the conversion is failed
- */
-ucschar
-hangul_choseong_to_jamo(ucschar c)
-{
-    static ucschar table[] = {
-	0x3131,	    /* 0x1100 */
-	0x3132,	    /* 0x1101 */
-	0x3134,	    /* 0x1102 */
-	0x3137,	    /* 0x1103 */
-	0x3138,	    /* 0x1104 */
-	0x3139,	    /* 0x1105 */
-	0x3141,	    /* 0x1106 */
-	0x3142,	    /* 0x1107 */
-	0x3143,	    /* 0x1108 */
-	0x3145,	    /* 0x1109 */
-	0x3146,	    /* 0x110a */
-	0x3147,	    /* 0x110b */
-	0x3148,	    /* 0x110c */
-	0x3149,	    /* 0x110d */
-	0x314a,	    /* 0x110e */
-	0x314b,	    /* 0x110f */
-	0x314c,	    /* 0x1110 */
-	0x314d,	    /* 0x1111 */
-	0x314e,	    /* 0x1112 */
-    };
-
-    if (c < 0x1100 || c > 0x1112)
-	return c;
-    return table[c - 0x1100];
-}
-
-/**
- * @brief convert a jungseong to the compatibility jamo
- * @param c ucs4 code value
- * @return converted value, or c
- *
- * This function converts the jungseong c, which must have ucs4 value, to
- * comaptibility jamo or c if the conversion is failed
- */
-ucschar
-hangul_jungseong_to_jamo(ucschar c)
-{
-    static ucschar table[] = {
-	0x314f,	    /* 0x1161 */
-	0x3150,	    /* 0x1162 */
-	0x3151,	    /* 0x1163 */
-	0x3152,	    /* 0x1164 */
-	0x3153,	    /* 0x1165 */
-	0x3154,	    /* 0x1166 */
-	0x3155,	    /* 0x1167 */
-	0x3156,	    /* 0x1168 */
-	0x3157,	    /* 0x1169 */
-	0x3158,	    /* 0x116a */
-	0x3159,	    /* 0x116b */
-	0x315a,	    /* 0x116c */
-	0x315b,	    /* 0x116d */
-	0x315c,	    /* 0x116e */
-	0x315d,	    /* 0x116f */
-	0x315e,	    /* 0x1170 */
-	0x315f,	    /* 0x1171 */
-	0x3160,	    /* 0x1172 */
-	0x3161,	    /* 0x1173 */
-	0x3162,	    /* 0x1174 */
-	0x3163	    /* 0x1175 */
-    };
-
-    if (c < 0x1161 || c > 0x1175)
-	return 0;
-    return table[c - 0x1161];
-}
-
-/**
- * @brief convert a jongseong to the compatibility jamo
- * @param c ucs4 code value
- * @return converted value, or c
- *
- * This function converts the jongseong c, which must have ucs4 value, to
- * comaptibility jamo or c if the conversion is failed
- */
-ucschar
-hangul_jongseong_to_jamo(ucschar c)
-{
-    static ucschar table[] = {
-	0x3131,	    /* 0x11a8 */
-	0x3132,	    /* 0x11a9 */
-	0x3133,	    /* 0x11aa */
-	0x3134,	    /* 0x11ab */
-	0x3135,	    /* 0x11ac */
-	0x3136,	    /* 0x11ad */
-	0x3137,	    /* 0x11ae */
-	0x3139,	    /* 0x11af */
-	0x313a,	    /* 0x11b0 */
-	0x313b,	    /* 0x11b1 */
-	0x313c,	    /* 0x11b2 */
-	0x313d,	    /* 0x11b3 */
-	0x313e,	    /* 0x11b4 */
-	0x313f,	    /* 0x11b5 */
-	0x3140,	    /* 0x11b6 */
-	0x3141,	    /* 0x11b7 */
-	0x3142,	    /* 0x11b8 */
-	0x3144,	    /* 0x11b9 */
-	0x3145,	    /* 0x11ba */
-	0x3146,	    /* 0x11bb */
-	0x3147,	    /* 0x11bc */
-	0x3148,	    /* 0x11bd */
-	0x314a,	    /* 0x11be */
-	0x314b,	    /* 0x11bf */
-	0x314c,	    /* 0x11c0 */
-	0x314d,	    /* 0x11c1 */
-	0x314e	    /* 0x11c2 */
-    };
-
-    if (c < 0x11a8 || c > 0x11c2)
-	return 0;
-    return table[c - 0x11a8];
 }
 
 ucschar
