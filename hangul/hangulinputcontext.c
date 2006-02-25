@@ -474,7 +474,11 @@ hangul_ic_process_jaso(HangulInputContext *hic, ucschar ch)
 {
     if (hangul_is_choseong(ch)) {
 	if (hic->buffer.choseong == 0) {
-	    hangul_ic_push(hic, ch);
+	    if (!hangul_ic_push(hic, ch)) {
+		if (!hangul_ic_push(hic, ch)) {
+		    return false;
+		}
+	    }
 	} else {
 	    ucschar choseong = 0;
 	    if (hangul_is_choseong(hangul_ic_peek(hic))) {
@@ -482,15 +486,25 @@ hangul_ic_process_jaso(HangulInputContext *hic, ucschar ch)
 						  hic->buffer.choseong, ch);
 	    }
 	    if (choseong) {
-		hangul_ic_push(hic, choseong);
+		if (!hangul_ic_push(hic, choseong)) {
+		    if (!hangul_ic_push(hic, choseong)) {
+			return false;
+		    }
+		}
 	    } else {
 		hangul_ic_save_commit_string(hic);
-		hangul_ic_push(hic, ch);
+		if (!hangul_ic_push(hic, ch)) {
+		    return false;
+		}
 	    }
 	}
     } else if (hangul_is_jungseong(ch)) {
 	if (hic->buffer.jungseong == 0) {
-	    hangul_ic_push(hic, ch);
+	    if (!hangul_ic_push(hic, ch)) {
+		if (!hangul_ic_push(hic, ch)) {
+		    return false;
+		}
+	    }
 	} else {
 	    ucschar jungseong = 0;
 	    if (hangul_is_jungseong(hangul_ic_peek(hic))) {
@@ -498,25 +512,45 @@ hangul_ic_process_jaso(HangulInputContext *hic, ucschar ch)
 						  hic->buffer.jungseong, ch);
 	    }
 	    if (jungseong) {
-		hangul_ic_push(hic, jungseong);
+		if (!hangul_ic_push(hic, jungseong)) {
+		    if (!hangul_ic_push(hic, jungseong)) {
+			return false;
+		    }
+		}
 	    } else {
 		hangul_ic_save_commit_string(hic);
-		hangul_ic_push(hic, ch);
+		if (!hangul_ic_push(hic, ch)) {
+		    if (!hangul_ic_push(hic, ch)) {
+			return false;
+		    }
+		}
 	    }
 	}
     } else if (hangul_is_jongseong(ch)) {
 	if (hic->buffer.jongseong == 0) {
-	    hangul_ic_push(hic, ch);
+	    if (!hangul_ic_push(hic, ch)) {
+		if (!hangul_ic_push(hic, ch)) {
+		    return false;
+		}
+	    }
 	} else {
 	    ucschar jongseong = 0;
 	    if (hangul_is_jongseong(hangul_ic_peek(hic))) {
 		jongseong = hangul_ic_combine_jamo(hic,
 						   hic->buffer.jongseong, ch);
 		if (jongseong) {
-		    hangul_ic_push(hic, jongseong);
+		    if (!hangul_ic_push(hic, jongseong)) {
+			if (!hangul_ic_push(hic, jongseong)) {
+			    return false;
+			}
+		    }
 		} else {
 		    hangul_ic_save_commit_string(hic);
-		    hangul_ic_push(hic, ch);
+		    if (!hangul_ic_push(hic, ch)) {
+			if (!hangul_ic_push(hic, ch)) {
+			    return false;
+			}
+		    }
 		}
 	    }
 	}
