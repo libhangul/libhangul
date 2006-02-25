@@ -4,7 +4,7 @@
  */
 
 /* libhangul
- * Copyright (C) 2004,2005 Choe Hwanjin
+ * Copyright (C) 2004 - 2006 Choe Hwanjin
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
