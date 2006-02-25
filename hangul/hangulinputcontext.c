@@ -24,9 +24,38 @@
 #include <ctype.h>
 
 #include "hangul.h"
-#include "hangulkeyboard.h"
 
 #define N_ELEMENTS(array) (sizeof(array) / sizeof(array[0]))
+
+struct _HangulJamoCombination {
+    uint32_t key;
+    ucschar code;
+};
+
+struct _HangulBuffer {
+    ucschar choseong;
+    ucschar jungseong;
+    ucschar jongseong;
+
+    ucschar stack[12];
+    int     index;
+};
+
+struct _HangulInputContext {
+    int type;
+    const ucschar *keyboard_table;
+    const HangulJamoCombination *combination_table;
+    int combination_table_size;
+    HangulBuffer buffer;
+    HangulICFilter filter;
+    void *filter_data;
+    int output_mode;
+
+    ucschar preedit_string[64];
+    ucschar commit_string[64];
+};
+
+#include "hangulkeyboard.h"
 
 static void    hangul_buffer_push(HangulBuffer *buffer, ucschar ch);
 static ucschar hangul_buffer_pop (HangulBuffer *buffer);

@@ -83,34 +83,6 @@ enum {
     HANGUL_INPUT_FILTER_JASO
 };
 
-struct _HangulJamoCombination {
-    uint32_t key;
-    ucschar code;
-};
-
-struct _HangulBuffer {
-    ucschar choseong;
-    ucschar jungseong;
-    ucschar jongseong;
-
-    ucschar stack[12];
-    int     index;
-};
-
-struct _HangulInputContext {
-    int type;
-    const ucschar *keyboard_table;
-    const HangulJamoCombination *combination_table;
-    int combination_table_size;
-    HangulBuffer buffer;
-    HangulICFilter filter;
-    void *filter_data;
-    int output_mode;
-
-    ucschar preedit_string[64];
-    ucschar commit_string[64];
-};
-
 HangulInputContext* hangul_ic_new(HangulKeyboardType keyboard);
 void hangul_ic_delete(HangulInputContext *hic);
 bool hangul_ic_process(HangulInputContext *hic, int ascii);
