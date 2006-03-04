@@ -388,6 +388,12 @@ hangul_ic_process_jamo(HangulInputContext *hic, ucschar ch)
     ucschar jong;
     ucschar combined;
 
+    if (!hangul_is_jaso(ch) && ch > 0) {
+	hangul_ic_save_commit_string(hic);
+	hangul_ic_append_commit_string(hic, ch);
+	return true;
+    }
+
     if (hic->buffer.jongseong) {
 	if (hangul_is_choseong(ch)) {
 	    jong = hangul_choseong_to_jongseong(ch);
@@ -485,8 +491,13 @@ hangul_ic_process_jamo(HangulInputContext *hic, ucschar ch)
 	    }
 	}
     } else {
-	if (!hangul_ic_push(hic, ch)) {
-	    return false;
+	if (hangul_is_jaso(ch)) {
+	    if (!hangul_ic_push(hic, ch)) {
+		return false;
+	    }
+	} else {
+	    hangul_ic_save_commit_string(hic);
+	    hangul_ic_append_commit_string(hic, ch);
 	}
     }
 
