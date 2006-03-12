@@ -90,6 +90,7 @@ void hangul_ic_reset(HangulInputContext *hic);
 void hangul_ic_flush(HangulInputContext *hic);
 bool hangul_ic_backspace(HangulInputContext *hic);
 bool hangul_ic_is_empty(HangulInputContext *hic);
+int  hangul_ic_dvorak_to_qwerty(int qwerty);
 
 void hangul_ic_set_output_mode(HangulInputContext *hic, int mode);
 void hangul_ic_set_keyboard(HangulInputContext *hic,
