@@ -1,19 +1,19 @@
 static const ucschar hangul_keyboard_table_2[] = {
     0x0000,     /* exclam:       exclamation mark               */
-    0x0000,     /* quotedbl:     quotation mark                 */
+    0x0022,     /* quotedbl:     quotation mark                 */
     0x0000,     /* numbersign:   number sign                    */
     0x0000,     /* dollar:       dollar sign                    */
     0x0000,     /* percent:      percent sign                   */
     0x0000,     /* ampersand:    ampersand                      */
-    0x0000,     /* apostrophe:   apostrophe                     */
+    0x0027,     /* apostrophe:   apostrophe                     */
     0x0000,     /* parenleft:    left parenthesis               */
     0x0000,     /* parenright:   right parenthesis              */
     0x0000,     /* asterisk:     asterisk                       */
     0x0000,     /* plus:         plus sign                      */
-    0x0000,     /* comma:        comma                          */
+    0x002c,     /* comma:        comma                          */
     0x0000,     /* minus:        minus sign                     */
-    0x0000,     /* period:       period                         */
-    0x0000,     /* slash:        slash                          */
+    0x002e,     /* period:       period                         */
+    0x002f,     /* slash:        slash                          */
     0x0000,     /* 0:            0                              */
     0x0000,     /* 1:            1                              */
     0x0000,     /* 2:            2                              */
@@ -24,12 +24,12 @@ static const ucschar hangul_keyboard_table_2[] = {
     0x0000,     /* 7:            7                              */
     0x0000,     /* 8:            8                              */
     0x0000,     /* 9:            9                              */
-    0x0000,     /* colon:        colon                          */
-    0x0000,     /* semicolon:    semicolon                      */
-    0x0000,     /* less:         less-than sign                 */
+    0x003a,     /* colon:        colon                          */
+    0x003b,     /* semicolon:    semicolon                      */
+    0x003c,     /* less:         less-than sign                 */
     0x0000,     /* equal:        equals sign                    */
-    0x0000,     /* greater:      greater-than sign              */
-    0x0000,     /* question:     question mark                  */
+    0x003e,     /* greater:      greater-than sign              */
+    0x003f,     /* question:     question mark                  */
     0x0000,     /* at:           commercial at                  */
     0x1106,     /* A:            choseong mieum                 */
     0x1172,     /* B:            jungseong yu                   */
@@ -57,9 +57,9 @@ static const ucschar hangul_keyboard_table_2[] = {
     0x1110,     /* X:            choseong thieuth               */
     0x116d,     /* Y:            jungseong yo                   */
     0x110f,     /* Z:            choseong khieukh               */
-    0x0000,     /* bracketleft:  left bracket                   */
+    0x005b,     /* bracketleft:  left bracket                   */
     0x0000,     /* backslash:    backslash                      */
-    0x0000,     /* bracketright: right bracket                  */
+    0x005d,     /* bracketright: right bracket                  */
     0x0000,     /* asciicircum:  circumflex accent              */
     0x0000,     /* underscore:   underscore                     */
     0x0000,     /* quoteleft:    grave accent                   */
@@ -89,9 +89,9 @@ static const ucschar hangul_keyboard_table_2[] = {
     0x1110,     /* x:            choseong  thieuth              */
     0x116d,     /* y:            jungseong yo                   */
     0x110f,     /* z:            choseong  khieukh              */
-    0x0000,     /* braceleft:    left brace                     */
+    0x007b,     /* braceleft:    left brace                     */
     0x0000,     /* bar:          vertical bar                   */
-    0x0000,     /* braceright:   right brace                    */
+    0x007d,     /* braceright:   right brace                    */
     0x0000      /* asciitilde:   tilde                          */
 };
 
