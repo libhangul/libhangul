@@ -491,13 +491,8 @@ hangul_ic_process_jamo(HangulInputContext *hic, ucschar ch)
 	    }
 	}
     } else {
-	if (hangul_is_jaso(ch)) {
-	    if (!hangul_ic_push(hic, ch)) {
-		return false;
-	    }
-	} else {
-	    hangul_ic_save_commit_string(hic);
-	    hangul_ic_append_commit_string(hic, ch);
+	if (!hangul_ic_push(hic, ch)) {
+	    return false;
 	}
     }
 
