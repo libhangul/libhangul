@@ -1,9 +1,4 @@
-SUBDIRS = hangul data test
+SUBDIRS = hangul data bindings test
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = libhangul.pc
-
-EXTRA_DIST = \
-    pyhangul/Makefile \
-    pyhangul/pyhangul.c \
-    pyhangul/setup.py

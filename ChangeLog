@@ -1,4 +1,180 @@
 ------------------------------------------------------------------------
+r67 | krisna | 2006-03-23 13:12:11 +0900 (목, 23  3월 2006) | 2 lines
+Changed paths:
+   M /libhangul/trunk/hangul/hangulinputcontext.c
+
+hangul_ic_process_jamo에서 처리하지 않는 글자는 false를 리턴하게 함
+
+------------------------------------------------------------------------
+r66 | krisna | 2006-03-12 15:01:58 +0900 (일, 12  3월 2006) | 4 lines
+Changed paths:
+   A /libhangul/trunk/bindings
+   A /libhangul/trunk/bindings/python
+   A /libhangul/trunk/bindings/python/Makefile (from /libhangul/trunk/pyhangul/Makefile:63)
+   A /libhangul/trunk/bindings/python/pyhangul.c (from /libhangul/trunk/pyhangul/pyhangul.c:63)
+   A /libhangul/trunk/bindings/python/setup.py (from /libhangul/trunk/pyhangul/setup.py:63)
+   A /libhangul/trunk/bindings/python/test_pyhangul.py (from /libhangul/trunk/pyhangul/test_pyhangul.py:63)
+   A /libhangul/trunk/bindings/ruby
+   A /libhangul/trunk/bindings/ruby/extconf.rb
+   A /libhangul/trunk/bindings/ruby/hangul.c
+   A /libhangul/trunk/bindings/ruby/test-hangul.rb
+   D /libhangul/trunk/pyhangul
+
+bindings dir 추가
+pyhangul을 bindings/python으로 옮김
+ruby binding 추가
+
+------------------------------------------------------------------------
+r65 | krisna | 2006-03-12 14:53:25 +0900 (일, 12  3월 2006) | 2 lines
+Changed paths:
+   M /libhangul/trunk/hangul/hangul.h
+   M /libhangul/trunk/hangul/hangulinputcontext.c
+
+hangul_ic_dvorak_to_qwerty() 추가
+
+------------------------------------------------------------------------
+r64 | krisna | 2006-03-12 14:52:59 +0900 (일, 12  3월 2006) | 2 lines
+Changed paths:
+   M /libhangul/trunk/hangul/hangulkeyboard.h
+
+dvorak + 두벌식 자판에서 기호글자는 qwerty 배열처럼 처리
+
+------------------------------------------------------------------------
+r63 | krisna | 2006-03-04 10:40:59 +0900 (토, 04  3월 2006) | 2 lines
+Changed paths:
+   M /libhangul/trunk/hangul/hangulinputcontext.c
+
+자모식 루틴에서 영문자 처리 개선
+
+------------------------------------------------------------------------
+r62 | krisna | 2006-02-25 22:33:54 +0900 (토, 25  2월 2006) | 2 lines
+Changed paths:
+   M /libhangul/trunk/test/test.c
+
+filter 함수 인자 바뀐 것을 적용함
+
+------------------------------------------------------------------------
+r61 | krisna | 2006-02-25 22:27:06 +0900 (토, 25  2월 2006) | 2 lines
+Changed paths:
+   M /libhangul/trunk/hangul/hangul.h
+   M /libhangul/trunk/hangul/hangulinputcontext.c
+   M /libhangul/trunk/hangul/hangulkeyboard.h
+
+HangulInputContext의 실제 구현을 hangulinputcontext.c로 숨김
+
+------------------------------------------------------------------------
+r60 | krisna | 2006-02-25 22:14:37 +0900 (토, 25  2월 2006) | 2 lines
+Changed paths:
+   M /libhangul/trunk/hangul/hangul.h
+   M /libhangul/trunk/hangul/hangulctype.c
+   M /libhangul/trunk/hangul/hangulinputcontext.c
+
+라이센스 연도 갱신
+
+------------------------------------------------------------------------
+r59 | krisna | 2006-02-25 18:04:30 +0900 (토, 25  2월 2006) | 2 lines
+Changed paths:
+   M /libhangul/trunk/hangul/hangulinputcontext.c
+
+hangul_ic_process_jaso()(세벌식 루틴)에서도 filter 함수 적용
+
+------------------------------------------------------------------------
+r58 | krisna | 2006-02-25 18:03:46 +0900 (토, 25  2월 2006) | 3 lines
+Changed paths:
+   M /libhangul/trunk/hangul/hangulctype.c
+
+hangul_jaso_to_jamo에서 잘못된 처리 수정
+hangul_choseong_to_jamo, hangul_jungseong_to_jamo, hangul_jongseong_to_jamo 제거
+
+------------------------------------------------------------------------
+r57 | krisna | 2006-02-25 17:19:00 +0900 (토, 25  2월 2006) | 3 lines
+Changed paths:
+   M /libhangul/trunk/hangul/hangulinputcontext.c
+
+hangul_ic_push 가 실패할 경우 한번더 push함
+ㅆㅠ 나 ㅠㅆ 를 입력할 때 발생하는 문제를 수정함
+
+------------------------------------------------------------------------
+r56 | krisna | 2006-02-18 15:49:57 +0900 (토, 18  2월 2006) | 3 lines
+Changed paths:
+   M /libhangul/trunk/hangul/hangul.h
+   M /libhangul/trunk/hangul/hangulctype.c
+   M /libhangul/trunk/hangul/hangulinputcontext.c
+
+add hangul_jaso_to_jamo()
+add new parameter preedit string to HangulICFilter
+
+------------------------------------------------------------------------
+r55 | krisna | 2006-02-18 11:13:18 +0900 (토, 18  2월 2006) | 2 lines
+Changed paths:
+   M /libhangul/trunk/hangul/hanja.c
+
+ignore comment line which is started by '#' or blank line
+
+------------------------------------------------------------------------
+r54 | krisna | 2006-02-18 02:41:10 +0900 (토, 18  2월 2006) | 2 lines
+Changed paths:
+   M /libhangul/trunk/hangul/hangulinputcontext.c
+
+use buffer.jongseong not jungseong on hangul_ic_push
+
+------------------------------------------------------------------------
+r53 | krisna | 2006-02-18 02:19:31 +0900 (토, 18  2월 2006) | 3 lines
+Changed paths:
+   M /libhangul/trunk/hangul/hangulinputcontext.c
+
+* filter function and data pointer initialize
+* make work when filter functions is NULL
+
+------------------------------------------------------------------------
+r52 | krisna | 2006-02-17 19:22:48 +0900 (금, 17  2월 2006) | 2 lines
+Changed paths:
+   M /libhangul/trunk/hangul/hangul.h
+   M /libhangul/trunk/hangul/hangulinputcontext.c
+   M /libhangul/trunk/test/test.c
+
+add hangul_ic_set_filter() function
+
+------------------------------------------------------------------------
+r51 | krisna | 2006-02-11 13:52:10 +0900 (토, 11  2월 2006) | 2 lines
+Changed paths:
+   M /libhangul/trunk/hangul/hangul.h
+   M /libhangul/trunk/hangul/hangulinputcontext.c
+   M /libhangul/trunk/pyhangul/pyhangul.c
+   M /libhangul/trunk/test/test.c
+
+rename hangul_ic_filter to hangul_ic_process
+
+------------------------------------------------------------------------
+r50 | krisna | 2005-12-21 21:41:18 +0900 (수, 21 12월 2005) | 2 lines
+Changed paths:
+   M /libhangul/trunk/data/hanja/hanja.txt
+
+remove word dictionary data and add license terms
+
+------------------------------------------------------------------------
+r49 | krisna | 2005-12-14 10:44:20 +0900 (수, 14 12월 2005) | 3 lines
+Changed paths:
+   M /libhangul/trunk/hangul/hangulinputcontext.c
+
+fix bug #301100, thanks to Young Chol Song (skystars)
+check the index validity on hangul_buffer_peek function
+
+------------------------------------------------------------------------
+r48 | krisna | 2005-11-27 23:19:43 +0900 (일, 27 11월 2005) | 2 lines
+Changed paths:
+   M /libhangul/trunk/hangul/hangulinputcontext.c
+
+fix the problem that 'krrk' generate '각가'
+
+------------------------------------------------------------------------
+r45 | krisna | 2005-11-20 23:27:07 +0900 (일, 20 11월 2005) | 2 lines
+Changed paths:
+   M /libhangul/trunk/ChangeLog
+
+update changelog
+
+------------------------------------------------------------------------
 r43 | krisna | 2005-11-20 01:16:28 +0900 (일, 20 11월 2005) | 2 lines
 Changed paths:
    M /libhangul/trunk/libhangul.pc.in
