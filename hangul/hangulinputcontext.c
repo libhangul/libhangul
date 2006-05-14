@@ -149,7 +149,7 @@ hangul_buffer_get_jamo_string(HangulBuffer *buffer, ucschar *buf, int buflen)
 	}
     }
 
-    buf[n] = L'\0';
+    buf[n] = 0;
 
     return n;
 }
@@ -158,7 +158,7 @@ static int
 hangul_jaso_to_string(ucschar cho, ucschar jung, ucschar jong,
 		      ucschar *buf, int len)
 {
-    ucschar ch = L'\0';
+    ucschar ch = 0;
     int n = 0;
 
     if (cho) {
@@ -199,11 +199,11 @@ hangul_jaso_to_string(ucschar cho, ucschar jung, ucschar jong,
 		buf[n++] = ch;
 	    } else {
 		/* have nothing */
-		buf[n] = L'\0';
+		buf[n] = 0;
 	    }
 	}
     }
-    buf[n] = L'\0';
+    buf[n] = 0;
 
     return n;
 }
