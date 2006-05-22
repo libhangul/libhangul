@@ -1,19 +1,53 @@
 ------------------------------------------------------------------------
+r72 | krisna | 2006-05-22 22:31:45 +0900 (월, 22  5월 2006) | 2 lines
+변경된 경로:
+   M /libhangul/trunk/configure.ac
+   M /libhangul/trunk/libhangul.pc.in
+
+LIBHANGUL_VERSION 대신 PACKAGE_VERSION을 사용함
+
+------------------------------------------------------------------------
+r71 | krisna | 2006-05-15 23:06:14 +0900 (월, 15  5월 2006) | 3 lines
+변경된 경로:
+   M /libhangul/trunk/data/hanja/hanja.txt
+
+candidate의 순서를 nabi와 같게 바꿈
+see: http://kldp.net/tracker/?func=detail&atid=350987&aid=301209&group_id=510
+
+------------------------------------------------------------------------
+r70 | krisna | 2006-05-14 19:41:29 +0900 (일, 14  5월 2006) | 2 lines
+변경된 경로:
+   M /libhangul/trunk/hangul/hangulinputcontext.c
+
+ucs string의 nul 문자를 L'\0'에서 0으로 바꿈
+
+------------------------------------------------------------------------
+r68 | krisna | 2006-05-14 03:31:33 +0900 (일, 14  5월 2006) | 3 lines
+변경된 경로:
+   M /libhangul/trunk/ChangeLog
+   M /libhangul/trunk/Makefile.am
+   M /libhangul/trunk/NEWS
+   M /libhangul/trunk/configure.ac
+
+* bindings 디렉토리 추가 (python, ruby포함)
+* 문서 업데이트
+
+------------------------------------------------------------------------
 r67 | krisna | 2006-03-23 13:12:11 +0900 (목, 23  3월 2006) | 2 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/hangul/hangulinputcontext.c
 
 hangul_ic_process_jamo에서 처리하지 않는 글자는 false를 리턴하게 함
 
 ------------------------------------------------------------------------
 r66 | krisna | 2006-03-12 15:01:58 +0900 (일, 12  3월 2006) | 4 lines
-Changed paths:
+변경된 경로:
    A /libhangul/trunk/bindings
    A /libhangul/trunk/bindings/python
-   A /libhangul/trunk/bindings/python/Makefile (from /libhangul/trunk/pyhangul/Makefile:63)
-   A /libhangul/trunk/bindings/python/pyhangul.c (from /libhangul/trunk/pyhangul/pyhangul.c:63)
-   A /libhangul/trunk/bindings/python/setup.py (from /libhangul/trunk/pyhangul/setup.py:63)
-   A /libhangul/trunk/bindings/python/test_pyhangul.py (from /libhangul/trunk/pyhangul/test_pyhangul.py:63)
+   A /libhangul/trunk/bindings/python/Makefile(원본 /libhangul/trunk/pyhangul/Makefile:63)
+   A /libhangul/trunk/bindings/python/pyhangul.c(원본 /libhangul/trunk/pyhangul/pyhangul.c:63)
+   A /libhangul/trunk/bindings/python/setup.py(원본 /libhangul/trunk/pyhangul/setup.py:63)
+   A /libhangul/trunk/bindings/python/test_pyhangul.py(원본 /libhangul/trunk/pyhangul/test_pyhangul.py:63)
    A /libhangul/trunk/bindings/ruby
    A /libhangul/trunk/bindings/ruby/extconf.rb
    A /libhangul/trunk/bindings/ruby/hangul.c
@@ -26,7 +60,7 @@ ruby binding 추가
 
 ------------------------------------------------------------------------
 r65 | krisna | 2006-03-12 14:53:25 +0900 (일, 12  3월 2006) | 2 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/hangul/hangul.h
    M /libhangul/trunk/hangul/hangulinputcontext.c
 
@@ -34,28 +68,28 @@ hangul_ic_dvorak_to_qwerty() 추가
 
 ------------------------------------------------------------------------
 r64 | krisna | 2006-03-12 14:52:59 +0900 (일, 12  3월 2006) | 2 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/hangul/hangulkeyboard.h
 
 dvorak + 두벌식 자판에서 기호글자는 qwerty 배열처럼 처리
 
 ------------------------------------------------------------------------
 r63 | krisna | 2006-03-04 10:40:59 +0900 (토, 04  3월 2006) | 2 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/hangul/hangulinputcontext.c
 
 자모식 루틴에서 영문자 처리 개선
 
 ------------------------------------------------------------------------
 r62 | krisna | 2006-02-25 22:33:54 +0900 (토, 25  2월 2006) | 2 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/test/test.c
 
 filter 함수 인자 바뀐 것을 적용함
 
 ------------------------------------------------------------------------
 r61 | krisna | 2006-02-25 22:27:06 +0900 (토, 25  2월 2006) | 2 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/hangul/hangul.h
    M /libhangul/trunk/hangul/hangulinputcontext.c
    M /libhangul/trunk/hangul/hangulkeyboard.h
@@ -64,7 +98,7 @@ HangulInputContext의 실제 구현을 hangulinputcontext.c로 숨김
 
 ------------------------------------------------------------------------
 r60 | krisna | 2006-02-25 22:14:37 +0900 (토, 25  2월 2006) | 2 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/hangul/hangul.h
    M /libhangul/trunk/hangul/hangulctype.c
    M /libhangul/trunk/hangul/hangulinputcontext.c
@@ -73,14 +107,14 @@ Changed paths:
 
 ------------------------------------------------------------------------
 r59 | krisna | 2006-02-25 18:04:30 +0900 (토, 25  2월 2006) | 2 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/hangul/hangulinputcontext.c
 
 hangul_ic_process_jaso()(세벌식 루틴)에서도 filter 함수 적용
 
 ------------------------------------------------------------------------
 r58 | krisna | 2006-02-25 18:03:46 +0900 (토, 25  2월 2006) | 3 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/hangul/hangulctype.c
 
 hangul_jaso_to_jamo에서 잘못된 처리 수정
@@ -88,7 +122,7 @@ hangul_choseong_to_jamo, hangul_jungseong_to_jamo, hangul_jongseong_to_jamo 제�
 
 ------------------------------------------------------------------------
 r57 | krisna | 2006-02-25 17:19:00 +0900 (토, 25  2월 2006) | 3 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/hangul/hangulinputcontext.c
 
 hangul_ic_push 가 실패할 경우 한번더 push함
@@ -96,7 +130,7 @@ hangul_ic_push 가 실패할 경우 한번더 push함
 
 ------------------------------------------------------------------------
 r56 | krisna | 2006-02-18 15:49:57 +0900 (토, 18  2월 2006) | 3 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/hangul/hangul.h
    M /libhangul/trunk/hangul/hangulctype.c
    M /libhangul/trunk/hangul/hangulinputcontext.c
@@ -106,21 +140,21 @@ add new parameter preedit string to HangulICFilter
 
 ------------------------------------------------------------------------
 r55 | krisna | 2006-02-18 11:13:18 +0900 (토, 18  2월 2006) | 2 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/hangul/hanja.c
 
 ignore comment line which is started by '#' or blank line
 
 ------------------------------------------------------------------------
 r54 | krisna | 2006-02-18 02:41:10 +0900 (토, 18  2월 2006) | 2 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/hangul/hangulinputcontext.c
 
 use buffer.jongseong not jungseong on hangul_ic_push
 
 ------------------------------------------------------------------------
 r53 | krisna | 2006-02-18 02:19:31 +0900 (토, 18  2월 2006) | 3 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/hangul/hangulinputcontext.c
 
 * filter function and data pointer initialize
@@ -128,7 +162,7 @@ Changed paths:
 
 ------------------------------------------------------------------------
 r52 | krisna | 2006-02-17 19:22:48 +0900 (금, 17  2월 2006) | 2 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/hangul/hangul.h
    M /libhangul/trunk/hangul/hangulinputcontext.c
    M /libhangul/trunk/test/test.c
@@ -137,7 +171,7 @@ add hangul_ic_set_filter() function
 
 ------------------------------------------------------------------------
 r51 | krisna | 2006-02-11 13:52:10 +0900 (토, 11  2월 2006) | 2 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/hangul/hangul.h
    M /libhangul/trunk/hangul/hangulinputcontext.c
    M /libhangul/trunk/pyhangul/pyhangul.c
@@ -147,14 +181,14 @@ rename hangul_ic_filter to hangul_ic_process
 
 ------------------------------------------------------------------------
 r50 | krisna | 2005-12-21 21:41:18 +0900 (수, 21 12월 2005) | 2 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/data/hanja/hanja.txt
 
 remove word dictionary data and add license terms
 
 ------------------------------------------------------------------------
 r49 | krisna | 2005-12-14 10:44:20 +0900 (수, 14 12월 2005) | 3 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/hangul/hangulinputcontext.c
 
 fix bug #301100, thanks to Young Chol Song (skystars)
@@ -162,49 +196,49 @@ check the index validity on hangul_buffer_peek function
 
 ------------------------------------------------------------------------
 r48 | krisna | 2005-11-27 23:19:43 +0900 (일, 27 11월 2005) | 2 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/hangul/hangulinputcontext.c
 
 fix the problem that 'krrk' generate '각가'
 
 ------------------------------------------------------------------------
 r45 | krisna | 2005-11-20 23:27:07 +0900 (일, 20 11월 2005) | 2 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/ChangeLog
 
 update changelog
 
 ------------------------------------------------------------------------
 r43 | krisna | 2005-11-20 01:16:28 +0900 (일, 20 11월 2005) | 2 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/libhangul.pc.in
 
 change includedir to have hangul header directory in libhangul.pc
 
 ------------------------------------------------------------------------
 r42 | krisna | 2005-11-20 01:13:49 +0900 (일, 20 11월 2005) | 2 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/autogen.sh
 
 add libtoolize command
 
 ------------------------------------------------------------------------
 r41 | krisna | 2005-11-19 16:12:31 +0900 (토, 19 11월 2005) | 2 lines
-Changed paths:
+변경된 경로:
    A /libhangul/trunk/pyhangul/test_pyhangul.py
 
 add pyhangul test code pyhangul/test_pyhangul.py
 
 ------------------------------------------------------------------------
 r40 | krisna | 2005-11-19 16:07:42 +0900 (토, 19 11월 2005) | 2 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/Makefile.am
 
 add test to SUBDIRS
 
 ------------------------------------------------------------------------
 r39 | krisna | 2005-11-19 16:07:14 +0900 (토, 19 11월 2005) | 2 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/NEWS
    M /libhangul/trunk/README
 
@@ -212,21 +246,21 @@ update documents
 
 ------------------------------------------------------------------------
 r38 | krisna | 2005-11-19 16:06:59 +0900 (토, 19 11월 2005) | 2 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/AUTHORS
 
 add developer, Joon-cheol Park
 
 ------------------------------------------------------------------------
 r37 | krisna | 2005-11-19 13:28:57 +0900 (토, 19 11월 2005) | 2 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/pyhangul/setup.py
 
 clean up setup.py, python install script
 
 ------------------------------------------------------------------------
 r36 | krisna | 2005-11-18 12:43:53 +0900 (금, 18 11월 2005) | 2 lines
-Changed paths:
+변경된 경로:
    A /libhangul/trunk/Doxyfile
    M /libhangul/trunk/hangul/hangulctype.c
 
@@ -234,14 +268,14 @@ add doxygen support
 
 ------------------------------------------------------------------------
 r35 | krisna | 2005-11-18 12:43:21 +0900 (금, 18 11월 2005) | 2 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/data/hanja/hanja.txt
 
 add some new word
 
 ------------------------------------------------------------------------
 r34 | krisna | 2005-11-04 23:31:59 +0900 (금, 04 11월 2005) | 2 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/test/Makefile.am
    M /libhangul/trunk/test/test.c
 
@@ -249,35 +283,35 @@ Apply the changes, libtoolize and new api hangul_ic_flush
 
 ------------------------------------------------------------------------
 r33 | krisna | 2005-11-04 23:24:50 +0900 (금, 04 11월 2005) | 2 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/pyhangul/pyhangul.c
 
 Change comment style, // -> /* */
 
 ------------------------------------------------------------------------
 r32 | krisna | 2005-11-04 23:22:35 +0900 (금, 04 11월 2005) | 2 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/pyhangul/pyhangul.c
 
 Change wchar_t to ucschar
 
 ------------------------------------------------------------------------
 r31 | krisna | 2005-11-04 22:39:58 +0900 (금, 04 11월 2005) | 2 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/pyhangul/pyhangul.c
 
 Add new api hangul_ic_flush
 
 ------------------------------------------------------------------------
 r30 | krisna | 2005-11-04 22:39:38 +0900 (금, 04 11월 2005) | 2 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/pyhangul/setup.py
 
 libtoolize
 
 ------------------------------------------------------------------------
 r29 | krisna | 2005-10-29 17:37:58 +0900 (토, 29 10월 2005) | 2 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/hangul/hangulinputcontext.c
    M /libhangul/trunk/hangul/hangulkeyboard.h
 
@@ -285,14 +319,14 @@ Changed paths:
 
 ------------------------------------------------------------------------
 r28 | krisna | 2005-10-03 16:00:43 +0900 (월, 03 10월 2005) | 2 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/Makefile.am
 
 * Makefile.am: add pkgconfig file rule
 
 ------------------------------------------------------------------------
 r27 | krisna | 2005-10-02 14:32:31 +0900 (일, 02 10월 2005) | 2 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/hangul/hangul.h
    M /libhangul/trunk/hangul/hangulinputcontext.c
 
@@ -300,7 +334,7 @@ add hangul_ic_reset() function
 
 ------------------------------------------------------------------------
 r26 | krisna | 2005-10-02 14:31:02 +0900 (일, 02 10월 2005) | 3 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/hangul/hanja.c
 
 * remove unneeded main() function ;)
@@ -308,7 +342,7 @@ Changed paths:
 
 ------------------------------------------------------------------------
 r25 | krisna | 2005-10-01 15:41:37 +0900 (토, 01 10월 2005) | 2 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk
    M /libhangul/trunk/data
    M /libhangul/trunk/data/hanja
@@ -318,7 +352,7 @@ add svn:ignore properties
 
 ------------------------------------------------------------------------
 r24 | krisna | 2005-10-01 15:15:45 +0900 (토, 01 10월 2005) | 3 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/Makefile.am
    M /libhangul/trunk/configure.ac
    A /libhangul/trunk/data
@@ -334,7 +368,7 @@ Changed paths:
 
 ------------------------------------------------------------------------
 r23 | krisna | 2005-10-01 14:39:54 +0900 (토, 01 10월 2005) | 3 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/hangul/hangul.h
    M /libhangul/trunk/hangul/hangulctype.c
    M /libhangul/trunk/hangul/hangulinputcontext.c
@@ -344,7 +378,7 @@ Changed paths:
 
 ------------------------------------------------------------------------
 r22 | krisna | 2005-10-01 14:17:13 +0900 (토, 01 10월 2005) | 2 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/hangul/hangul.h
    M /libhangul/trunk/hangul/hangulinputcontext.c
 
@@ -352,7 +386,7 @@ rename hangul_is_reset -> hangul_ic_flush
 
 ------------------------------------------------------------------------
 r21 | krisna | 2005-10-01 14:01:19 +0900 (토, 01 10월 2005) | 2 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/COPYING
    M /libhangul/trunk/hangul/hangul.h
    M /libhangul/trunk/hangul/hangulctype.c
@@ -363,7 +397,7 @@ change the license to LGPL
 
 ------------------------------------------------------------------------
 r20 | krisna | 2005-10-01 13:49:15 +0900 (토, 01 10월 2005) | 3 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/hangul/hangul.h
    M /libhangul/trunk/hangul/hangulctype.c
    M /libhangul/trunk/hangul/hangulinputcontext.c
@@ -374,7 +408,7 @@ Changed paths:
 
 ------------------------------------------------------------------------
 r19 | krisna | 2005-09-25 23:10:25 +0900 (일, 25  9월 2005) | 3 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/Makefile.am
    M /libhangul/trunk/hangul/Makefile.am
    M /libhangul/trunk/hangul/hangul.h
@@ -385,7 +419,7 @@ Changed paths:
 
 ------------------------------------------------------------------------
 r18 | krisna | 2005-09-25 22:55:24 +0900 (일, 25  9월 2005) | 3 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/configure.ac
    M /libhangul/trunk/hangul/Makefile.am
    A /libhangul/trunk/libhangul.pc.in
@@ -395,7 +429,7 @@ Changed paths:
 
 ------------------------------------------------------------------------
 r17 | krisna | 2005-09-25 19:24:56 +0900 (일, 25  9월 2005) | 2 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/hangul/hangul.h
    M /libhangul/trunk/hangul/hangulctype.c
 
@@ -403,7 +437,7 @@ hangul_is_syllable(wchar_t ch) 추가
 
 ------------------------------------------------------------------------
 r16 | krisna | 2005-08-25 23:58:55 +0900 (목, 25  8월 2005) | 3 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/hangul/hangulinputcontext.c
 
 do not make string, if there is no cho, jung, jongseong
@@ -411,7 +445,7 @@ in hangul_buffer_get_jamo_string()
 
 ------------------------------------------------------------------------
 r15 | krisna | 2005-08-21 14:05:26 +0900 (일, 21  8월 2005) | 3 lines
-Changed paths:
+변경된 경로:
    M /libhangul/trunk/hangul/hangulinputcontext.c
 
 append the translated char to the commit string if it has value.
@@ -419,11 +453,11 @@ append the translated char to the commit string if it has value.
 
 ------------------------------------------------------------------------
 r14 | krisna | 2005-07-23 23:50:10 +0900 (토, 23  7월 2005) | 2 lines
-Changed paths:
+변경된 경로:
    D /branches
    A /libhangul
-   A /libhangul/tags (from /tags:13)
-   A /libhangul/trunk (from /trunk/hangul:13)
+   A /libhangul/tags(원본 /tags:13)
+   A /libhangul/trunk(원본 /trunk/hangul:13)
    D /tags
    D /trunk
 
@@ -431,7 +465,7 @@ migrate to svn and rearrange source directory
 
 ------------------------------------------------------------------------
 r13 | krisna | 2004-12-14 22:41:59 +0900 (화, 14 12월 2004) | 2 lines
-Changed paths:
+변경된 경로:
    M /trunk/hangul/hangul/hangul.h
    M /trunk/hangul/hangul/hangulinputcontext.c
    M /trunk/hangul/pyhangul/pyhangul.c
@@ -441,14 +475,14 @@ Change api of hangul_ic_filter(); remove capslock argument.
 
 ------------------------------------------------------------------------
 r12 | krisna | 2004-12-07 21:58:00 +0900 (화, 07 12월 2004) | 2 lines
-Changed paths:
+변경된 경로:
    M /trunk/hangul/hangul/hangul.h
 
 include inttypes.h instead of stdint.h
 
 ------------------------------------------------------------------------
 r11 | krisna | 2004-12-05 13:11:46 +0900 (일, 05 12월 2004) | 3 lines
-Changed paths:
+변경된 경로:
    M /trunk/hangul/hangul/hangul.h
    M /trunk/hangul/hangul/hangulinputcontext.c
    M /trunk/hangul/hangul/hangulkeyboard.h
@@ -458,7 +492,7 @@ Changed paths:
 
 ------------------------------------------------------------------------
 r10 | exman | 2004-12-02 00:12:07 +0900 (목, 02 12월 2004) | 2 lines
-Changed paths:
+변경된 경로:
    A /trunk/hangul/pyhangul/dist.bat
    M /trunk/hangul/pyhangul/setup.py
 
@@ -466,21 +500,21 @@ add a script for win32-setup (using mingw32 compiler)
 
 ------------------------------------------------------------------------
 r9 | exman | 2004-11-08 22:54:21 +0900 (월, 08 11월 2004) | 2 lines
-Changed paths:
+변경된 경로:
    M /trunk/hangul/pyhangul/pyhangul.c
 
 *** empty log message ***
 
 ------------------------------------------------------------------------
 r8 | exman | 2004-11-08 22:47:37 +0900 (월, 08 11월 2004) | 1 line
-Changed paths:
+변경된 경로:
    M /trunk/hangul/pyhangul/pyhangul.c
    M /trunk/hangul/pyhangul/setup.py
 
 setup.py� path��
 ------------------------------------------------------------------------
 r7 | krisna | 2004-11-08 20:45:26 +0900 (월, 08 11월 2004) | 2 lines
-Changed paths:
+변경된 경로:
    M /trunk/hangul/README
    A /trunk/hangul/autogen.sh
 
@@ -488,7 +522,7 @@ write README and add autogen.sh
 
 ------------------------------------------------------------------------
 r3 | krisna | 2004-11-08 20:39:11 +0900 (월, 08 11월 2004) | 2 lines
-Changed paths:
+변경된 경로:
    A /trunk/hangul
    A /trunk/hangul/AUTHORS
    A /trunk/hangul/COPYING
