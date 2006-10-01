@@ -48,10 +48,10 @@ main(int argc, char *argv[])
 	    printf("%c", ascii);
 	}
     } 
+
     if (!hangul_ic_is_empty(hic)) {
-	hangul_ic_flush(hic);
-	commit_string = (wchar_t*)hangul_ic_get_commit_string(hic);
-	n = wcstombs(commit, commit_string, sizeof(commit));
+	const wchar_t *flushed = (wchar_t*)hangul_ic_flush(hic);
+	n = wcstombs(commit, flushed, sizeof(commit));
 	commit[n] = '\0';
 	if (strlen(commit) > 0) {
 	    printf("%s", commit);

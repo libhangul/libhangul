@@ -87,7 +87,6 @@ HangulInputContext* hangul_ic_new(HangulKeyboardType keyboard);
 void hangul_ic_delete(HangulInputContext *hic);
 bool hangul_ic_process(HangulInputContext *hic, int ascii);
 void hangul_ic_reset(HangulInputContext *hic);
-void hangul_ic_flush(HangulInputContext *hic);
 bool hangul_ic_backspace(HangulInputContext *hic);
 bool hangul_ic_is_empty(HangulInputContext *hic);
 int  hangul_ic_dvorak_to_qwerty(int qwerty);
@@ -100,6 +99,7 @@ void hangul_ic_set_filter(HangulInputContext *hic,
 
 const ucschar* hangul_ic_get_preedit_string(HangulInputContext *hic);
 const ucschar* hangul_ic_get_commit_string(HangulInputContext *hic);
+const ucschar* hangul_ic_flush(HangulInputContext *hic);
 
 /* hanja.c */
 enum {

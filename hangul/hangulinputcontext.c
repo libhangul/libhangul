@@ -53,6 +53,7 @@ struct _HangulInputContext {
 
     ucschar preedit_string[64];
     ucschar commit_string[64];
+    ucschar flushed_string[64];
 };
 
 #include "hangulkeyboard.h"
@@ -646,11 +647,13 @@ hangul_ic_reset(HangulInputContext *hic)
 
     hic->preedit_string[0] = 0;
     hic->commit_string[0] = 0;
+    hic->flushed_string[0] = 0;
 
     hangul_buffer_clear(&hic->buffer);
 }
 
-/* this function does not clear previously made commit string */
+/* append current preedit to the commit buffer.
+ * this function does not clear previously made commit string. */
 static void
 hangul_ic_flush_internal(HangulInputContext *hic)
 {
@@ -660,14 +663,22 @@ hangul_ic_flush_internal(HangulInputContext *hic)
     hangul_buffer_clear(&hic->buffer);
 }
 
-void
+const ucschar*
 hangul_ic_flush(HangulInputContext *hic)
 {
     if (hic == NULL)
-	return;
+	return NULL;
 
+    // get the remaining string and clear the buffer
+    hic->preedit_string[0] = 0;
     hic->commit_string[0] = 0;
-    hangul_ic_flush_internal(hic);
+    hic->flushed_string[0] = 0;
+    hangul_buffer_get_string(&hic->buffer, hic->flushed_string,
+			     N_ELEMENTS(hic->flushed_string));
+
+    hangul_buffer_clear(&hic->buffer);
+
+    return hic->flushed_string;
 }
 
 bool
@@ -883,6 +894,10 @@ hangul_ic_new(HangulKeyboardType keyboard)
     hangul_ic_set_filter(hic, NULL, NULL);
 
     hangul_buffer_clear(&hic->buffer);
+
+    hic->preedit_string[0] = 0;
+    hic->commit_string[0] = 0;
+    hic->flushed_string[0] = 0;
 
     return hic;
 }
