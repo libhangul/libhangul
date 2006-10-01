@@ -49,14 +49,9 @@ static const char utf8_skip_table[256] = {
     3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,5,5,5,5,6,6,1,1
 };
 
-static inline char *h_nth_char(char *p, int n)
+static inline int h_char_len(const char *p)
 {
-    while (n > 0) {
-	p += utf8_skip_table[*(unsigned char*)p];
-	n--;
-    }
-
-    return p;
+    return utf8_skip_table[*(const unsigned char*)p];
 }
 
 static struct slist *
@@ -258,7 +253,7 @@ hanja_table_compare(const void *key, const void *item)
 }
 
 HanjaList*
-hanja_table_match(const HanjaTable* table, int option, const char *key)
+hanja_table_match_prefix(const HanjaTable* table, const char *key)
 {
     char *p;
     char newkey[64] = { '\0', };
@@ -267,7 +262,7 @@ hanja_table_match(const HanjaTable* table, int option, const char *key)
     struct slist *items = NULL;
 
     strncpy(newkey, key, sizeof(newkey));
-    p = h_nth_char(newkey, 1);
+    p = newkey + h_char_len(newkey);
     *p = '\0';
 
     list = bsearch(newkey,
@@ -292,6 +287,47 @@ hanja_table_match(const HanjaTable* table, int option, const char *key)
 	}
     }
     
+    return NULL;
+}
+
+HanjaList*
+hanja_table_match_suffix(const HanjaTable* table, const char *key)
+{
+    const char *p;
+    char newkey[64] = { '\0', };
+    HanjaList **list = NULL;
+    HanjaList *ret;
+    struct slist *items = NULL;
+
+    p = key;
+    strncpy(newkey, p, sizeof(newkey));
+    newkey[h_char_len(newkey)] = '\0';
+    while (strlen(newkey) > 0) {
+	list = bsearch(newkey,
+		       table->base, table->nmember,
+		       sizeof(HanjaList*),
+		       hanja_table_compare);
+
+	if (list != NULL) {
+	    int i;
+	    for (i = 0; i < (*list)->nitems; i++) {
+		if (strcmp(p, (*list)->items[i]->key) == 0) {
+		    items = slist_append(items, (*list)->items[i]);
+		}
+	    }
+	}
+
+	p += h_char_len(p);
+	strncpy(newkey, p, sizeof(newkey));
+	newkey[h_char_len(newkey)] = '\0';
+    }
+
+    if (items != NULL) {
+	ret = hanja_list_new_from_slist(key, items);
+	slist_delete(items);
+	return ret;
+    }
+
     return NULL;
 }
 

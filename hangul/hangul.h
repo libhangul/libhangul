@@ -102,11 +102,6 @@ const ucschar* hangul_ic_get_commit_string(HangulInputContext *hic);
 const ucschar* hangul_ic_flush(HangulInputContext *hic);
 
 /* hanja.c */
-enum {
-    HANJA_MATCH_EXACT,
-    HANJA_MATCH_PREFIX
-};
-
 typedef struct _Hanja Hanja;
 typedef struct _HanjaList HanjaList;
 typedef struct _HanjaTable HanjaTable;
@@ -129,8 +124,9 @@ struct _HanjaTable {
 };
 
 HanjaTable* hanja_table_load(const char *filename);
-HanjaList*  hanja_table_match(const HanjaTable* table,
-			      int option, const char *key);
+HanjaList*  hanja_table_match_prefix(const HanjaTable* table, const char *key);
+HanjaList*  hanja_table_match_suffix(const HanjaTable* table, const char *key);
+
 void hanja_table_destroy(HanjaTable *table);
 void hanja_list_destroy(HanjaList *list);
 
