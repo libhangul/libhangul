@@ -26,10 +26,29 @@
 
 #include "hangul.h"
 
+
+struct _Hanja {
+    const char *key;
+    const char *value;
+    const char *comment;
+};
+
+struct _HanjaList {
+    const char *key;
+    int nitems;
+    Hanja **items; 
+};
+
+struct _HanjaTable {
+    int nmember;
+    HanjaList **base;
+};
+
 struct slist {
     void *data;
     struct slist *next;
 };
+
 
 /* utility functions */
 static inline void h_free(void *ptr)
@@ -119,6 +138,30 @@ hanja_new(const char *key, const char *value, const char *comment)
     }
 
     return item;
+}
+
+const char*
+hanja_get_key(const Hanja* hanja)
+{
+    if (hanja != NULL)
+	return hanja->key;
+    return NULL;
+}
+
+const char*
+hanja_get_value(const Hanja* hanja)
+{
+    if (hanja != NULL)
+	return hanja->value;
+    return NULL;
+}
+
+const char*
+hanja_get_comment(const Hanja* hanja)
+{
+    if (hanja != NULL)
+	return hanja->comment;
+    return NULL;
 }
 
 static HanjaList *
@@ -350,6 +393,46 @@ hanja_table_destroy(HanjaTable *table)
 	h_free(table->base);
 	h_free(table);
     }
+}
+
+int
+hanja_list_get_size(const HanjaList *list)
+{
+    if (list != NULL)
+	return list->nitems;
+    return 0;
+}
+
+const char*
+hanja_list_get_key(const HanjaList *list)
+{
+    if (list != NULL)
+	return list->key;
+    return NULL;
+}
+
+const Hanja*
+hanja_list_get_nth(const HanjaList *list, int n)
+{
+    if (list != NULL) {
+	if (n >= 0 && n < list->nitems)
+	    return list->items[n];
+    }
+    return NULL;
+}
+
+const char*
+hanja_list_get_nth_value(const HanjaList *list, int n)
+{
+    const Hanja* hanja = hanja_list_get_nth(list, n);
+    return hanja_get_value(hanja);
+}
+
+const char*
+hanja_list_get_nth_comment(const HanjaList *list, int n)
+{
+    const Hanja* hanja = hanja_list_get_nth(list, n);
+    return hanja_get_comment(hanja);
 }
 
 void

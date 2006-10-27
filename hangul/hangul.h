@@ -106,29 +106,21 @@ typedef struct _Hanja Hanja;
 typedef struct _HanjaList HanjaList;
 typedef struct _HanjaTable HanjaTable;
 
-struct _Hanja {
-    const char *key;
-    const char *value;
-    const char *comment;
-};
+HanjaTable*  hanja_table_load(const char *filename);
+HanjaList*   hanja_table_match_prefix(const HanjaTable* table, const char *key);
+HanjaList*   hanja_table_match_suffix(const HanjaTable* table, const char *key);
+void         hanja_table_destroy(HanjaTable *table);
 
-struct _HanjaList {
-    const char *key;
-    int nitems;
-    Hanja **items; 
-};
+int          hanja_list_get_size(const HanjaList *list);
+const char*  hanja_list_get_key(const HanjaList *list);
+const Hanja* hanja_list_get_nth(const HanjaList *list, int n);
+const char*  hanja_list_get_nth_value(const HanjaList *list, int n);
+const char*  hanja_list_get_nth_comment(const HanjaList *list, int n);
+void         hanja_list_destroy(HanjaList *list);
 
-struct _HanjaTable {
-    int nmember;
-    HanjaList **base;
-};
-
-HanjaTable* hanja_table_load(const char *filename);
-HanjaList*  hanja_table_match_prefix(const HanjaTable* table, const char *key);
-HanjaList*  hanja_table_match_suffix(const HanjaTable* table, const char *key);
-
-void hanja_table_destroy(HanjaTable *table);
-void hanja_list_destroy(HanjaList *list);
+const char*  hanja_get_key(const Hanja* hanja);
+const char*  hanja_get_value(const Hanja* hanja);
+const char*  hanja_get_comment(const Hanja* hanja);
 
 #ifdef __cplusplus
 }
