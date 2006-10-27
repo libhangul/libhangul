@@ -1,4 +1,95 @@
 ------------------------------------------------------------------------
+r82 | krisna | 2006-10-27 14:33:24 +0900 (금, 27 10월 2006) | 2 lines
+변경된 경로:
+   M /libhangul/trunk/test/Makefile.am
+   A /libhangul/trunk/test/hanja.c
+
+hanja test 코드 추가
+
+------------------------------------------------------------------------
+r81 | krisna | 2006-10-27 14:29:12 +0900 (금, 27 10월 2006) | 3 lines
+변경된 경로:
+   M /libhangul/trunk/hangul/hangul.h
+   M /libhangul/trunk/hangul/hanja.c
+
+ * HanjaTable, HanjaList, Hanja struct를 외부로 노출되지 않게함.
+ * 각 struct들의 액세스 함수를 추가함
+
+------------------------------------------------------------------------
+r80 | krisna | 2006-10-25 23:17:01 +0900 (수, 25 10월 2006) | 2 lines
+변경된 경로:
+   M /libhangul/trunk/data/hanja/hanja.txt
+
+국립국어원의 "한국어 학습용 어휘 목록" 추가
+
+------------------------------------------------------------------------
+r79 | krisna | 2006-10-22 01:50:10 +0900 (일, 22 10월 2006) | 5 lines
+변경된 경로:
+   M /libhangul/trunk/data/hanja/hanja.txt
+
+data/hanja/hanja.txt:
+    * 한자 단어 추가 (국립국어연구원의 '현대 국어 사용 빈도 조사 결과'
+      파일에서 추출함)
+
+
+------------------------------------------------------------------------
+r78 | krisna | 2006-10-21 23:18:48 +0900 (토, 21 10월 2006) | 6 lines
+변경된 경로:
+   M /libhangul/trunk/data/hanja/hanja.txt
+
+data/hanja/hanja.txt:
+    * KSX1001과 KSX1002에 있는 한자만 남기고 나머지는 지움
+    * 국립국어연구원에서 제공받은 한자독음 파일을 참고하여 다시 작성
+      참고: http://lists.kldp.net/pipermail/hangul-hackers/2004-June/000073.html
+
+
+------------------------------------------------------------------------
+r77 | krisna | 2006-10-02 00:35:17 +0900 (월, 02 10월 2006) | 5 lines
+변경된 경로:
+   M /libhangul/trunk/hangul/hangul.h
+   M /libhangul/trunk/hangul/hanja.c
+
+hangul/hangul.h,hangul/hanja.c:
+    * remove hanja_table_match() and add hanja_table_match_prefix() and
+      hanja_table_match_suffix()
+
+
+------------------------------------------------------------------------
+r76 | krisna | 2006-10-01 17:08:19 +0900 (일, 01 10월 2006) | 5 lines
+변경된 경로:
+   M /libhangul/trunk/hangul/hangul.h
+   M /libhangul/trunk/hangul/hangulinputcontext.c
+   M /libhangul/trunk/test/test.c
+
+hangul/hangul.h,hangul/hangulinputcontext.c:
+    * add hangul_ic_flush() function which flushes the current buffer and
+      return it. returned pointer is not need to freed, but it is available
+      until other HangulInputContext function is called.
+
+------------------------------------------------------------------------
+r75 | krisna | 2006-09-23 15:05:10 +0900 (토, 23  9월 2006) | 4 lines
+변경된 경로:
+   M /libhangul/trunk/data/hanja/hanja.txt
+
+data/hanja/hanja.txt:
+    remove symbol data from hanja data list. I will use another data table for
+    symbol area.
+
+------------------------------------------------------------------------
+r74 | krisna | 2006-05-23 10:45:06 +0900 (화, 23  5월 2006) | 2 lines
+변경된 경로:
+   A /libhangul/trunk/bindings/Makefile.am
+
+bindings 디렉토리에 Makefile.am 추가
+
+------------------------------------------------------------------------
+r73 | krisna | 2006-05-22 22:40:04 +0900 (월, 22  5월 2006) | 2 lines
+변경된 경로:
+   M /libhangul/trunk/ChangeLog
+
+update ChangeLog
+
+------------------------------------------------------------------------
 r72 | krisna | 2006-05-22 22:31:45 +0900 (월, 22  5월 2006) | 2 lines
 변경된 경로:
    M /libhangul/trunk/configure.ac
