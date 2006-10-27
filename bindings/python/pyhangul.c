@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <alloca.h>
 
-#include "../hangul/hangul.h"
+#include <hangul.h>
 
 static PyObject *_pyhangul_error;
 
@@ -102,9 +102,24 @@ static PyObject *_pyhangulic_reset(PY_HANGULIC *self, PyObject *args)
 
 static PyObject *_pyhangulic_flush(PY_HANGULIC *self, PyObject *args)
 {
-    hangul_ic_flush(self->hic);
+#ifndef Py_UNICODE_WIDE
+    int i;
+    Py_UNICODE *buf;
+#endif /* !Py_UNICODE_WIDE */
+    int len;
+    const ucschar *str;
 
-    return Py_None;
+    str = hangul_ic_flush(self->hic);
+    len = ucscharlen(str);
+
+#ifdef Py_UNICODE_WIDE
+    return PyUnicode_FromUnicode((Py_UNICODE*)str, len);
+#else  /* Py_UNICODE_WIDE */
+    buf = alloca(sizeof(Py_UNICODE) * len);
+    for (i = 0; i < len; i++)
+	buf[i] = str[i];
+    return PyUnicode_FromUnicode(buf, len);
+#endif /* Py_UNICODE_WIDE */
 }
 
 static PyObject *_pyhangulic_backspace(PY_HANGULIC *self, PyObject *args)
