@@ -19,7 +19,6 @@
 #ifndef _HANGUL_H_
 #define _HANGUL_H_
 
-#include <wchar.h>
 #include <stdbool.h>
 #include <inttypes.h>
 
