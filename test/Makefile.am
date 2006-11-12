@@ -1,9 +1,9 @@
 
-noinst_PROGRAMS = test hanja
+noinst_PROGRAMS = hangul hanja
 
-test_CFLAGS =
-test_SOURCES = test.c
-test_LDADD = ../hangul/libhangul.la
+hangul_CFLAGS =
+hangul_SOURCES = hangul.c
+hangul_LDADD = ../hangul/libhangul.la
 
 hanja_CFLAGS =
 hanja_SOURCES = hanja.c
