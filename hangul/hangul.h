@@ -64,15 +64,6 @@ typedef struct _HangulBuffer          HangulBuffer;
 typedef struct _HangulInputContext    HangulInputContext;
 typedef bool (*HangulICFilter) (ucschar*, ucschar, ucschar, ucschar, void*);
 
-typedef enum {
-    HANGUL_KEYBOARD_2,
-    HANGUL_KEYBOARD_32,
-    HANGUL_KEYBOARD_3FINAL,
-    HANGUL_KEYBOARD_390,
-    HANGUL_KEYBOARD_3NOSHIFT,
-    HANGUL_KEYBOARD_3YETGUL
-} HangulKeyboardType;
-
 enum {
     HANGUL_OUTPUT_SYLLABLE,
     HANGUL_OUTPUT_JAMO
@@ -86,7 +77,6 @@ enum {
 /* keyboard */
 HangulKeyboard* hangul_keyboard_new();
 void    hangul_keyboard_delete(HangulKeyboard *keyboard);
-ucschar hangul_keyboard_get_value(const HangulKeyboard *keyboard, int key);
 void    hangul_keyboard_set_value(HangulKeyboard *keyboard,
 				  int key, ucschar value);
 void    hangul_keyboard_set_type(HangulKeyboard *keyboard, int type);
@@ -98,7 +88,7 @@ bool hangul_combination_set_data(HangulCombination* combination,
 		     ucschar* first, ucschar* second, ucschar* result, int n);
 
 /* input context */
-HangulInputContext* hangul_ic_new(HangulKeyboardType keyboard);
+HangulInputContext* hangul_ic_new(const char* keyboard);
 void hangul_ic_delete(HangulInputContext *hic);
 bool hangul_ic_process(HangulInputContext *hic, int ascii);
 void hangul_ic_reset(HangulInputContext *hic);

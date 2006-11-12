@@ -142,7 +142,7 @@ hangul_keyboard_new()
     return NULL;
 }
 
-ucschar
+static ucschar
 hangul_keyboard_get_value(const HangulKeyboard *keyboard, int key)
 {
     if (keyboard != NULL) {
@@ -160,6 +160,16 @@ hangul_keyboard_set_value(HangulKeyboard *keyboard, int key, ucschar value)
 	if (key >= 0 && key < N_ELEMENTS(keyboard->table))
 	    keyboard->table[key] = value;
     }
+}
+
+static int
+hangul_keyboard_get_type(const HangulKeyboard *keyboard)
+{
+    int type = 0;
+    if (keyboard != NULL) {
+	type = keyboard->type;
+    }
+    return type;
 }
 
 void
@@ -766,7 +776,7 @@ hangul_ic_process(HangulInputContext *hic, int ascii)
     hic->preedit_string[0] = 0;
     hic->commit_string[0] = 0;
 
-    if (hic->type == HANGUL_KEYBOARD_TYPE_JAMO)
+    if (hangul_keyboard_get_type(hic->keyboard) == HANGUL_KEYBOARD_TYPE_JAMO)
 	return hangul_ic_process_jamo(hic, ch);
     else
 	return hangul_ic_process_jaso(hic, ch);
@@ -964,8 +974,7 @@ hangul_ic_set_output_mode(HangulInputContext *hic, int mode)
     if (hic == NULL)
 	return;
 
-    if (hic->output_mode != HANGUL_KEYBOARD_3YETGUL)
-	hic->output_mode = mode;
+    hic->output_mode = mode;
 }
 
 void hangul_ic_set_filter(HangulInputContext *hic,
@@ -1028,7 +1037,7 @@ hangul_ic_set_combination(HangulInputContext *hic,
 }
 
 HangulInputContext*
-hangul_ic_new(HangulKeyboardType keyboard)
+hangul_ic_new(const char* keyboard)
 {
     HangulInputContext *hic;
 
@@ -1037,7 +1046,7 @@ hangul_ic_new(HangulKeyboardType keyboard)
 	return NULL;
 
     hangul_ic_set_output_mode(hic, HANGUL_OUTPUT_SYLLABLE);
-    hangul_ic_select_keyboard(hic, "2");
+    hangul_ic_select_keyboard(hic, keyboard);
     hangul_ic_set_filter(hic, NULL, NULL);
 
     hangul_buffer_clear(&hic->buffer);
