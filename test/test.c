@@ -1,10 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <locale.h>
-#include <wchar.h>
+#include <iconv.h>
+#include <endian.h>
 
 #include "../hangul/hangul.h"
+
+#if __BYTE_ORDER == __LITTLE_ENDIAN
+#define UCS4 "UCS-4LE"
+#else
+#define UCS4 "UCS-4BE"
+#endif
 
 bool filter(ucschar *str, ucschar cho, ucschar jung, ucschar jong, void *data)
 {
@@ -13,21 +19,48 @@ bool filter(ucschar *str, ucschar cho, ucschar jung, ucschar jong, void *data)
     return true;
 }
 
+void ucs4_to_utf8(char *buf, const ucschar *ucs4, size_t bufsize)
+{
+    size_t n;
+    char*  inbuf;
+    size_t inbytesleft;
+    char*  outbuf;
+    size_t outbytesleft;
+    size_t ret;
+    iconv_t cd;
+
+    for (n = 0; ucs4[n] != 0; n++)
+	continue;
+
+    if (n == 0) {
+	buf[0] = '\0';
+	return;
+    }
+
+    cd = iconv_open("UTF-8", UCS4);
+    if (cd == (iconv_t)(-1))
+	return;
+
+    inbuf = (char*)ucs4;
+    inbytesleft = n * 4;
+    outbuf = buf;
+    outbytesleft = bufsize;
+    ret = iconv(cd, &inbuf, &inbytesleft, &outbuf, &outbytesleft);
+
+    iconv_close(cd);
+}
+
 int
 main(int argc, char *argv[])
 {
-    int n;
     int ascii;
-    int keyboard = HANGUL_KEYBOARD_2;
+    const char* keyboard = "2";
     char commit[32] = { '\0', };
-    wchar_t *commit_string;
     HangulInputContext *hic;
 
     if (argc > 1) {
-	keyboard = atoi(argv[1]);
+	keyboard = argv[1];
     }
-
-    setlocale(LC_CTYPE, "");
 
     hic = hangul_ic_new(keyboard);
     if (hic == NULL) {
@@ -38,9 +71,7 @@ main(int argc, char *argv[])
 
     for (ascii = getchar(); ascii != EOF; ascii = getchar()) {
 	int ret = hangul_ic_process(hic, ascii);
-	commit_string = (wchar_t*)hangul_ic_get_commit_string(hic);
-	n = wcstombs(commit, commit_string, sizeof(commit));
-	commit[n] = '\0';
+	ucs4_to_utf8(commit, hangul_ic_get_commit_string(hic), sizeof(commit));
 	if (strlen(commit) > 0) {
 	    printf("%s", commit);
 	}
@@ -50,9 +81,7 @@ main(int argc, char *argv[])
     } 
 
     if (!hangul_ic_is_empty(hic)) {
-	const wchar_t *flushed = (wchar_t*)hangul_ic_flush(hic);
-	n = wcstombs(commit, flushed, sizeof(commit));
-	commit[n] = '\0';
+	ucs4_to_utf8(commit, hangul_ic_flush(hic), sizeof(commit));
 	if (strlen(commit) > 0) {
 	    printf("%s", commit);
 	}
