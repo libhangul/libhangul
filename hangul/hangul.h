@@ -58,7 +58,8 @@ ucschar hangul_jaso_to_syllable(ucschar choseong,
 				ucschar jongseong);
 
 /* hangulinputcontext.c */
-typedef struct _HangulJamoCombination HangulJamoCombination;
+typedef struct _HangulKeyboard        HangulKeyboard;
+typedef struct _HangulCombination     HangulCombination;
 typedef struct _HangulBuffer          HangulBuffer;
 typedef struct _HangulInputContext    HangulInputContext;
 typedef bool (*HangulICFilter) (ucschar*, ucschar, ucschar, ucschar, void*);
@@ -78,10 +79,25 @@ enum {
 };
 
 enum {
-    HANGUL_INPUT_FILTER_JAMO,
-    HANGUL_INPUT_FILTER_JASO
+    HANGUL_KEYBOARD_TYPE_JAMO,
+    HANGUL_KEYBOARD_TYPE_JASO
 };
 
+/* keyboard */
+HangulKeyboard* hangul_keyboard_new();
+void    hangul_keyboard_delete(HangulKeyboard *keyboard);
+ucschar hangul_keyboard_get_value(const HangulKeyboard *keyboard, int key);
+void    hangul_keyboard_set_value(HangulKeyboard *keyboard,
+				  int key, ucschar value);
+void    hangul_keyboard_set_type(HangulKeyboard *keyboard, int type);
+
+/* combination */
+HangulCombination* hangul_combination_new();
+void hangul_combination_delete(HangulCombination *combination);
+bool hangul_combination_set_data(HangulCombination* combination, 
+		     ucschar* first, ucschar* second, ucschar* result, int n);
+
+/* input context */
 HangulInputContext* hangul_ic_new(HangulKeyboardType keyboard);
 void hangul_ic_delete(HangulInputContext *hic);
 bool hangul_ic_process(HangulInputContext *hic, int ascii);
@@ -92,7 +108,11 @@ int  hangul_ic_dvorak_to_qwerty(int qwerty);
 
 void hangul_ic_set_output_mode(HangulInputContext *hic, int mode);
 void hangul_ic_set_keyboard(HangulInputContext *hic,
-			    HangulKeyboardType keyboard);
+			    const HangulKeyboard *keyboard);
+void hangul_ic_select_keyboard(HangulInputContext *hic,
+			       const char* id);
+void hangul_ic_set_combination(HangulInputContext *hic,
+			       const HangulCombination *combination);
 void hangul_ic_set_filter(HangulInputContext *hic,
 			  HangulICFilter func, void *user_data);
 

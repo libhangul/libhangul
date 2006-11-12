@@ -1,4 +1,38 @@
-static const ucschar hangul_keyboard_table_2[] = {
+static ucschar hangul_keyboard_table_2[] = {
+    0x0000,     /* null                                         */
+    0x0000,     /* start of heading                             */
+    0x0000,     /* start of text                                */
+    0x0000,     /* end of text                                  */
+    0x0000,     /* end of transmission                          */
+    0x0000,     /* enquiry                                      */
+    0x0000,     /* acknowledge                                  */
+    0x0000,     /* bell                                         */
+    0x0000,     /* backspace                                    */
+    0x0000,     /* character tabulation                         */
+    0x0000,     /* line feed (lf)                               */
+    0x0000,     /* line tabulation                              */
+    0x0000,     /* form feed (ff)                               */
+    0x0000,     /* carriage return (cr)                         */
+    0x0000,     /* shift out                                    */
+    0x0000,     /* shift in                                     */
+    0x0000,     /* data link escape                             */
+    0x0000,     /* device control one                           */
+    0x0000,     /* device control two                           */
+    0x0000,     /* device control three                         */
+    0x0000,     /* device control four                          */
+    0x0000,     /* negative acknowledge                         */
+    0x0000,     /* synchronous idle                             */
+    0x0000,     /* end of transmission block                    */
+    0x0000,     /* cancel                                       */
+    0x0000,     /* end of medium                                */
+    0x0000,     /* substitute                                   */
+    0x0000,     /* escape                                       */
+    0x0000,     /* information separator four                   */
+    0x0000,     /* information separator three                  */
+    0x0000,     /* information separator two                    */
+    0x0000,     /* information separator one                    */
+    0x0000,     /* space                                        */
+
     0x0000,     /* exclam:       exclamation mark               */
     0x0022,     /* quotedbl:     quotation mark                 */
     0x0000,     /* numbersign:   number sign                    */
@@ -92,10 +126,45 @@ static const ucschar hangul_keyboard_table_2[] = {
     0x007b,     /* braceleft:    left brace                     */
     0x0000,     /* bar:          vertical bar                   */
     0x007d,     /* braceright:   right brace                    */
-    0x0000      /* asciitilde:   tilde                          */
+    0x0000,     /* asciitilde:   tilde                          */
+    0x0000      /* delete                                       */
 };
 
-static const ucschar hangul_keyboard_table_32[] = {
+static ucschar hangul_keyboard_table_32[] = {
+    0x0000,     /* null                                         */
+    0x0000,     /* start of heading                             */
+    0x0000,     /* start of text                                */
+    0x0000,     /* end of text                                  */
+    0x0000,     /* end of transmission                          */
+    0x0000,     /* enquiry                                      */
+    0x0000,     /* acknowledge                                  */
+    0x0000,     /* bell                                         */
+    0x0000,     /* backspace                                    */
+    0x0000,     /* character tabulation                         */
+    0x0000,     /* line feed (lf)                               */
+    0x0000,     /* line tabulation                              */
+    0x0000,     /* form feed (ff)                               */
+    0x0000,     /* carriage return (cr)                         */
+    0x0000,     /* shift out                                    */
+    0x0000,     /* shift in                                     */
+    0x0000,     /* data link escape                             */
+    0x0000,     /* device control one                           */
+    0x0000,     /* device control two                           */
+    0x0000,     /* device control three                         */
+    0x0000,     /* device control four                          */
+    0x0000,     /* negative acknowledge                         */
+    0x0000,     /* synchronous idle                             */
+    0x0000,     /* end of transmission block                    */
+    0x0000,     /* cancel                                       */
+    0x0000,     /* end of medium                                */
+    0x0000,     /* substitute                                   */
+    0x0000,     /* escape                                       */
+    0x0000,     /* information separator four                   */
+    0x0000,     /* information separator three                  */
+    0x0000,     /* information separator two                    */
+    0x0000,     /* information separator one                    */
+    0x0000,     /* space                                        */
+
     0x0000,	/* exclam:	exclamation mark		*/
     0x0000,	/* quotedbl:	quotation mark 			*/
     0x0000,	/* numbersign:	number sign	 		*/
@@ -192,7 +261,41 @@ static const ucschar hangul_keyboard_table_32[] = {
     0x203b,	/* asciitilde:	tilde				*/
 };
 
-static const ucschar hangul_keyboard_table_390[] = {
+static ucschar hangul_keyboard_table_390[] = {
+    0x0000,     /* null                                         */
+    0x0000,     /* start of heading                             */
+    0x0000,     /* start of text                                */
+    0x0000,     /* end of text                                  */
+    0x0000,     /* end of transmission                          */
+    0x0000,     /* enquiry                                      */
+    0x0000,     /* acknowledge                                  */
+    0x0000,     /* bell                                         */
+    0x0000,     /* backspace                                    */
+    0x0000,     /* character tabulation                         */
+    0x0000,     /* line feed (lf)                               */
+    0x0000,     /* line tabulation                              */
+    0x0000,     /* form feed (ff)                               */
+    0x0000,     /* carriage return (cr)                         */
+    0x0000,     /* shift out                                    */
+    0x0000,     /* shift in                                     */
+    0x0000,     /* data link escape                             */
+    0x0000,     /* device control one                           */
+    0x0000,     /* device control two                           */
+    0x0000,     /* device control three                         */
+    0x0000,     /* device control four                          */
+    0x0000,     /* negative acknowledge                         */
+    0x0000,     /* synchronous idle                             */
+    0x0000,     /* end of transmission block                    */
+    0x0000,     /* cancel                                       */
+    0x0000,     /* end of medium                                */
+    0x0000,     /* substitute                                   */
+    0x0000,     /* escape                                       */
+    0x0000,     /* information separator four                   */
+    0x0000,     /* information separator three                  */
+    0x0000,     /* information separator two                    */
+    0x0000,     /* information separator one                    */
+    0x0000,     /* space                                        */
+
     0x11bd,	/* exclam:		jongseong cieuc			*/
     0x0000,	/* quotedbl:	quotatioin mark			*/
     0x0000,	/* numbersign:	number sign	 		*/
@@ -289,7 +392,41 @@ static const ucschar hangul_keyboard_table_390[] = {
     0x0000,	/* asciitilde:	tilde				*/
 };
 
-static const ucschar hangul_keyboard_table_3final[] = {
+static ucschar hangul_keyboard_table_3final[] = {
+    0x0000,     /* null                                         */
+    0x0000,     /* start of heading                             */
+    0x0000,     /* start of text                                */
+    0x0000,     /* end of text                                  */
+    0x0000,     /* end of transmission                          */
+    0x0000,     /* enquiry                                      */
+    0x0000,     /* acknowledge                                  */
+    0x0000,     /* bell                                         */
+    0x0000,     /* backspace                                    */
+    0x0000,     /* character tabulation                         */
+    0x0000,     /* line feed (lf)                               */
+    0x0000,     /* line tabulation                              */
+    0x0000,     /* form feed (ff)                               */
+    0x0000,     /* carriage return (cr)                         */
+    0x0000,     /* shift out                                    */
+    0x0000,     /* shift in                                     */
+    0x0000,     /* data link escape                             */
+    0x0000,     /* device control one                           */
+    0x0000,     /* device control two                           */
+    0x0000,     /* device control three                         */
+    0x0000,     /* device control four                          */
+    0x0000,     /* negative acknowledge                         */
+    0x0000,     /* synchronous idle                             */
+    0x0000,     /* end of transmission block                    */
+    0x0000,     /* cancel                                       */
+    0x0000,     /* end of medium                                */
+    0x0000,     /* substitute                                   */
+    0x0000,     /* escape                                       */
+    0x0000,     /* information separator four                   */
+    0x0000,     /* information separator three                  */
+    0x0000,     /* information separator two                    */
+    0x0000,     /* information separator one                    */
+    0x0000,     /* space                                        */
+
     0x11a9,	/* exclam:		jongseong ssangkiyeok		*/
     0x00b7,	/* quotedbl:	middle dot 			*/
     0x11bd,	/* numbersign:	jognseong cieuc 		*/
@@ -386,7 +523,41 @@ static const ucschar hangul_keyboard_table_3final[] = {
     0x203b,	/* asciitilde:	reference mark			*/
 };
 
-static const ucschar hangul_keyboard_table_3sun[] = {
+static ucschar hangul_keyboard_table_3sun[] = {
+    0x0000,     /* null                                         */
+    0x0000,     /* start of heading                             */
+    0x0000,     /* start of text                                */
+    0x0000,     /* end of text                                  */
+    0x0000,     /* end of transmission                          */
+    0x0000,     /* enquiry                                      */
+    0x0000,     /* acknowledge                                  */
+    0x0000,     /* bell                                         */
+    0x0000,     /* backspace                                    */
+    0x0000,     /* character tabulation                         */
+    0x0000,     /* line feed (lf)                               */
+    0x0000,     /* line tabulation                              */
+    0x0000,     /* form feed (ff)                               */
+    0x0000,     /* carriage return (cr)                         */
+    0x0000,     /* shift out                                    */
+    0x0000,     /* shift in                                     */
+    0x0000,     /* data link escape                             */
+    0x0000,     /* device control one                           */
+    0x0000,     /* device control two                           */
+    0x0000,     /* device control three                         */
+    0x0000,     /* device control four                          */
+    0x0000,     /* negative acknowledge                         */
+    0x0000,     /* synchronous idle                             */
+    0x0000,     /* end of transmission block                    */
+    0x0000,     /* cancel                                       */
+    0x0000,     /* end of medium                                */
+    0x0000,     /* substitute                                   */
+    0x0000,     /* escape                                       */
+    0x0000,     /* information separator four                   */
+    0x0000,     /* information separator three                  */
+    0x0000,     /* information separator two                    */
+    0x0000,     /* information separator one                    */
+    0x0000,     /* space                                        */
+
     0x0000,	/* exclam:		exclamation mark		*/
     0x0000,	/* quotedbl:	quotatioin mark			*/
     0x0000,	/* numbersign:	number sign	 		*/
@@ -483,7 +654,41 @@ static const ucschar hangul_keyboard_table_3sun[] = {
     0x0000,	/* asciitilde:	tilde				*/
 };
 
-static const ucschar hangul_keyboard_table_3yet[] = {
+static ucschar hangul_keyboard_table_3yet[] = {
+    0x0000,     /* null                                         */
+    0x0000,     /* start of heading                             */
+    0x0000,     /* start of text                                */
+    0x0000,     /* end of text                                  */
+    0x0000,     /* end of transmission                          */
+    0x0000,     /* enquiry                                      */
+    0x0000,     /* acknowledge                                  */
+    0x0000,     /* bell                                         */
+    0x0000,     /* backspace                                    */
+    0x0000,     /* character tabulation                         */
+    0x0000,     /* line feed (lf)                               */
+    0x0000,     /* line tabulation                              */
+    0x0000,     /* form feed (ff)                               */
+    0x0000,     /* carriage return (cr)                         */
+    0x0000,     /* shift out                                    */
+    0x0000,     /* shift in                                     */
+    0x0000,     /* data link escape                             */
+    0x0000,     /* device control one                           */
+    0x0000,     /* device control two                           */
+    0x0000,     /* device control three                         */
+    0x0000,     /* device control four                          */
+    0x0000,     /* negative acknowledge                         */
+    0x0000,     /* synchronous idle                             */
+    0x0000,     /* end of transmission block                    */
+    0x0000,     /* cancel                                       */
+    0x0000,     /* end of medium                                */
+    0x0000,     /* substitute                                   */
+    0x0000,     /* escape                                       */
+    0x0000,     /* information separator four                   */
+    0x0000,     /* information separator three                  */
+    0x0000,     /* information separator two                    */
+    0x0000,     /* information separator one                    */
+    0x0000,     /* space                                        */
+
     0x11bd,	/* exclam:		jongseong cieuc			*/
     0x0000,	/* quotedbl:	quotatioin mark			*/
     0x0000,	/* numbersign:	number sign	 		*/
@@ -580,7 +785,7 @@ static const ucschar hangul_keyboard_table_3yet[] = {
     0x11f0,	/* asciitilde:	jongseong yesieung		*/
 };
 
-static const HangulJamoCombination hangul_combination_table_default[] = {
+static HangulCombinationItem hangul_combination_table_default[] = {
   { 0x11001100, 0x1101 }, /* choseong  kiyeok + kiyeok	= ssangkiyeok	*/
   { 0x11031103, 0x1104 }, /* choseong  tikeut + tikeut	= ssangtikeut	*/
   { 0x11071107, 0x1108 }, /* choseong  pieup  + pieup	= ssangpieup	*/
@@ -608,7 +813,7 @@ static const HangulJamoCombination hangul_combination_table_default[] = {
   { 0x11ba11ba, 0x11bb }, /* jongseong sios   + sios	= ssangsios	*/
 };
 
-static const HangulJamoCombination hangul_combination_table_full[] = {
+static HangulCombinationItem hangul_combination_table_full[] = {
   { 0x11001100, 0x1101 }, /* choseong ssangkiyeok           = kiyeok + kiyeok */
   { 0x11021100, 0x1113 }, /* choseong nieun-kiyeok          = nieun + kiyeok */
   { 0x11021102, 0x1114 }, /* choseong ssangnieun            = nieun + nieun */
