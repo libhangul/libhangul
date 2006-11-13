@@ -43,9 +43,9 @@ static ucschar hangul_keyboard_table_2[] = {
     0x0000,     /* parenleft:    left parenthesis               */
     0x0000,     /* parenright:   right parenthesis              */
     0x0000,     /* asterisk:     asterisk                       */
-    0x0000,     /* plus:         plus sign                      */
+    0x002b,     /* plus:         plus sign                      */
     0x002c,     /* comma:        comma                          */
-    0x0000,     /* minus:        minus sign                     */
+    0x002d,     /* minus:        minus sign                     */
     0x002e,     /* period:       period                         */
     0x002f,     /* slash:        slash                          */
     0x0000,     /* 0:            0                              */
@@ -61,7 +61,7 @@ static ucschar hangul_keyboard_table_2[] = {
     0x003a,     /* colon:        colon                          */
     0x003b,     /* semicolon:    semicolon                      */
     0x003c,     /* less:         less-than sign                 */
-    0x0000,     /* equal:        equals sign                    */
+    0x003d,     /* equal:        equals sign                    */
     0x003e,     /* greater:      greater-than sign              */
     0x003f,     /* question:     question mark                  */
     0x0000,     /* at:           commercial at                  */
@@ -95,7 +95,7 @@ static ucschar hangul_keyboard_table_2[] = {
     0x0000,     /* backslash:    backslash                      */
     0x005d,     /* bracketright: right bracket                  */
     0x0000,     /* asciicircum:  circumflex accent              */
-    0x0000,     /* underscore:   underscore                     */
+    0x005f,     /* underscore:   underscore                     */
     0x0000,     /* quoteleft:    grave accent                   */
     0x1106,     /* a:            choseong  mieum                */
     0x1172,     /* b:            jungseong yu                   */
@@ -166,20 +166,20 @@ static ucschar hangul_keyboard_table_32[] = {
     0x0000,     /* space                                        */
 
     0x0000,	/* exclam:	exclamation mark		*/
-    0x0000,	/* quotedbl:	quotation mark 			*/
+    0x0022,	/* quotedbl:	quotation mark 			*/
     0x0000,	/* numbersign:	number sign	 		*/
     0x0000,	/* dollar:	dollar sign			*/
     0x0000,	/* percent:	percent sign			*/
     0x0000,	/* ampersand:	ampersand		 	*/
-    0x0000,	/* apostrophe:	apostrophe			*/
+    0x0027,	/* apostrophe:	apostrophe			*/
     0x0000,	/* parenleft:	left parenthesis		*/
     0x0000,	/* parenright:	right parenthesis		*/
     0x0000,	/* asterisk:	asterisk			*/
-    0x0000,	/* plus:	plus sign			*/
-    0x0000,	/* comma:	comma				*/
-    0x0000,	/* minus:	minus sign			*/
-    0x0000,	/* period:	period				*/
-    0x0000,	/* slash:	slash				*/
+    0x002b,	/* plus:	plus sign			*/
+    0x002c,	/* comma:	comma				*/
+    0x002d,	/* minus:	minus sign			*/
+    0x002e,	/* period:	period				*/
+    0x002f,	/* slash:	slash				*/
     0x0000,	/* 0:		0				*/
     0x0000,	/* 1:		1				*/
     0x0000,	/* 2:		2				*/
@@ -190,12 +190,12 @@ static ucschar hangul_keyboard_table_32[] = {
     0x0000,	/* 7:		7				*/
     0x0000,	/* 8:		8				*/
     0x0000,	/* 9:		9				*/
-    0x0000,	/* colon:	colon				*/
-    0x0000,	/* semicolon:	semicolon			*/
-    0x0000,	/* less:	less-than sign			*/
-    0x0000,	/* equal:	equals sign			*/
-    0x0000,	/* greater:	greater-than sign		*/
-    0x0000,	/* question:	question mark	 		*/
+    0x003a,	/* colon:	colon				*/
+    0x003b,	/* semicolon:	semicolon			*/
+    0x003c,	/* less:	less-than sign			*/
+    0x003d,	/* equal:	equals sign			*/
+    0x003e,	/* greater:	greater-than sign		*/
+    0x003f,	/* question:	question mark	 		*/
     0x0000,	/* at:		commercial at			*/
     0x11b7,	/* A:		jongseong mieum			*/
     0x1172,	/* B:		jungseong yu			*/
@@ -223,11 +223,11 @@ static ucschar hangul_keyboard_table_32[] = {
     0x11c0,	/* X:		jongseong thieuth		*/
     0x116d,	/* Y:		jungseong yo			*/
     0x11bf,	/* Z:		jongseong khieukh		*/
-    0x0000,	/* bracketleft:	left bracket			*/
+    0x005b,	/* bracketleft:	left bracket			*/
     0x0000,	/* backslash:	backslash			*/
-    0x0000,	/* bracketright:right bracket			*/
+    0x005d,	/* bracketright:right bracket			*/
     0x0000,	/* asciicircum:	circumflex accent		*/
-    0x0000,	/* underscore:	underscore			*/
+    0x005f,	/* underscore:	underscore			*/
     0x0000,	/* quoteleft:	grave accent			*/
     0x1106,	/* a:		choseong  mieum			*/
     0x1172,	/* b:		jungseong yu			*/
@@ -255,10 +255,11 @@ static ucschar hangul_keyboard_table_32[] = {
     0x1110,	/* x:		choseong  thieuth		*/
     0x116d,	/* y:		jungseong yo			*/
     0x110f,	/* z:		choseong  khieukh		*/
-    0x0000,	/* braceleft:	left brace			*/
+    0x007b,	/* braceleft:	left brace			*/
     0x0000,	/* bar:		vertical bar			*/
-    0x0000,	/* braceright:	right brace			*/
+    0x007d,	/* braceright:	right brace			*/
     0x203b,	/* asciitilde:	tilde				*/
+    0x0000      /* delete                                       */
 };
 
 static ucschar hangul_keyboard_table_390[] = {
@@ -297,7 +298,7 @@ static ucschar hangul_keyboard_table_390[] = {
     0x0000,     /* space                                        */
 
     0x11bd,	/* exclam:		jongseong cieuc			*/
-    0x0000,	/* quotedbl:	quotatioin mark			*/
+    0x0022,	/* quotedbl:	quotatioin mark			*/
     0x0000,	/* numbersign:	number sign	 		*/
     0x0000,	/* dollar:		dollar sign			*/
     0x0000,	/* percent:		percent sign			*/
@@ -306,10 +307,10 @@ static ucschar hangul_keyboard_table_390[] = {
     0x0000,	/* parenleft:	left parenthesis		*/
     0x0000,	/* parenright:	right parenthesis		*/
     0x0000,	/* asterisk:	asterisk			*/
-    0x0000,	/* plus:		plus sign			*/
-    0x0000,	/* comma:		comma				*/
-    0x0000,	/* minus:		minus sign			*/
-    0x0000,	/* period:		period				*/
+    0x002b,	/* plus:		plus sign			*/
+    0x002c,	/* comma:		comma				*/
+    0x002d,	/* minus:		minus sign			*/
+    0x002e,	/* period:		period				*/
     0x1169,	/* slash:		jungseong o			*/
     0x110f,	/* 0:		choseong  khieukh		*/
     0x11c2,	/* 1:		jongseong hieuh			*/
@@ -321,12 +322,12 @@ static ucschar hangul_keyboard_table_390[] = {
     0x1168,	/* 7:		jungseong ye			*/
     0x1174,	/* 8:		jungseong yi			*/
     0x116e,	/* 9:		jungseong u			*/
-    0x0000,	/* colon:		colon				*/
+    0x003a,	/* colon:		colon				*/
     0x1107,	/* semicolon:	choseong  pieup			*/
     0x0032,	/* less:		2				*/
-    0x0000,	/* equal:		euals sign			*/
+    0x003d,	/* equal:		euals sign			*/
     0x0033,	/* greater:		3				*/
-    0x0000,	/* question:	question mark	 		*/
+    0x003f,	/* question:	question mark	 		*/
     0x0000,	/* at:		commertial at			*/
     0x11ae,	/* A:		jongseong tikeut		*/
     0x0021,	/* B:		exclamation mark		*/
@@ -354,11 +355,11 @@ static ucschar hangul_keyboard_table_390[] = {
     0x11b9,	/* X:		jongseong pieup-sios		*/
     0x003c,	/* Y:		less-than sign			*/
     0x11be,	/* Z:		jongseong chieuch		*/
-    0x0000,	/* bracketleft:	left bracket			*/
+    0x005b,	/* bracketleft:	left bracket			*/
     0x0000,	/* backslash:	backslash			*/
-    0x0000,	/* bracketright:	right bracket			*/
+    0x005d,	/* bracketright:	right bracket			*/
     0x0000,	/* asciicircum:	circumflex accent		*/
-    0x0000,	/* underscore:	underscore			*/
+    0x005f,	/* underscore:	underscore			*/
     0x0000,	/* quoteleft:	grave accent			*/
     0x11bc,	/* a:		jongseong ieung			*/
     0x116e,	/* b:		jungseong u			*/
@@ -386,10 +387,11 @@ static ucschar hangul_keyboard_table_390[] = {
     0x11a8,	/* x:		jongseong kiyeok		*/
     0x1105,	/* y:		choseong  rieul			*/
     0x11b7,	/* z:		jongseong mieum			*/
-    0x0000,	/* braceleft:	left brace			*/
+    0x007b,	/* braceleft:	left brace			*/
     0x0000,	/* bar:		vertical line(bar)		*/
-    0x0000,	/* braceright:	right brace			*/
+    0x007d,	/* braceright:	right brace			*/
     0x0000,	/* asciitilde:	tilde				*/
+    0x0000      /* delete                                       */
 };
 
 static ucschar hangul_keyboard_table_3final[] = {
@@ -437,10 +439,10 @@ static ucschar hangul_keyboard_table_3final[] = {
     0x0027,	/* parenleft:	apostrophe			*/
     0x007e,	/* parenright:	Tilde				*/
     0x201d,	/* asterisk:	right double quotation mark	*/
-    0x0000,	/* plus:		plus sign			*/
-    0x0000,	/* comma:		comma				*/
+    0x002b,	/* plus:		plus sign			*/
+    0x002c,	/* comma:		comma				*/
     0x0029,	/* minus:		right parenthesis		*/
-    0x0000,	/* period:		period				*/
+    0x002e,	/* period:		period				*/
     0x1169,	/* slash:		jungseong o			*/
     0x110f,	/* 0:		choseong  khieukh		*/
     0x11c2,	/* 1:		jongseong hieuh			*/
@@ -521,6 +523,7 @@ static ucschar hangul_keyboard_table_3final[] = {
     0x005c,	/* bar:		backslash			*/
     0x002f,	/* braceright:	slash				*/
     0x203b,	/* asciitilde:	reference mark			*/
+    0x0000      /* delete                                       */
 };
 
 static ucschar hangul_keyboard_table_3sun[] = {
@@ -559,7 +562,7 @@ static ucschar hangul_keyboard_table_3sun[] = {
     0x0000,     /* space                                        */
 
     0x0000,	/* exclam:		exclamation mark		*/
-    0x0000,	/* quotedbl:	quotatioin mark			*/
+    0x0022,	/* quotedbl:	quotatioin mark			*/
     0x0000,	/* numbersign:	number sign	 		*/
     0x0000,	/* dollar:		dollar sign			*/
     0x0000,	/* percent:		percent sign			*/
@@ -568,10 +571,10 @@ static ucschar hangul_keyboard_table_3sun[] = {
     0x0000,	/* parenleft:	left parenthesis		*/
     0x0000,	/* parenright:	right parenthesis		*/
     0x0000,	/* asterisk:	asterisk			*/
-    0x0000,	/* plus:		plus sign			*/
-    0x0000,	/* comma:		comma				*/
+    0x002b,	/* plus:		plus sign			*/
+    0x002c,	/* comma:		comma				*/
     0x11bd,	/* minus:		jongseong cieuc			*/
-    0x0000,	/* period:		period				*/
+    0x002e,	/* period:		period				*/
     0x11ae,	/* slash:		jongseong tikeut		*/
     0x1164,	/* 0:		choseong  yae			*/
     0x11c2,	/* 1:		jongseong hieuh			*/
@@ -583,12 +586,12 @@ static ucschar hangul_keyboard_table_3sun[] = {
     0x1168,	/* 7:		jungseong ye			*/
     0x1174,	/* 8:		jungseong yi			*/
     0x110f,	/* 9:		choseong khieukh		*/
-    0x0000,	/* colon:		colon				*/
+    0x003a,	/* colon:		colon				*/
     0x1107,	/* semicolon:	choseong  pieup			*/
     0x0032,	/* less:		2				*/
     0x11be,	/* equal:		jongseong chieuch		*/
     0x0033,	/* greater:		3				*/
-    0x0000,	/* question:	question mark	 		*/
+    0x003f,	/* question:	question mark	 		*/
     0x0000,	/* at:		commertial at			*/
     0x11bc,	/* A:		jongseong ieung			*/
     0x0021,	/* B:		exclamation mark		*/
@@ -620,7 +623,7 @@ static ucschar hangul_keyboard_table_3sun[] = {
     0x11bf,	/* backslash:	jongseong khieukh		*/
     0x11c1,	/* bracketright:	jongseong phieuph		*/
     0x0000,	/* asciicircum:	circumflex accent		*/
-    0x0000,	/* underscore:	underscore			*/
+    0x005f,	/* underscore:	underscore			*/
     0x0000,	/* quoteleft:	grave accent			*/
     0x11bc,	/* a:		jongseong ieung			*/
     0x116e,	/* b:		jungseong u			*/
@@ -648,10 +651,11 @@ static ucschar hangul_keyboard_table_3sun[] = {
     0x11a8,	/* x:		jongseong kiyeok		*/
     0x1105,	/* y:		choseong  rieul			*/
     0x11b7,	/* z:		jongseong mieum			*/
-    0x0000,	/* braceleft:	left brace			*/
+    0x007b,	/* braceleft:	left brace			*/
     0x0000,	/* bar:		vertical line(bar)		*/
-    0x0000,	/* braceright:	right brace			*/
+    0x007d,	/* braceright:	right brace			*/
     0x0000,	/* asciitilde:	tilde				*/
+    0x0000      /* delete                                       */
 };
 
 static ucschar hangul_keyboard_table_3yet[] = {
@@ -690,7 +694,7 @@ static ucschar hangul_keyboard_table_3yet[] = {
     0x0000,     /* space                                        */
 
     0x11bd,	/* exclam:		jongseong cieuc			*/
-    0x0000,	/* quotedbl:	quotatioin mark			*/
+    0x0022,	/* quotedbl:	quotatioin mark			*/
     0x0000,	/* numbersign:	number sign	 		*/
     0x0000,	/* dollar:		dollar sign			*/
     0x0000,	/* percent:		percent sign			*/
@@ -699,10 +703,10 @@ static ucschar hangul_keyboard_table_3yet[] = {
     0x0000,	/* parenleft:	left parenthesis		*/
     0x0000,	/* parenright:	right parenthesis		*/
     0x0000,	/* asterisk:	asterisk			*/
-    0x0000,	/* plus:		plus sign			*/
-    0x0000,	/* comma:		comma				*/
-    0x0000,	/* minus:		minus sign			*/
-    0x0000,	/* period:		period				*/
+    0x002b,	/* plus:		plus sign			*/
+    0x002c,	/* comma:		comma				*/
+    0x002d,	/* minus:		minus sign			*/
+    0x002e,	/* period:		period				*/
     0x1169,	/* slash:		jungseong o			*/
     0x110f,	/* 0:		choseong  khieukh		*/
     0x11c2,	/* 1:		jongseong hieuh			*/
@@ -714,12 +718,12 @@ static ucschar hangul_keyboard_table_3yet[] = {
     0x1168,	/* 7:		jungseong ye			*/
     0x1174,	/* 8:		jungseong yi			*/
     0x116e,	/* 9:		jungseong u			*/
-    0x0000,	/* colon:		colon				*/
+    0x003a,	/* colon:		colon				*/
     0x1107,	/* semicolon:	choseong  pieup			*/
     0x113c,	/* less:		choseong chitueumsios		*/
-    0x0000,	/* equal:		euals sign			*/
+    0x003d,	/* equal:		euals sign			*/
     0x113e,	/* greater:		choseong ceongchieumsios	*/
-    0x0000,	/* question:	question mark	 		*/
+    0x003f,	/* question:	question mark	 		*/
     0x11eb,	/* at:		jongseong pansios		*/
     0x11ae,	/* A:		jongseong tikeut		*/
     0x116e,	/* B:		jungseong u			*/
@@ -747,11 +751,11 @@ static ucschar hangul_keyboard_table_3yet[] = {
     0x11b9,	/* X:		jongseong pieup-sios		*/
     0x302f,	/* Y:		double dot tone mark		*/
     0x11be,	/* Z:		jongseong chieuch		*/
-    0x0000,	/* bracketleft:	left bracket			*/
+    0x005b,	/* bracketleft:	left bracket			*/
     0x0000,	/* backslash:	backslash			*/
-    0x0000,	/* bracketright:	right bracket			*/
+    0x005d,	/* bracketright:	right bracket			*/
     0x0000,	/* asciicircum:	circumflex accent		*/
-    0x0000,	/* underscore:	underscore			*/
+    0x005f,	/* underscore:	underscore			*/
     0x11f9,	/* quoteleft:	jongseong yeorinhieuh		*/
     0x11bc,	/* a:		jongseong ieung			*/
     0x116e,	/* b:		jungseong u			*/
@@ -779,9 +783,9 @@ static ucschar hangul_keyboard_table_3yet[] = {
     0x11a8,	/* x:		jongseong kiyeok		*/
     0x1105,	/* y:		choseong  rieul			*/
     0x11b7,	/* z:		jongseong mieum			*/
-    0x0000,	/* braceleft:	left brace			*/
+    0x007b,	/* braceleft:	left brace			*/
     0x0000,	/* bar:		vertical line(bar)		*/
-    0x0000,	/* braceright:	right brace			*/
+    0x007d,	/* braceright:	right brace			*/
     0x11f0,	/* asciitilde:	jongseong yesieung		*/
 };
 
