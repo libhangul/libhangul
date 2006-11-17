@@ -48,6 +48,11 @@ void ucs4_to_utf8(char *buf, const ucschar *ucs4, size_t bufsize)
     ret = iconv(cd, &inbuf, &inbytesleft, &outbuf, &outbytesleft);
 
     iconv_close(cd);
+
+    if (outbytesleft > 0)
+	*outbuf = '\0';
+    else
+	buf[bufsize - 1] = '\0';
 }
 
 int
