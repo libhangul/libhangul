@@ -23,12 +23,51 @@ AC_PROG_LIBTOOL
 # Checks for libraries.
 
 # Checks for header files.
-AC_CHECK_HEADERS([locale.h stdint.h stdlib.h string.h wchar.h])
+AC_CHECK_HEADERS([stdlib.h string.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_HEADER_STDBOOL
 AC_C_CONST
 AC_C_INLINE
+
+
+# Generate hangulconf.h file
+AC_CONFIG_COMMANDS([hangulconfig.h],
+[
+    outfile=hangulconfig.h
+    cat > $outfile << _HANGULCONFEOF
+/* hangulconfig.h
+ * This is generated file. Do not directly modify this.
+ */
+
+_HANGULCONFEOF
+
+if test "$stdbool_h" = "yes" ; then
+    echo "#include <stdbool.h>" >> $outfile
+else
+    if test "$bool_type" != "yes" ; then
+	cat >> $outfile << _HANGULCONFEOF
+# ifdef __cplusplus
+   typedef bool _Bool;
+# else
+   typedef unsigned char _Bool;
+#endif
+_HANGULCONFEOF
+    fi
+
+    cat >> $outfile << _HANGULCONFEOF
+#define bool _Bool
+#define false 0
+#define true 1
+#define __bool_true_false_are_defined 1
+_HANGULCONFEOF
+fi
+], [
+
+stdbool_h="$ac_cv_header_stdbool_h"
+bool_type="$ac_cv_type__Bool"
+
+])
 
 # Checks for library functions.
 AC_CONFIG_FILES([
