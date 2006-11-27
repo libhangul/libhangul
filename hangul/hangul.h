@@ -19,8 +19,7 @@
 #ifndef _HANGUL_H_
 #define _HANGUL_H_
 
-#include <stdbool.h>
-#include <inttypes.h>
+#include <hangulconfig.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -32,7 +31,7 @@ enum {
     HANGUL_JUNGSEONG_FILLER = 0x1160    /* hangul jungseong filler */
 };
 
-typedef uint32_t ucschar;
+typedef unsigned int ucschar;
 
 bool hangul_is_choseong(ucschar c);
 bool hangul_is_jungseong(ucschar c);
