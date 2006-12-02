@@ -736,18 +736,18 @@ hangul_ic_process_jaso(HangulInputContext *hic, ucschar ch)
 	    if (hangul_is_jongseong(hangul_ic_peek(hic))) {
 		jongseong = hangul_combination_combine(hic->combination,
 						   hic->buffer.jongseong, ch);
-		if (jongseong) {
+	    }
+	    if (jongseong) {
+		if (!hangul_ic_push(hic, jongseong)) {
 		    if (!hangul_ic_push(hic, jongseong)) {
-			if (!hangul_ic_push(hic, jongseong)) {
-			    return false;
-			}
+			return false;
 		    }
-		} else {
-		    hangul_ic_save_commit_string(hic);
+		}
+	    } else {
+		hangul_ic_save_commit_string(hic);
+		if (!hangul_ic_push(hic, ch)) {
 		    if (!hangul_ic_push(hic, ch)) {
-			if (!hangul_ic_push(hic, ch)) {
-			    return false;
-			}
+			return false;
 		    }
 		}
 	    }
