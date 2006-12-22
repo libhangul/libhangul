@@ -375,7 +375,7 @@ hanja_table_match_suffix(const HanjaTable* table, const char *key)
 }
 
 void
-hanja_table_destroy(HanjaTable *table)
+hanja_table_delete(HanjaTable *table)
 {
     if (table) {
 	int i, j;
@@ -436,7 +436,7 @@ hanja_list_get_nth_comment(const HanjaList *list, int n)
 }
 
 void
-hanja_list_destroy(HanjaList *list)
+hanja_list_delete(HanjaList *list)
 {
     if (list) {
 	h_free(list->items);
