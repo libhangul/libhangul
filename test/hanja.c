@@ -16,9 +16,9 @@ main(int argc, char *argv[])
 	printf("%s\n", value);
     }
 
-    hanja_list_destroy(list);
+    hanja_list_delete(list);
 
-    hanja_table_destroy(table);
+    hanja_table_delete(table);
 
     return 0;
 }
