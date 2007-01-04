@@ -199,7 +199,6 @@ hanja_table_new_from_slist(struct slist *lists)
 	    table->base[i] = lists->data;
 	    lists = lists->next;
 	}
-	printf("n list: %d\n", table->nmember);
     }
     return table;
 }
