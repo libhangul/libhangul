@@ -76,42 +76,42 @@ struct _HangulInputContext {
 
 static const HangulKeyboard hangul_keyboard_2 = {
     HANGUL_KEYBOARD_TYPE_JAMO,
-    hangul_keyboard_table_2
+    (ucschar*)hangul_keyboard_table_2
 };
 
 static const HangulKeyboard hangul_keyboard_32 = {
     HANGUL_KEYBOARD_TYPE_JASO,
-    hangul_keyboard_table_32
+    (ucschar*)hangul_keyboard_table_32
 };
 
 static const HangulKeyboard hangul_keyboard_390 = {
     HANGUL_KEYBOARD_TYPE_JASO,
-    hangul_keyboard_table_390
+    (ucschar*)hangul_keyboard_table_390
 };
 
 static const HangulKeyboard hangul_keyboard_3final = {
     HANGUL_KEYBOARD_TYPE_JASO,
-    hangul_keyboard_table_3final
+    (ucschar*)hangul_keyboard_table_3final
 };
 
 static const HangulKeyboard hangul_keyboard_3sun = {
     HANGUL_KEYBOARD_TYPE_JASO,
-    hangul_keyboard_table_3sun
+    (ucschar*)hangul_keyboard_table_3sun
 };
 
 static const HangulKeyboard hangul_keyboard_3yet = {
     HANGUL_KEYBOARD_TYPE_JASO,
-    hangul_keyboard_table_3yet
+    (ucschar*)hangul_keyboard_table_3yet
 };
 
 static const HangulCombination hangul_combination_default = {
     N_ELEMENTS(hangul_combination_table_default),
-    hangul_combination_table_default
+    (HangulCombinationItem*)hangul_combination_table_default
 };
 
 static const HangulCombination hangul_combination_full = {
     N_ELEMENTS(hangul_combination_table_full),
-    hangul_combination_table_full
+    (HangulCombinationItem*)hangul_combination_table_full
 };
 
 static void    hangul_buffer_push(HangulBuffer *buffer, ucschar ch);

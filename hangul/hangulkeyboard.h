@@ -1,4 +1,4 @@
-static ucschar hangul_keyboard_table_2[] = {
+static const ucschar hangul_keyboard_table_2[] = {
     0x0000,     /* 0x00 null                                         */
     0x0000,     /* 0x01 start of heading                             */
     0x0000,     /* 0x02 start of text                                */
@@ -129,7 +129,7 @@ static ucschar hangul_keyboard_table_2[] = {
     0x0000      /* 0x7F delete                                       */
 };
 
-static ucschar hangul_keyboard_table_32[] = {
+static const ucschar hangul_keyboard_table_32[] = {
     0x0000,     /* 0x00 null                                         */
     0x0000,     /* 0x01 start of heading                             */
     0x0000,     /* 0x02 start of text                                */
@@ -260,7 +260,7 @@ static ucschar hangul_keyboard_table_32[] = {
     0x0000      /* 0x7F delete                                       */
 };
 
-static ucschar hangul_keyboard_table_390[] = {
+static const ucschar hangul_keyboard_table_390[] = {
     0x0000,     /* 0x00 null                                         */
     0x0000,     /* 0x01 start of heading                             */
     0x0000,     /* 0x02 start of text                                */
@@ -391,7 +391,7 @@ static ucschar hangul_keyboard_table_390[] = {
     0x0000      /* 0x7F delete                                       */
 };
 
-static ucschar hangul_keyboard_table_3final[] = {
+static const ucschar hangul_keyboard_table_3final[] = {
     0x0000,     /* 0x00 null                                         */
     0x0000,     /* 0x01 start of heading                             */
     0x0000,     /* 0x02 start of text                                */
@@ -522,7 +522,7 @@ static ucschar hangul_keyboard_table_3final[] = {
     0x0000      /* 0x7F delete                                       */
 };
 
-static ucschar hangul_keyboard_table_3sun[] = {
+static const ucschar hangul_keyboard_table_3sun[] = {
     0x0000,     /* 0x00 null                                         */
     0x0000,     /* 0x01 start of heading                             */
     0x0000,     /* 0x02 start of text                                */
@@ -653,7 +653,7 @@ static ucschar hangul_keyboard_table_3sun[] = {
     0x0000      /* 0x7F delete                                       */
 };
 
-static ucschar hangul_keyboard_table_3yet[] = {
+static const ucschar hangul_keyboard_table_3yet[] = {
     0x0000,     /* 0x00 null                                         */
     0x0000,     /* 0x01 start of heading                             */
     0x0000,     /* 0x02 start of text                                */
@@ -784,7 +784,7 @@ static ucschar hangul_keyboard_table_3yet[] = {
     0x0000      /* 0x7F delete                                       */
 };
 
-static HangulCombinationItem hangul_combination_table_default[] = {
+static const HangulCombinationItem hangul_combination_table_default[] = {
   { 0x11001100, 0x1101 }, /* choseong  kiyeok + kiyeok  = ssangkiyeok   */
   { 0x11031103, 0x1104 }, /* choseong  tikeut + tikeut  = ssangtikeut   */
   { 0x11071107, 0x1108 }, /* choseong  pieup  + pieup   = ssangpieup    */
@@ -812,7 +812,7 @@ static HangulCombinationItem hangul_combination_table_default[] = {
   { 0x11ba11ba, 0x11bb }, /* jongseong sios   + sios    = ssangsios     */
 };
 
-static HangulCombinationItem hangul_combination_table_full[] = {
+static const HangulCombinationItem hangul_combination_table_full[] = {
   { 0x11001100, 0x1101 }, /* choseong ssangkiyeok           = kiyeok + kiyeok */
   { 0x11021100, 0x1113 }, /* choseong nieun-kiyeok          = nieun + kiyeok */
   { 0x11021102, 0x1114 }, /* choseong ssangnieun            = nieun + nieun */
