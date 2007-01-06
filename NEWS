@@ -1,3 +1,8 @@
+0.0.4
+ * added HnagulKeyboard, HangulCombination feature
+ * update test code
+ * process english character also in hangul mode
+
 0.0.3
  * added Hanja related features
 
