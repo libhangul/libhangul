@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.57)
-AC_INIT(libhangul, 0.0.3, http://kldp.net/projects/hangul/)
+AC_INIT(libhangul, 0.0.4, http://kldp.net/projects/hangul/)
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([hangul/hangul.h])
 AC_CONFIG_HEADER([config.h])
@@ -29,45 +29,6 @@ AC_CHECK_HEADERS([stdlib.h string.h])
 AC_HEADER_STDBOOL
 AC_C_CONST
 AC_C_INLINE
-
-
-# Generate hangulconf.h file
-AC_CONFIG_COMMANDS([hangulconfig.h],
-[
-    outfile=hangulconfig.h
-    cat > $outfile << _HANGULCONFEOF
-/* hangulconfig.h
- * This is generated file. Do not directly modify this.
- */
-
-_HANGULCONFEOF
-
-if test "$stdbool_h" = "yes" ; then
-    echo "#include <stdbool.h>" >> $outfile
-else
-    if test "$bool_type" != "yes" ; then
-	cat >> $outfile << _HANGULCONFEOF
-# ifdef __cplusplus
-   typedef bool _Bool;
-# else
-   typedef unsigned char _Bool;
-#endif
-_HANGULCONFEOF
-    fi
-
-    cat >> $outfile << _HANGULCONFEOF
-#define bool _Bool
-#define false 0
-#define true 1
-#define __bool_true_false_are_defined 1
-_HANGULCONFEOF
-fi
-], [
-
-stdbool_h="$ac_cv_header_stdbool_h"
-bool_type="$ac_cv_type__Bool"
-
-])
 
 # Checks for library functions.
 AC_CONFIG_FILES([

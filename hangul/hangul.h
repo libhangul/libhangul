@@ -16,10 +16,10 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-#ifndef _HANGUL_H_
-#define _HANGUL_H_
+#ifndef libhangul_hangul_h
+#define libhangul_hangul_h
 
-#include <hangulconfig.h>
+#include <stdbool.h>
 #include <inttypes.h>
 
 #ifdef __cplusplus
@@ -135,4 +135,4 @@ const char*  hanja_get_comment(const Hanja* hanja);
 }
 #endif
 
-#endif /* _HANGUL_H_ */
+#endif /* libhangul_hangul_h */
