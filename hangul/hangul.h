@@ -93,7 +93,12 @@ void hangul_ic_delete(HangulInputContext *hic);
 bool hangul_ic_process(HangulInputContext *hic, int ascii);
 void hangul_ic_reset(HangulInputContext *hic);
 bool hangul_ic_backspace(HangulInputContext *hic);
+
 bool hangul_ic_is_empty(HangulInputContext *hic);
+bool hangul_ic_has_choseong(HangulInputContext *hic);
+bool hangul_ic_has_jungseong(HangulInputContext *hic);
+bool hangul_ic_has_jongseong(HangulInputContext *hic);
+
 int  hangul_ic_dvorak_to_qwerty(int qwerty);
 
 void hangul_ic_set_output_mode(HangulInputContext *hic, int mode);

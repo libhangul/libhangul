@@ -25,6 +25,8 @@
 #include <config.h>
 #endif
 
+#include <stdlib.h>
+
 #include "hangul.h"
 
 /**
@@ -373,4 +375,43 @@ hangul_jaso_to_syllable(ucschar choseong, ucschar jungseong, ucschar jongseong)
     return c;
 }
 
+void
+hangul_syllable_to_jaso(ucschar syllable,
+			ucschar* choseong,
+			ucschar* jungseong,
+			ucschar* jongseong)
+{
+    static const ucschar hangul_base    = 0xac00;
+    static const ucschar choseong_base  = 0x1100;
+    static const ucschar jungseong_base = 0x1161;
+    static const ucschar jongseong_base = 0x11a7;
+    static const int njungseong = 21;
+    static const int njongseong = 28;
 
+    if (!hangul_is_syllable(syllable)) {
+	if (jongseong != NULL)
+	    *jongseong = 0;
+	if (jungseong != NULL)
+	    *jungseong = 0;
+	if (choseong != NULL)
+	    *choseong = 0;
+
+	return;
+    }
+
+    syllable -= hangul_base;
+
+    if (jongseong != NULL) {
+	*jongseong = jongseong_base + syllable % njongseong;
+    }
+    syllable /= njongseong;
+
+    if (jungseong != NULL) {
+	*jungseong = jungseong_base + syllable % njungseong;
+    }
+    syllable /= njungseong;
+
+    if (choseong != NULL) {
+	*choseong = choseong_base + syllable;
+    }
+}

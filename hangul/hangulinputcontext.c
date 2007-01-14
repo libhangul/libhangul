@@ -274,6 +274,24 @@ hangul_buffer_is_empty(HangulBuffer *buffer)
 	   buffer->jongseong == 0;
 }
 
+static bool
+hangul_buffer_has_choseong(HangulBuffer *buffer)
+{
+    return buffer->choseong != 0;
+}
+
+static bool
+hangul_buffer_has_jungseong(HangulBuffer *buffer)
+{
+    return buffer->jungseong != 0;
+}
+
+static bool
+hangul_buffer_has_jongseong(HangulBuffer *buffer)
+{
+    return buffer->jongseong != 0;
+}
+
 static void
 hangul_buffer_push(HangulBuffer *buffer, ucschar ch)
 {
@@ -967,6 +985,24 @@ bool
 hangul_ic_is_empty(HangulInputContext *hic)
 {
     return hangul_buffer_is_empty(&hic->buffer);
+}
+
+bool
+hangul_ic_has_choseong(HangulInputContext *hic)
+{
+    return hangul_buffer_has_choseong(&hic->buffer);
+}
+
+bool
+hangul_ic_has_jungseong(HangulInputContext *hic)
+{
+    return hangul_buffer_has_jungseong(&hic->buffer);
+}
+
+bool
+hangul_ic_has_jongseong(HangulInputContext *hic)
+{
+    return hangul_buffer_has_jongseong(&hic->buffer);
 }
 
 void
