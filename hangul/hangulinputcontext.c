@@ -459,41 +459,41 @@ hangul_buffer_backspace(HangulBuffer *buffer)
 }
 
 static inline bool
-hangul_ic_push(HangulInputContext *hic, ucschar ch)
+hangul_ic_push(HangulInputContext *hic, ucschar c)
 {
     ucschar buf[64] = { 0, };
     if (hic->filter != NULL) {
 	ucschar cho, jung, jong;
-	if (hangul_is_choseong(ch)) {
-	    cho  = ch;
+	if (hangul_is_choseong(c)) {
+	    cho  = c;
 	    jung = hic->buffer.jungseong;
 	    jong = hic->buffer.jongseong;
-	} else if (hangul_is_jungseong(ch)) {
+	} else if (hangul_is_jungseong(c)) {
 	    cho  = hic->buffer.choseong;
-	    jung = ch;
+	    jung = c;
 	    jong = hic->buffer.jongseong;
-	} else if (hangul_is_jongseong(ch)) {
+	} else if (hangul_is_jongseong(c)) {
 	    cho  = hic->buffer.choseong;
 	    jung = hic->buffer.jungseong;
-	    jong = ch;
+	    jong = c;
 	} else {
 	    hangul_ic_flush_internal(hic);
 	    return false;
 	}
 
 	hangul_jaso_to_string(cho, jung, jong, buf, N_ELEMENTS(buf));
-	if (!hic->filter(buf, cho, jung, jong, hic->filter_data)) {
+	if (!hic->filter(hic, c, buf, hic->filter_data)) {
 	    hangul_ic_flush_internal(hic);
 	    return false;
 	}
     } else {
-	if (!hangul_is_jaso(ch)) {
+	if (!hangul_is_jaso(c)) {
 	    hangul_ic_flush_internal(hic);
 	    return false;
 	}
     }
 
-    hangul_buffer_push(&hic->buffer, ch);
+    hangul_buffer_push(&hic->buffer, c);
     return true;
 }
 

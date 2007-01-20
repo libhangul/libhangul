@@ -66,7 +66,8 @@ typedef struct _HangulKeyboard        HangulKeyboard;
 typedef struct _HangulCombination     HangulCombination;
 typedef struct _HangulBuffer          HangulBuffer;
 typedef struct _HangulInputContext    HangulInputContext;
-typedef bool (*HangulICFilter) (ucschar*, ucschar, ucschar, ucschar, void*);
+typedef bool   (*HangulICFilter)     (HangulInputContext*,
+				      ucschar, const ucschar*, void*);
 
 enum {
     HANGUL_OUTPUT_SYLLABLE,
