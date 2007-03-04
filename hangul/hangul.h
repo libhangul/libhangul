@@ -1,5 +1,5 @@
 /* libhangul
- * Copyright (C) 2004 - 2006 Choe Hwanjin
+ * Copyright (C) 2004 - 2007 Choe Hwanjin
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -66,8 +66,15 @@ typedef struct _HangulKeyboard        HangulKeyboard;
 typedef struct _HangulCombination     HangulCombination;
 typedef struct _HangulBuffer          HangulBuffer;
 typedef struct _HangulInputContext    HangulInputContext;
-typedef bool   (*HangulICFilter)     (HangulInputContext*,
-				      ucschar, const ucschar*, void*);
+
+typedef bool   (*HangulOnTransition) (HangulInputContext*,
+				      ucschar,
+				      const ucschar*,
+				      void*);
+typedef void   (*HangulOnTranslate)  (HangulInputContext*,
+				      int,
+				      ucschar*,
+				      void*);
 
 enum {
     HANGUL_OUTPUT_SYLLABLE,
@@ -113,8 +120,13 @@ void hangul_ic_select_keyboard(HangulInputContext *hic,
 			       const char* id);
 void hangul_ic_set_combination(HangulInputContext *hic,
 			       const HangulCombination *combination);
-void hangul_ic_set_filter(HangulInputContext *hic,
-			  HangulICFilter func, void *user_data);
+
+void hangul_ic_connect_translate (HangulInputContext* hic,
+                                  HangulOnTranslate callback,
+                                  void* user_data);
+void hangul_ic_connect_transition(HangulInputContext* hic,
+                                  HangulOnTransition callback,
+                                  void* user_data);
 
 const ucschar* hangul_ic_get_preedit_string(HangulInputContext *hic);
 const ucschar* hangul_ic_get_commit_string(HangulInputContext *hic);
@@ -140,6 +152,12 @@ void         hanja_list_delete(HanjaList *list);
 const char*  hanja_get_key(const Hanja* hanja);
 const char*  hanja_get_value(const Hanja* hanja);
 const char*  hanja_get_comment(const Hanja* hanja);
+
+
+/* deprecated */
+typedef bool (*HangulICFilter) (ucschar*, ucschar, ucschar, ucschar, void*);
+void hangul_ic_set_filter(HangulInputContext *hic,
+			  HangulICFilter func, void *user_data);
 
 #ifdef __cplusplus
 }

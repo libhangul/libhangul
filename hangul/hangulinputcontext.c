@@ -63,13 +63,20 @@ struct _HangulInputContext {
     const HangulCombination* combination;
 
     HangulBuffer buffer;
-    HangulICFilter filter;
-    void *filter_data;
     int output_mode;
 
     ucschar preedit_string[64];
     ucschar commit_string[64];
     ucschar flushed_string[64];
+
+    HangulOnTranslate   on_translate;
+    void*               on_translate_data;
+
+    HangulOnTransition  on_transition;
+    void*               on_transition_data;
+
+    HangulICFilter filter;
+    void *filter_data;
 };
 
 #include "hangulkeyboard.h"
@@ -462,7 +469,7 @@ static inline bool
 hangul_ic_push(HangulInputContext *hic, ucschar c)
 {
     ucschar buf[64] = { 0, };
-    if (hic->filter != NULL) {
+    if (hic->on_transition != NULL) {
 	ucschar cho, jung, jong;
 	if (hangul_is_choseong(c)) {
 	    cho  = c;
@@ -482,7 +489,7 @@ hangul_ic_push(HangulInputContext *hic, ucschar c)
 	}
 
 	hangul_jaso_to_string(cho, jung, jong, buf, N_ELEMENTS(buf));
-	if (!hic->filter(hic, c, buf, hic->filter_data)) {
+	if (!hic->on_transition(hic, c, buf, hic->on_transition_data)) {
 	    hangul_ic_flush_internal(hic);
 	    return false;
 	}
@@ -785,20 +792,22 @@ hangul_ic_process_jaso(HangulInputContext *hic, ucschar ch)
 bool
 hangul_ic_process(HangulInputContext *hic, int ascii)
 {
-    ucschar ch;
+    ucschar c;
 
     if (hic == NULL)
 	return false;
 
-    ch = hangul_keyboard_get_value(hic->keyboard, ascii);
-
     hic->preedit_string[0] = 0;
     hic->commit_string[0] = 0;
 
+    c = hangul_keyboard_get_value(hic->keyboard, ascii);
+    if (hic->on_translate != NULL)
+	hic->on_translate(hic, ascii, &c, hic->on_translate_data);
+
     if (hangul_keyboard_get_type(hic->keyboard) == HANGUL_KEYBOARD_TYPE_JAMO)
-	return hangul_ic_process_jamo(hic, ch);
+	return hangul_ic_process_jamo(hic, c);
     else
-	return hangul_ic_process_jaso(hic, ch);
+	return hangul_ic_process_jaso(hic, c);
 }
 
 const ucschar*
@@ -1014,14 +1023,32 @@ hangul_ic_set_output_mode(HangulInputContext *hic, int mode)
     hic->output_mode = mode;
 }
 
+void
+hangul_ic_connect_translate (HangulInputContext* hic,
+                             HangulOnTranslate callback,
+                             void* user_data)
+{
+    if (hic != NULL) {
+	hic->on_translate      = callback;
+	hic->on_translate_data = user_data;
+    }
+}
+
+void
+hangul_ic_connect_transition(HangulInputContext* hic,
+                             HangulOnTransition callback,
+                             void* user_data)
+{
+    if (hic != NULL) {
+	hic->on_transition      = callback;
+	hic->on_transition_data = user_data;
+    }
+}
+
 void hangul_ic_set_filter(HangulInputContext *hic,
 			  HangulICFilter func, void *user_data)
 {
-    if (hic == NULL)
-	return;
-
-    hic->filter = func;
-    hic->filter_data = user_data;
+    return;
 }
 
 void
