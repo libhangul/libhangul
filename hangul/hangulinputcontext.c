@@ -1111,13 +1111,18 @@ hangul_ic_new(const char* keyboard)
 
     hangul_ic_set_output_mode(hic, HANGUL_OUTPUT_SYLLABLE);
     hangul_ic_select_keyboard(hic, keyboard);
-    hangul_ic_set_filter(hic, NULL, NULL);
 
     hangul_buffer_clear(&hic->buffer);
 
     hic->preedit_string[0] = 0;
     hic->commit_string[0] = 0;
     hic->flushed_string[0] = 0;
+
+    hic->on_translate      = NULL;
+    hic->on_translate_data = NULL;
+
+    hic->on_transition      = NULL;
+    hic->on_transition_data = NULL;
 
     return hic;
 }
