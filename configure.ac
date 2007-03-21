@@ -18,17 +18,21 @@ AC_SUBST(LIBHANGUL_AGE)
 
 # Checks for programs.
 AC_PROG_CC
+AM_PROG_CC_C_O
 AC_PROG_LIBTOOL
+AC_PROG_INSTALL
 
 # Checks for libraries.
 
 # Checks for header files.
+AC_HEADER_STDC
 AC_CHECK_HEADERS([stdlib.h string.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_HEADER_STDBOOL
 AC_C_CONST
 AC_C_INLINE
+AC_TYPE_UINT32_T
 
 # Checks for library functions.
 AC_CONFIG_FILES([
