@@ -67,15 +67,6 @@ typedef struct _HangulCombination     HangulCombination;
 typedef struct _HangulBuffer          HangulBuffer;
 typedef struct _HangulInputContext    HangulInputContext;
 
-typedef bool   (*HangulOnTransition) (HangulInputContext*,
-				      ucschar,
-				      const ucschar*,
-				      void*);
-typedef void   (*HangulOnTranslate)  (HangulInputContext*,
-				      int,
-				      ucschar*,
-				      void*);
-
 enum {
     HANGUL_OUTPUT_SYLLABLE,
     HANGUL_OUTPUT_JAMO
@@ -120,13 +111,8 @@ void hangul_ic_select_keyboard(HangulInputContext *hic,
 			       const char* id);
 void hangul_ic_set_combination(HangulInputContext *hic,
 			       const HangulCombination *combination);
-
-void hangul_ic_connect_translate (HangulInputContext* hic,
-                                  HangulOnTranslate callback,
-                                  void* user_data);
-void hangul_ic_connect_transition(HangulInputContext* hic,
-                                  HangulOnTransition callback,
-                                  void* user_data);
+void hangul_ic_connect_callback(HangulInputContext* hic, const char* event,
+				void* callback, void* user_data);
 
 const ucschar* hangul_ic_get_preedit_string(HangulInputContext *hic);
 const ucschar* hangul_ic_get_commit_string(HangulInputContext *hic);

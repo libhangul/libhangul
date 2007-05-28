@@ -30,6 +30,15 @@
 #define N_ELEMENTS(array) (sizeof(array) / sizeof(array[0]))
 #define HANGUL_KEYBOARD_TABLE_SIZE 0x80
 
+typedef void   (*HangulOnTranslate)  (HangulInputContext*,
+				      int,
+				      ucschar*,
+				      void*);
+typedef bool   (*HangulOnTransition) (HangulInputContext*,
+				      ucschar,
+				      const ucschar*,
+				      void*);
+
 typedef struct _HangulCombinationItem HangulCombinationItem;
 
 struct _HangulKeyboard {
@@ -1041,6 +1050,21 @@ hangul_ic_connect_transition(HangulInputContext* hic,
 {
     if (hic != NULL) {
 	hic->on_transition      = callback;
+	hic->on_transition_data = user_data;
+    }
+}
+
+void hangul_ic_connect_callback(HangulInputContext* hic, const char* event,
+				void* callback, void* user_data)
+{
+    if (hic == NULL || event == NULL)
+	return;
+
+    if (strcasecmp(event, "translate") == 0) {
+	hic->on_translate      = (HangulOnTranslate)callback;
+	hic->on_translate_data = user_data;
+    } else if (strcasecmp(event, "transition") == 0) {
+	hic->on_transition      = (HangulOnTransition)callback;
 	hic->on_transition_data = user_data;
     }
 }
