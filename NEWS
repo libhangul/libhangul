@@ -1,3 +1,7 @@
+0.0.5
+ * changed filter api
+ * add more hanja word database
+
 0.0.4
  * added HnagulKeyboard, HangulCombination feature
  * update test code

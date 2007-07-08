@@ -1,4 +1,149 @@
 ------------------------------------------------------------------------
+r127 | krisna | 2007-07-08 22:21:05 +0900 (Sun, 08 Jul 2007) | 2 lines
+Changed paths:
+   M /libhangul/trunk/test/hanja.c
+
+hanja 테스트 코드 변경
+
+------------------------------------------------------------------------
+r126 | krisna | 2007-07-08 21:44:29 +0900 (Sun, 08 Jul 2007) | 2 lines
+Changed paths:
+   M /libhangul/trunk/data/hanja/hanja.txt
+
+오류 수정
+
+------------------------------------------------------------------------
+r125 | krisna | 2007-07-08 20:46:51 +0900 (Sun, 08 Jul 2007) | 2 lines
+Changed paths:
+   M /libhangul/trunk/data/hanja/hanja.txt
+
+단어 정보 오류 수정
+
+------------------------------------------------------------------------
+r124 | krisna | 2007-07-07 17:19:12 +0900 (Sat, 07 Jul 2007) | 2 lines
+Changed paths:
+   M /libhangul/trunk/data/hanja/hanja.txt
+
+한자 단어 오류 수정
+
+------------------------------------------------------------------------
+r123 | krisna | 2007-06-24 21:54:35 +0900 (Sun, 24 Jun 2007) | 6 lines
+Changed paths:
+   M /libhangul/trunk/data/hanja/hanja.txt
+
+* 국립국어원의 국어사전 표제어 목록에서 추출한 한자 추가
+ - http://kldp.org/node/83356 참고
+ - http://kldp.org/files/hanja_nikl.zip
+ - hanja_type2_1_complete.txt 추가
+
+
+------------------------------------------------------------------------
+r122 | krisna | 2007-06-24 21:03:10 +0900 (Sun, 24 Jun 2007) | 6 lines
+Changed paths:
+   M /libhangul/trunk/data/hanja/hanja.txt
+
+* 국립국어원의 국어사전 표제어 목록에서 추출한 한자 추가
+ - http://kldp.org/node/83356 참고
+ - http://kldp.org/files/hanja_nikl.zip
+ - hanja_type3_1_1_complete.txt 추가
+
+
+------------------------------------------------------------------------
+r121 | krisna | 2007-06-24 20:59:26 +0900 (Sun, 24 Jun 2007) | 6 lines
+Changed paths:
+   M /libhangul/trunk/data/hanja/hanja.txt
+
+* 국립국어원의 국어사전 표제어 목록에서 추출한 한자 추가
+ - http://kldp.org/node/83356 참고
+ - http://kldp.org/files/hanja_nikl.zip
+ - hanja_type1_complete.txt merge
+
+
+------------------------------------------------------------------------
+r120 | krisna | 2007-05-28 22:25:15 +0900 (Mon, 28 May 2007) | 4 lines
+Changed paths:
+   M /libhangul/trunk/hangul/hangul.h
+   M /libhangul/trunk/hangul/hangulinputcontext.c
+
+callback function 등록하는 api 수정
+ * hangul_ic_connect_callback() 사용
+ * callback function type 제거
+
+------------------------------------------------------------------------
+r119 | krisna | 2007-03-21 22:22:02 +0900 (Wed, 21 Mar 2007) | 2 lines
+Changed paths:
+   M /libhangul/trunk/configure.ac
+
+configure에 몇가지 check 추가
+
+------------------------------------------------------------------------
+r118 | krisna | 2007-03-08 22:41:38 +0900 (Thu, 08 Mar 2007) | 2 lines
+Changed paths:
+   M /libhangul/trunk/hangul/hangulinputcontext.c
+
+callback function pointer 초기화 루틴 추가
+
+------------------------------------------------------------------------
+r117 | krisna | 2007-03-04 22:28:14 +0900 (Sun, 04 Mar 2007) | 8 lines
+Changed paths:
+   M /libhangul/trunk/hangul/hangul.h
+   M /libhangul/trunk/hangul/hangulinputcontext.c
+
+* filter api 변경
+ - hangul_ic_connect_translate() 추가:
+   ascii 코드에서 한글코드로 변환할때 불리는 callback 등록 함수 
+ - hangul_ic_connect_transition() 추가:
+   입력된 글자에 따라서 상태 전이(transition)이 발생할때 불리는 callback 등록
+   함수
+ - hangul_ic_set_filter()를 앞으로 사용하지 않음, 삭제될 예정
+
+------------------------------------------------------------------------
+r116 | krisna | 2007-01-20 14:50:53 +0900 (Sat, 20 Jan 2007) | 11 lines
+Changed paths:
+   M /libhangul/trunk/hangul/hangul.h
+   M /libhangul/trunk/hangul/hangulinputcontext.c
+
+HangulICFilter의 argument 순서를 바꿈
+ * bool (*HangulICFilter)(HangulInputContext* hic,
+			  ucschar c,
+			  const ucschar* preedit,
+			  void* data);
+   - hic: 이 ic의 포인터
+   - c: 새로 입력된 글자
+   - preedit:  c가 입력됐을 경우 만들어질 preedit string
+   - data: filter를 등록할때 지정한 user data pointer
+   
+
+------------------------------------------------------------------------
+r115 | krisna | 2007-01-14 21:29:54 +0900 (Sun, 14 Jan 2007) | 2 lines
+Changed paths:
+   M /libhangul/trunk/hangul/hangul.h
+   M /libhangul/trunk/hangul/hangulctype.c
+
+hangul_syllable_to_jaso() 추가
+
+------------------------------------------------------------------------
+r114 | krisna | 2007-01-14 21:14:07 +0900 (Sun, 14 Jan 2007) | 4 lines
+Changed paths:
+   M /libhangul/trunk/hangul/hangul.h
+   M /libhangul/trunk/hangul/hangulctype.c
+   M /libhangul/trunk/hangul/hangulinputcontext.c
+
+HangulInputContext의 상태를 알 수 있는 함수 추가:
+ * hangul_buffer_has_choseong(), hangul_buffer_has_jungseong(),
+   hangul_buffer_has_jongseong() 추가
+
+------------------------------------------------------------------------
+r110 | krisna | 2007-01-06 15:35:09 +0900 (Sat, 06 Jan 2007) | 3 lines
+Changed paths:
+   M /libhangul/trunk/ChangeLog
+   M /libhangul/trunk/Makefile.am
+   M /libhangul/trunk/NEWS
+
+ * update documents
+ * update the rule to generate ChangeLog
+
+------------------------------------------------------------------------
 r109 | krisna | 2007-01-06 15:14:45 +0900 (Sat, 06 Jan 2007) | 11 lines
 Changed paths:
    M /libhangul/trunk/Makefile.am
