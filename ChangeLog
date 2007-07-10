@@ -1,4 +1,32 @@
 ------------------------------------------------------------------------
+r130 | krisna | 2007-07-10 22:13:56 +0900 (Tue, 10 Jul 2007) | 2 lines
+Changed paths:
+   M /libhangul/trunk/NEWS
+   M /libhangul/trunk/configure.ac
+
+0.0.6 release
+
+------------------------------------------------------------------------
+r129 | krisna | 2007-07-10 22:12:03 +0900 (Tue, 10 Jul 2007) | 2 lines
+Changed paths:
+   M /libhangul/trunk/test/hanja.c
+
+include string.h, 워닝 제거
+
+------------------------------------------------------------------------
+r128 | krisna | 2007-07-08 22:22:26 +0900 (Sun, 08 Jul 2007) | 5 lines
+Changed paths:
+   M /libhangul/trunk/ChangeLog
+   M /libhangul/trunk/NEWS
+   M /libhangul/trunk/configure.ac
+   M /libhangul/trunk/libhangul.pc.in
+
+0.0.5 준비
+ * 문서 업데이트
+ * configure.ac의 버젼 변경
+ * libhangul.pc.in에서 datadir 설정 제거
+
+------------------------------------------------------------------------
 r127 | krisna | 2007-07-08 22:21:05 +0900 (Sun, 08 Jul 2007) | 2 lines
 Changed paths:
    M /libhangul/trunk/test/hanja.c
