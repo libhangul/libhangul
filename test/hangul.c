@@ -1,15 +1,18 @@
+#ifdef HAVE_CONFIG_H
+#include <config.h>
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <iconv.h>
-#include <endian.h>
 
 #include "../hangul/hangul.h"
 
-#if __BYTE_ORDER == __LITTLE_ENDIAN
-#define UCS4 "UCS-4LE"
-#else
+#ifdef WORDS_BIGENDIAN
 #define UCS4 "UCS-4BE"
+#else
+#define UCS4 "UCS-4LE"
 #endif
 
 bool filter(ucschar *str, ucschar cho, ucschar jung, ucschar jong, void *data)
