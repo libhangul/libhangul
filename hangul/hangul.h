@@ -88,7 +88,7 @@ void    hangul_keyboard_set_type(HangulKeyboard *keyboard, int type);
 HangulCombination* hangul_combination_new();
 void hangul_combination_delete(HangulCombination *combination);
 bool hangul_combination_set_data(HangulCombination* combination, 
-		     ucschar* first, ucschar* second, ucschar* result, int n);
+		     ucschar* first, ucschar* second, ucschar* result, unsigned int n);
 
 /* input context */
 HangulInputContext* hangul_ic_new(const char* keyboard);
@@ -130,9 +130,9 @@ void         hanja_table_delete(HanjaTable *table);
 
 int          hanja_list_get_size(const HanjaList *list);
 const char*  hanja_list_get_key(const HanjaList *list);
-const Hanja* hanja_list_get_nth(const HanjaList *list, int n);
-const char*  hanja_list_get_nth_value(const HanjaList *list, int n);
-const char*  hanja_list_get_nth_comment(const HanjaList *list, int n);
+const Hanja* hanja_list_get_nth(const HanjaList *list, unsigned int n);
+const char*  hanja_list_get_nth_value(const HanjaList *list, unsigned int n);
+const char*  hanja_list_get_nth_comment(const HanjaList *list, unsigned int n);
 void         hanja_list_delete(HanjaList *list);
 
 const char*  hanja_get_key(const Hanja* hanja);

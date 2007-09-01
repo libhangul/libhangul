@@ -20,6 +20,7 @@
 #include <config.h>
 #endif
 
+#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -28,19 +29,19 @@
 
 
 struct _Hanja {
-    const char *key;
-    const char *value;
-    const char *comment;
+    char *key;
+    char *value;
+    char *comment;
 };
 
 struct _HanjaList {
-    const char *key;
-    int nitems;
+    char *key;
+    unsigned int nitems;
     Hanja **items; 
 };
 
 struct _HanjaTable {
-    int nmember;
+    unsigned int nmember;
     HanjaList **base;
 };
 
@@ -83,8 +84,10 @@ slist_append(struct slist *head, void *data)
 
     if (head == NULL) {
 	head = malloc(sizeof(struct slist));
-	head->data = data;
-	head->next = NULL;
+	if (head != NULL) {
+	    head->data = data;
+	    head->next = NULL;
+	}
 
 	return head;
     }
@@ -93,8 +96,10 @@ slist_append(struct slist *head, void *data)
 	continue;
 
     tail->next = malloc(sizeof(struct slist));
-    tail->next->data = data;
-    tail->next->next = NULL;
+    if (tail->next != NULL) {
+	tail->next->data = data;
+	tail->next->next = NULL;
+    }
 
     return head;
 }
@@ -110,10 +115,10 @@ slist_delete(struct slist *head)
     }
 }
 
-static int
+static unsigned int
 slist_length(struct slist *head)
 {
-    int n = 0;
+    unsigned int n = 0;
     while (head != NULL) {
 	head = head->next;
 	n++;
@@ -128,7 +133,7 @@ hanja_new(const char *key, const char *value, const char *comment)
     Hanja *item;
 
     item = malloc(sizeof(Hanja));
-    if (item) {
+    if (item != NULL) {
 	item->key = strdup(key);
 	item->value = strdup(value);
 	if (comment != NULL)
@@ -167,18 +172,29 @@ hanja_get_comment(const Hanja* hanja)
 static HanjaList *
 hanja_list_new_from_slist(const char *key, struct slist *items)
 {
+    unsigned int nitems;
     HanjaList *list;
 
+    nitems = slist_length(items);
+    if (nitems > ULONG_MAX / sizeof(Hanja*))
+	return NULL;
+
     list = malloc(sizeof(HanjaList));
-    if (list) {
+    if (list != NULL) {
 	int i;
 	list->key = strdup(key);
-	list->nitems = slist_length(items);
+	list->nitems = nitems;
 	list->items = malloc(sizeof(Hanja*) * list->nitems);
-
-	for (i = 0; i < list->nitems; i++) {
-	    list->items[i] = items->data;
-	    items = items->next;
+	if (list->items != NULL) {
+	    for (i = 0; i < list->nitems; i++) {
+		list->items[i] = items->data;
+		items = items->next;
+	    }
+	} else {
+	    if (list->key != NULL)
+		free(list->key);
+	    free(list);
+	    list = NULL;
 	}
     }
 
@@ -188,16 +204,26 @@ hanja_list_new_from_slist(const char *key, struct slist *items)
 static HanjaTable *
 hanja_table_new_from_slist(struct slist *lists)
 {
+    unsigned int nitems;
     HanjaTable *table;
+
+    nitems = slist_length(lists);
+    if (nitems > ULONG_MAX / sizeof(HanjaList*))
+	return NULL;
 
     table = malloc(sizeof(HanjaTable));
     if (table) {
 	int i;
-	table->nmember = slist_length(lists);
+	table->nmember = nitems;
 	table->base = malloc(sizeof(HanjaList*) * table->nmember);
-	for (i = 0; i < table->nmember; i++) {
-	    table->base[i] = lists->data;
-	    lists = lists->next;
+	if (table->base != NULL) {
+	    for (i = 0; i < table->nmember; i++) {
+		table->base[i] = lists->data;
+		lists = lists->next;
+	    }
+	} else {
+	    free(table);
+	    table = NULL;
 	}
     }
     return table;
@@ -411,24 +437,24 @@ hanja_list_get_key(const HanjaList *list)
 }
 
 const Hanja*
-hanja_list_get_nth(const HanjaList *list, int n)
+hanja_list_get_nth(const HanjaList *list, unsigned int n)
 {
     if (list != NULL) {
-	if (n >= 0 && n < list->nitems)
+	if (n < list->nitems)
 	    return list->items[n];
     }
     return NULL;
 }
 
 const char*
-hanja_list_get_nth_value(const HanjaList *list, int n)
+hanja_list_get_nth_value(const HanjaList *list, unsigned int n)
 {
     const Hanja* hanja = hanja_list_get_nth(list, n);
     return hanja_get_value(hanja);
 }
 
 const char*
-hanja_list_get_nth_comment(const HanjaList *list, int n)
+hanja_list_get_nth_comment(const HanjaList *list, unsigned int n)
 {
     const Hanja* hanja = hanja_list_get_nth(list, n);
     return hanja_get_comment(hanja);

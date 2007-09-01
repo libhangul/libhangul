@@ -24,6 +24,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <inttypes.h>
+#include <limits.h>
 
 #include "hangul.h"
 
@@ -236,9 +237,12 @@ hangul_combination_make_key(ucschar first, ucschar second)
 bool
 hangul_combination_set_data(HangulCombination* combination, 
 			    ucschar* first, ucschar* second, ucschar* result,
-			    int n)
+			    unsigned int n)
 {
-    if (combination == NULL || n == 0)
+    if (combination == NULL)
+	return false;
+
+    if (n == 0 || n > ULONG_MAX / sizeof(HangulCombinationItem))
 	return false;
 
     combination->table = malloc(sizeof(HangulCombinationItem) * n);
