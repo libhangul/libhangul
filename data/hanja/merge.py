@@ -82,6 +82,8 @@ for file in sys.argv[1:]:
 			if len(i['comment']) == 0:
 			    sys.stderr.write('%s:%s is duplicate, but has new comment, added: ' % (key.encode('utf-8'), value.encode('utf-8')))
 			    sys.stderr.write('"%s"\n' % (comment.encode('utf-8')))
+			    i['comment'] = comment
+			    isDuplicate = True
 			elif i['comment'] == comment:
 			    sys.stderr.write('%s:%s is duplicate, ignored\n' % (key.encode('utf-8'), value.encode('utf-8')))
 			    isDuplicate = True
