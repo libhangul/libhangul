@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# coding=utf-8
 
 import sys
 
@@ -66,23 +67,36 @@ for file in sys.argv[1:]:
 
 	key = line[0]
 	value = get_unified(line[1])
-	comment = line[2]
+	comment = line[2].strip()
 	freq = get_frequency(value)
 
 	if table.has_key(key):
 	    isDuplicate = False
 	    # check duplicate
 	    for i in table[key]:
-		if i['value'] == value and i['comment'] == comment:
-		    isDuplicate = True
-		    sys.stderr.write('%s:%s is duplicate\n' % (key.encode('utf-8'), value.encode('utf-8')))
-		    continue
-		elif i['value'] == value and i['comment'] != comment:
-		    sys.stderr.write('%s:%s has different comments\n' % (key.encode('utf-8'), value.encode('utf-8')))
-		    sys.stderr.write('\t%s\n' % (i['comment'].encode('utf-8')))
-		    sys.stderr.write('\t%s\n' % (comment.encode('utf-8')))
-		    isDuplicate = True
-		    continue
+		if i['value'] == value:
+		    if len(comment) == 0:
+			sys.stderr.write('%s:%s is duplicate, ignored\n' % (key.encode('utf-8'), value.encode('utf-8')))
+			isDuplicate = True
+		    else:
+			if len(i['comment']) == 0:
+			    sys.stderr.write('%s:%s is duplicate, but has new comment, added: ' % (key.encode('utf-8'), value.encode('utf-8')))
+			    sys.stderr.write('"%s"\n' % (comment.encode('utf-8')))
+			elif i['comment'] == comment:
+			    sys.stderr.write('%s:%s is duplicate, ignored\n' % (key.encode('utf-8'), value.encode('utf-8')))
+			    isDuplicate = True
+			else:
+			    # 기존의 테이블에 새로운 커멘트가 있는지 확인한다.
+			    # 띠어쓰기로 다른 스트링으로 처리되는 문제를 피하기
+			    # 위해서 빈칸을 지운다
+			    res = i['comment'].replace(' ','').find(comment.replace(' ', '')) 
+			    if res >= 0:
+				sys.stderr.write('%s:%s is duplicate, already includes that comments, ignored\n' % (key.encode('utf-8'), value.encode('utf-8')))
+				isDuplicate = True
+			    else:
+				sys.stderr.write('%s:%s is duplicate, but has different comments, merged: ' % (key.encode('utf-8'), value.encode('utf-8')))
+				sys.stderr.write('"%s" + "%s"\n' % (i['comment'].encode('utf-8'), comment.encode('utf-8')))
+				comment = i['comment'] + ', ' + comment
 
 	    if not isDuplicate:
 		table[key].append({ 'key' : key, 'value': value, 'freq': freq, 'comment': comment })
