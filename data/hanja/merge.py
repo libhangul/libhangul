@@ -96,7 +96,8 @@ for file in sys.argv[1:]:
 			    else:
 				sys.stderr.write('%s:%s is duplicate, but has different comments, merged: ' % (key.encode('utf-8'), value.encode('utf-8')))
 				sys.stderr.write('"%s" + "%s"\n' % (i['comment'].encode('utf-8'), comment.encode('utf-8')))
-				comment = i['comment'] + ', ' + comment
+				i['comment'] = i['comment'] + ', ' + comment
+				isDuplicate = True
 
 	    if not isDuplicate:
 		table[key].append({ 'key' : key, 'value': value, 'freq': freq, 'comment': comment })
