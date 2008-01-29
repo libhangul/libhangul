@@ -27,8 +27,8 @@
 #include <limits.h>
 
 #include "hangul.h"
+#include "hangulinternals.h"
 
-#define N_ELEMENTS(array) (sizeof(array) / sizeof(array[0]))
 #define HANGUL_KEYBOARD_TABLE_SIZE 0x80
 
 typedef void   (*HangulOnTranslate)  (HangulInputContext*,

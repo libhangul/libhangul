@@ -26,7 +26,10 @@
 #include <string.h>
 
 #include "hangul.h"
+#include "hangulinternals.h"
 
+typedef struct _HanjaPair      HanjaPair;
+typedef struct _HanjaPairArray HanjaPairArray;
 
 struct _Hanja {
     char *key;
@@ -50,6 +53,17 @@ struct slist {
     struct slist *next;
 };
 
+struct _HanjaPair {
+    ucschar first;
+    ucschar second;
+};
+
+struct _HanjaPairArray {
+    ucschar          key;
+    const HanjaPair* pairs;
+};
+
+#include "hanjacompatible.h"
 
 /* utility functions */
 static inline void h_free(void *ptr)
@@ -469,3 +483,67 @@ hanja_list_delete(HanjaList *list)
 	h_free(list);
     }
 }
+
+static int
+compare_pair(const void* a, const void* b)
+{
+    const ucschar*   c = a;
+    const HanjaPair* y = b;
+
+    return *c - y->first;
+}
+
+size_t
+hanja_compatibility_form(ucschar* hanja, const ucschar* hangul, size_t n)
+{
+    size_t i;
+    size_t nconverted;
+
+    if (hangul == NULL || hanja == NULL)
+	return 0;
+
+    nconverted = 0;
+    for (i = 0; i < n && hangul[i] != 0 && hanja[i] != 0; i++) {
+	HanjaPairArray* p;
+
+	p = bsearch(&hanja[i],
+		    hanja_unified_to_compat_table,
+		    N_ELEMENTS(hanja_unified_to_compat_table),
+		    sizeof(hanja_unified_to_compat_table[0]),
+		    compare_pair);
+	if (p != NULL) {
+	    const HanjaPair* pair = p->pairs;
+	    while (pair->first != 0) {
+		if (pair->first == hangul[i]) {
+		    hanja[i] = pair->second;
+		    nconverted++;
+		    break;
+		}
+		pair++;
+	    }
+	}
+    }
+
+    return nconverted;
+}
+
+size_t
+hanja_unified_form(ucschar* str, size_t n)
+{
+    size_t i;
+    size_t nconverted;
+
+    if (str == NULL)
+	return 0;
+
+    nconverted = 0;
+    for (i = 0; i < n && str[i] != 0; i++) {
+	if (str[i] >= 0xF900 && str[i] <= 0xFA0B) {
+	    str[i] = hanja_compat_to_unified_table[str[i] - 0xF900];
+	    nconverted++;
+	}
+    }
+
+    return nconverted;
+}
+
