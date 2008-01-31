@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ(2.57)
-AC_INIT(libhangul, 0.0.6, http://kldp.net/projects/hangul/)
+AC_INIT(libhangul, 0.0.7, http://kldp.net/projects/hangul/)
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([hangul/hangul.h])
 AC_CONFIG_HEADER([config.h])
