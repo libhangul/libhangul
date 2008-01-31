@@ -35,9 +35,9 @@ static int ucscharlen(const ucschar *str)
 static PyObject *_create_ic(PY_HANGUL *self, PyObject *args)
 { 
     PY_HANGULIC *imObject;
-    int keyboard;
+    const char* keyboard = NULL;
 
-    if(!PyArg_ParseTuple(args,"i",&keyboard)) {
+    if(!PyArg_ParseTuple(args,"s",&keyboard)) {
 	PyErr_SetString(_pyhangul_error,
 			"Usage: create_ic(keyboard)\n"
 			"\tkeyboard: hangul2, hangul3{2,90,f,s}");
@@ -65,12 +65,6 @@ void inithangul(void)
     PyObject *m, *d;
 
     m = Py_InitModule("hangul", _pyhangul_methods);
-    PyModule_AddIntConstant(m, "hangul2", HANGUL_KEYBOARD_2);
-    PyModule_AddIntConstant(m, "hangul32", HANGUL_KEYBOARD_32);
-    PyModule_AddIntConstant(m, "hangul390", HANGUL_KEYBOARD_390);
-    PyModule_AddIntConstant(m, "hangul3f", HANGUL_KEYBOARD_3FINAL);
-    PyModule_AddIntConstant(m, "hangul3s", HANGUL_KEYBOARD_3NOSHIFT);
-    /* PyModule_AddIntConstant(m, "Hangul3_Yetgeul", HANGUL_KEYBOARD_3YETGUL); */
 
     d = PyModule_GetDict(m);
     _pyhangul_error = PyErr_NewException("_pyhangul.error", NULL, NULL);

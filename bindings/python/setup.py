@@ -15,8 +15,8 @@ Operating System :: Unix
 """
  
 if sys.platform == "win32": # for MinGW
-	include_dirs = [r'\MinGW\include', r'..\hangul']
-	library_dirs = [r'\MinGW\lib', r'..\hangul']
+	include_dirs = [r'\MinGW\include', r'..\..\hangul']
+	library_dirs = [r'\MinGW\lib', r'..\..\hangul']
 	libraries = ['hangul']
 	data_files = []
 	

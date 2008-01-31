@@ -9,18 +9,18 @@ import unittest
 
 class TestHangul(unittest.TestCase):
     def setUp(self):
-        self.ic = hangul.create_ic(hangul.hangul2)
+        self.ic = hangul.create_ic('hangul2')
 
     def testSimpleString(self):
         input  = u"vkdlTjs gksrmf fkdlqmfjfl xptmxm"
         output = u"파이썬 한글 라이브러리 테스트"
         buffer = u''
         for i in input:
-            ret = self.ic.filter(ord(i))
+            ret = self.ic.process(ord(i))
             buffer += self.ic.commit_string()
             if not ret:
                 buffer += str(i)
-        self.ic.flush()
+        buffer += self.ic.flush()
         buffer += self.ic.commit_string()
         self.assertEqual(output, buffer)
 
