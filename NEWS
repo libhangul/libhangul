@@ -1,3 +1,12 @@
+0.0.7
+ * update hanja.txt
+   - added more word data
+   - hanja items are ordered by frequency from Kim Song-yil<masoris@gmail.com>
+   - all CJK compatibility hanja was changed to CJK unified hanja
+ * add new function to convert compatibility hanja to unified hanja and unified
+   to compatibility.
+ * update python module
+
 0.0.6
  * update library version
 
