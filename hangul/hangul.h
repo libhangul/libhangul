@@ -78,14 +78,14 @@ enum {
 };
 
 /* keyboard */
-HangulKeyboard* hangul_keyboard_new();
+HangulKeyboard* hangul_keyboard_new(void);
 void    hangul_keyboard_delete(HangulKeyboard *keyboard);
 void    hangul_keyboard_set_value(HangulKeyboard *keyboard,
 				  int key, ucschar value);
 void    hangul_keyboard_set_type(HangulKeyboard *keyboard, int type);
 
 /* combination */
-HangulCombination* hangul_combination_new();
+HangulCombination* hangul_combination_new(void);
 void hangul_combination_delete(HangulCombination *combination);
 bool hangul_combination_set_data(HangulCombination* combination, 
 		     ucschar* first, ucschar* second, ucschar* result, unsigned int n);
