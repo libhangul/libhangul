@@ -875,8 +875,14 @@ hangul_ic_flush(HangulInputContext *hic)
     hic->preedit_string[0] = 0;
     hic->commit_string[0] = 0;
     hic->flushed_string[0] = 0;
-    hangul_buffer_get_string(&hic->buffer, hic->flushed_string,
-			     N_ELEMENTS(hic->flushed_string));
+
+    if (hic->output_mode == HANGUL_OUTPUT_JAMO) {
+	hangul_buffer_get_jamo_string(&hic->buffer, hic->flushed_string,
+				 N_ELEMENTS(hic->flushed_string));
+    } else {
+	hangul_buffer_get_string(&hic->buffer, hic->flushed_string,
+				 N_ELEMENTS(hic->flushed_string));
+    }
 
     hangul_buffer_clear(&hic->buffer);
 
@@ -1112,6 +1118,7 @@ hangul_ic_select_keyboard(HangulInputContext *hic, const char* id)
     } else if (strcmp(id, "3y") == 0) {
 	hic->keyboard = &hangul_keyboard_3yet;
 	hic->combination = &hangul_combination_full;
+	hic->output_mode = HANGUL_OUTPUT_JAMO;
     } else {
 	hic->keyboard = &hangul_keyboard_2;
 	hic->combination = &hangul_combination_default;
