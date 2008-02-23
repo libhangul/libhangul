@@ -970,6 +970,9 @@ hanja_table_match_prefix(const HanjaTable* table, const char *key)
     if (key == NULL || key[0] == '\0')
 	return NULL;
 
+    if (table == NULL)
+	return NULL;
+
     newkey = strdup(key);
     p = strchr(newkey, '\0');
     while (newkey[0] != '\0') {
@@ -990,6 +993,9 @@ hanja_table_match_suffix(const HanjaTable* table, const char *key)
     HanjaList* ret = NULL;
 
     if (key == NULL || key[0] == '\0')
+	return NULL;
+
+    if (table == NULL)
 	return NULL;
 
     p = key;
