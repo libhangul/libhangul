@@ -543,8 +543,6 @@ hanja_vectors_from_txt(const char *filename)
 
     fclose(file);
 
-    printf("%s: done\n", __func__);
-
     return keys;
 }
 
@@ -976,7 +974,6 @@ hanja_table_match_prefix(const HanjaTable* table, const char *key)
     newkey = strdup(key);
     p = strchr(newkey, '\0');
     while (newkey[0] != '\0') {
-	printf("%s: %s\n", __func__, newkey);
 	table->match(table, newkey, &ret);
 	p = utf8_prev(newkey, p);
 	p[0] = '\0';
