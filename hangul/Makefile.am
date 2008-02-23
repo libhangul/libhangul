@@ -14,7 +14,7 @@ libhangul_la_SOURCES = \
 	hanja.c
 
 libhangul_la_CFLAGS = \
-    -DLIBHANGUL_DEFAULT_HANJA_DIC=\"$(datadir)/libhangul/hanja/hanja.txt\"
+    -DLIBHANGUL_DEFAULT_HANJA_DIC=\"$(datadir)/libhangul/hanja/hanja.bin\"
 
 libhangul_la_LDFLAGS = -version-info $(LIBHANGUL_CURRENT):$(LIBHANGUL_REVISION):$(LIBHANGUL_AGE)
 libhangul_la_LIBADD =

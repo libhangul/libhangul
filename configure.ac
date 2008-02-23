@@ -26,7 +26,7 @@ AC_PROG_INSTALL
 
 # Checks for header files.
 AC_HEADER_STDC
-AC_CHECK_HEADERS([stdlib.h string.h])
+AC_CHECK_HEADERS([stdlib.h string.h limits.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_HEADER_STDBOOL
@@ -36,9 +36,17 @@ AC_C_INLINE
 AC_TYPE_UINT32_T
 
 # Checks for library functions.
+AC_FUNC_MEMCMP
+AC_FUNC_MMAP
+AC_FUNC_REALLOC
+AC_CHECK_FUNCS([munmap])
+AC_CHECK_FUNCS([strcasecmp])
+
+
 AC_CONFIG_FILES([
 Makefile
 hangul/Makefile
+tools/Makefile
 data/Makefile
 data/hanja/Makefile
 bindings/Makefile
