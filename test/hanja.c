@@ -12,8 +12,9 @@ main(int argc, char *argv[])
     if (argc > 1)
 	hanja_table_file = argv[1];
 
-    HanjaTable *table = hanja_table_load(hanja_table_file);
-    
+    HanjaTable *table;
+    table = hanja_table_load(hanja_table_file);
+ 
     while (fgets(buf, sizeof(buf), stdin) != NULL) {
 	char* p = strchr(buf, '\n');
 	if (p != NULL)
@@ -24,8 +25,10 @@ main(int argc, char *argv[])
 	int i, n;
 	n = hanja_list_get_size(list);
 	for (i = 0; i < n; i++) {
-	    const char* value = hanja_list_get_nth_value(list, i);
-	    printf("%s\n", value);
+	    const char* key     = hanja_list_get_nth_key(list, i);
+	    const char* value   = hanja_list_get_nth_value(list, i);
+	    const char* comment = hanja_list_get_nth_comment(list, i);
+	    printf("%s:%s:%s\n", key, value, comment);
 	}
 
 	hanja_list_delete(list);
