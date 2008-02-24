@@ -49,7 +49,6 @@ hangul/Makefile
 tools/Makefile
 data/Makefile
 data/hanja/Makefile
-bindings/Makefile
 test/Makefile
 libhangul.pc
 ])
