@@ -24,7 +24,9 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+#ifdef HAVE_MMAP
 #include <sys/mman.h>
+#endif
 
 #include <limits.h>
 #include <stdio.h>
@@ -269,6 +271,28 @@ static inline char* utf8_prev(const char *str, const char *p)
     }
     return (char*)p;
 }
+
+#ifndef HAVE_MMAP
+
+#define PROT_READ 0
+#define MAP_SHARED 0
+static void*
+mmap(void *start, size_t length, int prot, int flags, int fd, size_t offset)
+{
+    start = malloc(length);
+    if (start != NULL) {
+	read(fd, start, length);
+    }
+    return start;
+}
+
+static int
+munmap(void *start, size_t length)
+{
+    free(start);
+}
+
+#endif
 
 static PtrVector*
 ptr_vector_new(size_t initial_size)
