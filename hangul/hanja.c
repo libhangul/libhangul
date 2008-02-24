@@ -333,7 +333,7 @@ ptr_vector_get_length(PtrVector* vector)
 static void
 ptr_vector_append(PtrVector* vector, void* data)
 {
-    if (vector->alloc < vector->len + 1) {
+    if (vector->alloc < vector->len + 1 && vector->alloc < UINT_MAX / 2) {
 	size_t alloc = vector->alloc * 2;
 	void** ptrs;
 
@@ -457,7 +457,7 @@ hanja_list_new(const char *key)
 static void
 hanja_list_reserve(HanjaList* list, size_t n)
 {
-    if (list->alloc < list->len + n) {
+    if (list->alloc < list->len + n && list->alloc < UINT_MAX / 2) {
 	const Hanja** data;
 	size_t size = list->alloc;
 
