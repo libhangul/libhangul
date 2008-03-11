@@ -302,6 +302,9 @@ ptr_vector_new(size_t initial_size)
     if (initial_size == 0)
 	initial_size = 2;
 
+    if (initial_size > SIZE_MAX / sizeof(vector->ptrs[0]))
+	return NULL;
+
     vector = malloc(sizeof(*vector));
     vector->len = 0;
     vector->alloc = initial_size;
@@ -333,7 +336,7 @@ ptr_vector_get_length(PtrVector* vector)
 static void
 ptr_vector_append(PtrVector* vector, void* data)
 {
-    if (vector->alloc * sizeof(vector->ptrs[0]) >= SIZE_MAX / 2)
+    if (vector->alloc > SIZE_MAX / sizeof(vector->ptrs[0]) / 2)
 	return;
 
     if (vector->alloc < vector->len + 1) {
@@ -460,15 +463,19 @@ hanja_list_new(const char *key)
 static void
 hanja_list_reserve(HanjaList* list, size_t n)
 {
-    if (list->alloc * sizeof(list->items[0]) >= SIZE_MAX / 2)
+    size_t size = list->alloc;
+
+    if (n > SIZE_MAX / sizeof(list->items[0]) - list->len)
+	return;
+
+    while (size < list->len + n)
+	size *= 2;
+
+    if (size > SIZE_MAX / sizeof(list->items[0]))
 	return;
 
     if (list->alloc < list->len + n) {
 	const Hanja** data;
-	size_t size = list->alloc;
-
-	while (size < list->len + n)
-	    size *= 2;
 
 	data = realloc(list->items, size * sizeof(list->items[0]));
 	if (data != NULL) {
@@ -1002,6 +1009,9 @@ hanja_table_match_prefix(const HanjaTable* table, const char *key)
 	return NULL;
 
     newkey = strdup(key);
+    if (newkey == NULL)
+	return NULL;
+
     p = strchr(newkey, '\0');
     while (newkey[0] != '\0') {
 	table->match(table, newkey, &ret);
