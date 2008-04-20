@@ -29,6 +29,14 @@
 #include "hangul.h"
 #include "hangulinternals.h"
 
+#ifndef TRUE
+#define TRUE 1
+#endif
+
+#ifndef FALSE
+#define FALSE 0
+#endif
+
 #define HANGUL_KEYBOARD_TABLE_SIZE 0x80
 
 typedef void   (*HangulOnTranslate)  (HangulInputContext*,
@@ -87,6 +95,8 @@ struct _HangulInputContext {
 
     HangulICFilter filter;
     void *filter_data;
+
+    unsigned int use_jamo_mode_only : 1;
 };
 
 #include "hangulkeyboard.h"
@@ -1039,7 +1049,8 @@ hangul_ic_set_output_mode(HangulInputContext *hic, int mode)
     if (hic == NULL)
 	return;
 
-    hic->output_mode = mode;
+    if (!hic->use_jamo_mode_only)
+	hic->output_mode = mode;
 }
 
 void
@@ -1106,22 +1117,33 @@ hangul_ic_select_keyboard(HangulInputContext *hic, const char* id)
     if (strcmp(id, "32") == 0) {
 	hic->keyboard = &hangul_keyboard_32;
 	hic->combination = &hangul_combination_default;
+	hic->output_mode = HANGUL_OUTPUT_SYLLABLE;
+	hic->use_jamo_mode_only = FALSE;
     } else if (strcmp(id, "39") == 0) {
 	hic->keyboard = &hangul_keyboard_390;
 	hic->combination = &hangul_combination_default;
+	hic->output_mode = HANGUL_OUTPUT_SYLLABLE;
+	hic->use_jamo_mode_only = FALSE;
     } else if (strcmp(id, "3f") == 0) {
 	hic->keyboard = &hangul_keyboard_3final;
 	hic->combination = &hangul_combination_default;
+	hic->output_mode = HANGUL_OUTPUT_SYLLABLE;
+	hic->use_jamo_mode_only = FALSE;
     } else if (strcmp(id, "3s") == 0) {
 	hic->keyboard = &hangul_keyboard_3sun;
 	hic->combination = &hangul_combination_default;
+	hic->output_mode = HANGUL_OUTPUT_SYLLABLE;
+	hic->use_jamo_mode_only = FALSE;
     } else if (strcmp(id, "3y") == 0) {
 	hic->keyboard = &hangul_keyboard_3yet;
 	hic->combination = &hangul_combination_full;
 	hic->output_mode = HANGUL_OUTPUT_JAMO;
+	hic->use_jamo_mode_only = TRUE;
     } else {
 	hic->keyboard = &hangul_keyboard_2;
 	hic->combination = &hangul_combination_default;
+	hic->output_mode = HANGUL_OUTPUT_SYLLABLE;
+	hic->use_jamo_mode_only = FALSE;
     }
 }
 
@@ -1144,11 +1166,6 @@ hangul_ic_new(const char* keyboard)
     if (hic == NULL)
 	return NULL;
 
-    hangul_ic_set_output_mode(hic, HANGUL_OUTPUT_SYLLABLE);
-    hangul_ic_select_keyboard(hic, keyboard);
-
-    hangul_buffer_clear(&hic->buffer);
-
     hic->preedit_string[0] = 0;
     hic->commit_string[0] = 0;
     hic->flushed_string[0] = 0;
@@ -1158,6 +1175,13 @@ hangul_ic_new(const char* keyboard)
 
     hic->on_transition      = NULL;
     hic->on_transition_data = NULL;
+
+    hic->use_jamo_mode_only = FALSE;
+
+    hangul_ic_set_output_mode(hic, HANGUL_OUTPUT_SYLLABLE);
+    hangul_ic_select_keyboard(hic, keyboard);
+
+    hangul_buffer_clear(&hic->buffer);
 
     return hic;
 }
