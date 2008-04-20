@@ -6,21 +6,10 @@ libhangul
     $ make
     # make install
 
-python 모듈 빌드 방법:
-    $ cd bindings/pyhangul
-    $ make
-    # make install
-
 
 libhangul
 
 How to build:
     $ ./autogen.sh
     $ ./configure
-    $ make
-
-How to install python module 'pyhangul':
-    $ cd bindings/pyhangul
-    $ make
-    login as root
-    # make install
+    # make

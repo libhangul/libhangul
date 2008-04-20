@@ -1,3 +1,13 @@
+0.0.8
+ * update hanja searching routine
+  - reduce memory usage on hanja searching
+  - use new binary data file format for hanja table
+ * update hanja.txt
+ * add new API to convert jamo string to syllable string(#304765)
+ * fix some yet hangul input routine(#304728)
+ * fix a bug on keyboard selection(#304765)
+ * remove python, ruby module
+
 0.0.7
  * update hanja.txt
    - added more word data
