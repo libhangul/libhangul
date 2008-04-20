@@ -53,6 +53,8 @@ ucschar hangul_choseong_to_jongseong(ucschar ch);
 ucschar hangul_jongseong_to_choseong(ucschar ch);
 void    hangul_jongseong_dicompose(ucschar ch, ucschar* jong, ucschar* cho);
 
+int     hangul_syllable_len(const ucschar* str, int max_len);
+
 ucschar hangul_jaso_to_syllable(ucschar choseong,
 				ucschar jungseong,
 				ucschar jongseong);
@@ -60,6 +62,8 @@ void    hangul_syllable_to_jaso(ucschar syllable,
 				ucschar* choseong,
 				ucschar* jungseong,
 				ucschar* jongseong);
+int     hangul_jamos_to_syllables(ucschar* dest, int destlen,
+				  const ucschar* src, int srclen);
 
 /* hangulinputcontext.c */
 typedef struct _HangulKeyboard        HangulKeyboard;

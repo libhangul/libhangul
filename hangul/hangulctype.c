@@ -408,3 +408,270 @@ hangul_syllable_to_jaso(ucschar syllable,
 	*choseong = choseong_base + syllable;
     }
 }
+
+static inline bool 
+is_syllable_boundary(ucschar prev, ucschar next)
+{
+    if (hangul_is_choseong(prev)) {
+	if (hangul_is_choseong(next))
+	    return false;
+	if (hangul_is_jungseong(next))
+	    return false;
+    } else if (hangul_is_jungseong(prev)) {
+	if (hangul_is_jungseong(next))
+	    return false;
+	if (hangul_is_jongseong(next))
+	    return false;
+    } else if (hangul_is_jongseong(prev)) {
+	if (hangul_is_jongseong(next))
+	    return false;
+    }
+    
+    return true;
+}
+
+static inline ucschar
+choseong_compress(ucschar a, ucschar b)
+{
+    if (a == 0)
+	return b;
+
+    if (a == 0x1100 && b == 0x1100)
+	return 0x1101;
+    if (a == 0x1103 && b == 0x1103)
+	return 0x1104;
+    if (a == 0x1107 && b == 0x1107)
+	return 0x1108;
+    if (a == 0x1109 && b == 0x1109)
+	return 0x110A;
+    if (a == 0x110c && b == 0x110c)
+	return 0x110d;
+    return 0;
+}
+
+static inline ucschar
+jungseong_compress(ucschar a, ucschar b)
+{
+    if (a == 0)
+	return b;
+
+    if (a == 0x1169) {
+	if (b == 0x1161)
+	    return 0x116a;
+	if (b == 0x1162)
+	    return 0x116b;
+	if (b == 0x1175)
+	    return 0x116c;
+    }
+    if (a == 0x116e) {
+	if (b == 0x1165)
+	    return 0x116f;
+	if (b == 0x1166)
+	    return 0x1170;
+	if (b == 0x1175)
+	    return 0x1171;
+    }
+    if (b == 0x1175) {
+	if (a == 0x1173)
+	    return 0x1174;
+	if (a == 0x1161)
+	    return 0x1162;
+	if (a == 0x1163)
+	    return 0x1164;
+	if (a == 0x1165)
+	    return 0x1166;
+	if (a == 0x1167)
+	    return 0x1168;
+    }
+
+    return 0;
+}
+
+static inline ucschar
+jongseong_compress(ucschar a, ucschar b)
+{
+    if (a == 0)
+	return b;
+    
+    if (a == 0x11a8) {
+	if (b == 0x11a8)
+	    return 0x11a9;
+	if (b == 0x11ba)
+	    return 0x11aa;
+    }
+    if (a == 0x11ab) {
+	if (b == 0x11b0)
+	    return 0x11ab;
+	if (b == 0x11c2)
+	    return 0x11ad;
+    }
+    if (a == 0x11af) {
+	if (b == 0x11a8)
+	    return 0x11b0;
+	if (b == 0x11b7)
+	    return 0x11b1;
+	if (b == 0x11b8)
+	    return 0x11b2;
+	if (b == 0x11ba)
+	    return 0x11b3;
+	if (b == 0x11c0)
+	    return 0x11b4;
+	if (b == 0x11c1)
+	    return 0x11b5;
+	if (b == 0x11c2)
+	    return 0x11b6;
+    }
+    if (a == 0x11b8 && b == 0x11ba)
+	return 0x11b9;
+    if (a == 0x11ba && b == 0x11ba)
+	return 0x11bb;
+
+    return 0;
+}
+
+static inline ucschar
+build_syllable(const ucschar* str, size_t len)
+{
+    int i;
+    ucschar cho = 0, jung = 0, jong = 0;
+
+    i = 0;
+    while (i < len && hangul_is_choseong_conjoinable(str[i])) {
+	cho = choseong_compress(cho, str[i]);
+	if (cho == 0)
+	    return 0;
+	i++;
+    }
+
+    while (i < len && hangul_is_jungseong_conjoinable(str[i])) {
+	jung = jungseong_compress(jung, str[i]);
+	if (jung == 0)
+	    return 0;
+	i++;
+    }
+
+    while (i < len && hangul_is_jongseong_conjoinable(str[i])) {
+	jong = jongseong_compress(jong, str[i]);
+	if (jong == 0)
+	    return 0;
+	i++;
+    }
+
+    if (i < len)
+	return 0;
+
+    return hangul_jaso_to_syllable(cho, jung, jong);
+}
+
+/**
+ * @brief 한 음절에 해당하는 코드의 갯수를 구한다
+ * @param str 음절의 길이를 구할 스트링
+ * @param max_len @a str 에서 읽을 길이의 제한값
+ * @return 한 음절에 해당하는 코드의 갯수
+ *
+ * 이 함수는 @a str 에서 한 음절에 해당하는 코드의 갯수를 구한다. 
+ * 한 음절에 해당하는 코드의 갯수가 @a max_len 보다 많다면 @a max_len 을 
+ * 반환한다. 한 음절이라고 판단하는 기준은 L*V*T+ 패턴에 따른다. 이 패턴은
+ * regular expression의 컨벤션을 따른 것으로, 1개 이상의 초성과 중성, 0개
+ * 이상의 종성이 모인 자모 스트링을 한 음절로 인식한다는 뜻이다. 예를 들면
+ * 다음과 같은 자모 스트링도 한 음절로 인식한다.
+ *
+ *  예) "ㅂ ㅂ ㅜ ㅔ ㄹ ㄱ" -> "쀍"
+ * 
+ * 따라서 위 경우에는 6을 반환하게 된다. 
+ *
+ * 일반적으로는 방점(U+302E, U+302F)까지 한 음절로 인식하겠지만, 이 함수는
+ * 음절과 자모간 변환을 편리하게 하기 위해 구현된 것으로 방점은 다른 음절로 
+ * 인식한다.
+ *
+ * @a str 이 자모 코드에 해당하지 않는 경우에는 1을 반환한다.
+ *
+ * 이 함수는 자모 스트링에서 총 음절의 갯수를 구하는 함수가 아님에 주의한다.
+ */
+int
+hangul_syllable_len(const ucschar* str, int max_len)
+{
+    int i = 0;
+
+    if (str[i] != 0) {
+	for (i = 1; i < max_len; i++) {
+	    if (str[i] == 0)
+		break;
+
+	    if (is_syllable_boundary(str[i - 1], str[i]))
+		break;
+	}
+    }
+
+    return i;
+}
+
+/**
+ * @brief 자모 스트링을 음절 스트링을 변환한다
+ * @param dest 음절형으로 변환된 결과가 저장될 버퍼
+ * @param destlen 결과를 저장할 버퍼의 길이(ucschar 코드 단위)
+ * @param src 변환할 자모 스트링
+ * @param srclen 변환할 자모 스트링의 길이(ucschar 코드 단위)
+ * @return @a destlen 에 저장한 코드의 갯수
+ *
+ * 이 함수는 L+V+T* 패턴에 따라 자모 스트링 변환을 시도한다. 한 음절을 
+ * 판단하는 기준은 @ref hangul_syllable_len 을 참조한다.
+ * 만일 @a src 가 적절한 음절형태로 변환이 불가능한 경우에는 자모 스트링이
+ * 그대로 복사된다.
+ *
+ * 이 함수는 자모 스트링 @a src 를 음절형으로 변환하여 @a dest 에 저장한다.
+ * @a srclen 에 지정된 갯수만큼 읽고, @a destlen 에 지정된 길이 이상 쓰지
+ * 않는다.  @a srclen 이 -1이라면 @a src 는 0으로 끝나는 스트링으로 가정하고
+ * 0을 제외한 길이까지 변환을 시도한다. 따라서 변환된 결과 스트링은 0으로 
+ * 끝나지 않는다. 만일 0으로 끝나는 스트링을 만들고 싶다면 다음과 같이 한다.
+ *
+ * @code
+ * int n = hangul_jamos_to_syllables(dest, destlen, src, srclen);
+ * dest[n] = 0;
+ * @endcode
+ */
+int
+hangul_jamos_to_syllables(ucschar* dest, int destlen, const ucschar* src, int srclen)
+{
+    ucschar* d;
+    const ucschar* s;
+
+    int inleft;
+    int outleft;
+    int n;
+
+    if (srclen < 0) {
+	s = src;
+	while (*s != 0)
+	    s++;
+	srclen = s - src;
+    }
+
+    s = src;
+    d = dest;
+    inleft = srclen;
+    outleft = destlen;
+
+    n = hangul_syllable_len(s, inleft);
+    while (n > 0 && outleft > 0) {
+	ucschar c = build_syllable(s, n);
+	if (c != 0) {
+	    *d = c;
+	    d++;
+	    outleft--;
+	} else {
+	    int i;
+	    for (i = 0; i < n && i < outleft; i++) {
+		d[i] = s[i];
+	    }
+	    d += i;
+	    outleft -= i;
+	}
+
+	s += n;
+	inleft -= n;
+	n = hangul_syllable_len(s, inleft);
+    }
+
+    return destlen - outleft;
+}
