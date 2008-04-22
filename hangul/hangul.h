@@ -138,6 +138,7 @@ int          hanja_table_txt_to_bin(const char* txtfilename,
 int          hanja_list_get_size(const HanjaList *list);
 const char*  hanja_list_get_key(const HanjaList *list);
 const Hanja* hanja_list_get_nth(const HanjaList *list, unsigned int n);
+const char*  hanja_list_get_nth_key(const HanjaList *list, unsigned int n);
 const char*  hanja_list_get_nth_value(const HanjaList *list, unsigned int n);
 const char*  hanja_list_get_nth_comment(const HanjaList *list, unsigned int n);
 void         hanja_list_delete(HanjaList *list);
