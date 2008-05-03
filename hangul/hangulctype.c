@@ -593,6 +593,9 @@ hangul_syllable_len(const ucschar* str, int max_len)
 {
     int i = 0;
 
+    if (max_len == 0)
+	return 0;
+
     if (str[i] != 0) {
 	for (i = 1; i < max_len; i++) {
 	    if (str[i] == 0)
@@ -653,7 +656,7 @@ hangul_jamos_to_syllables(ucschar* dest, int destlen, const ucschar* src, int sr
     outleft = destlen;
 
     n = hangul_syllable_len(s, inleft);
-    while (n > 0 && outleft > 0) {
+    while (n > 0 && inleft > 0 && outleft > 0) {
 	ucschar c = build_syllable(s, n);
 	if (c != 0) {
 	    *d = c;
