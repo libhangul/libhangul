@@ -128,6 +128,7 @@ typedef struct _HanjaList HanjaList;
 typedef struct _HanjaTable HanjaTable;
 
 HanjaTable*  hanja_table_load(const char *filename);
+HanjaList*   hanja_table_match_exact(const HanjaTable* table, const char *key);
 HanjaList*   hanja_table_match_prefix(const HanjaTable* table, const char *key);
 HanjaList*   hanja_table_match_suffix(const HanjaTable* table, const char *key);
 void         hanja_table_delete(HanjaTable *table);

@@ -996,6 +996,22 @@ hanja_table_delete(HanjaTable *table)
 }
 
 HanjaList*
+hanja_table_match_exact(const HanjaTable* table, const char *key)
+{
+    HanjaList* ret = NULL;
+
+    if (key == NULL || key[0] == '\0')
+	return NULL;
+
+    if (table == NULL)
+	return NULL;
+
+    table->match(table, key, &ret);
+
+    return ret;
+}
+
+HanjaList*
 hanja_table_match_prefix(const HanjaTable* table, const char *key)
 {
     char* p;
