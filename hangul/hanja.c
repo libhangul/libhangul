@@ -1000,10 +1000,7 @@ hanja_table_match_exact(const HanjaTable* table, const char *key)
 {
     HanjaList* ret = NULL;
 
-    if (key == NULL || key[0] == '\0')
-	return NULL;
-
-    if (table == NULL)
+    if (key == NULL || key[0] == '\0' || table == NULL)
 	return NULL;
 
     table->match(table, key, &ret);
@@ -1018,10 +1015,7 @@ hanja_table_match_prefix(const HanjaTable* table, const char *key)
     char* newkey;
     HanjaList* ret = NULL;
 
-    if (key == NULL || key[0] == '\0')
-	return NULL;
-
-    if (table == NULL)
+    if (key == NULL || key[0] == '\0' || table == NULL)
 	return NULL;
 
     newkey = strdup(key);
@@ -1045,10 +1039,7 @@ hanja_table_match_suffix(const HanjaTable* table, const char *key)
     const char* p;
     HanjaList* ret = NULL;
 
-    if (key == NULL || key[0] == '\0')
-	return NULL;
-
-    if (table == NULL)
+    if (key == NULL || key[0] == '\0' || table == NULL)
 	return NULL;
 
     p = key;
