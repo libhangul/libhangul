@@ -907,6 +907,9 @@ hangul_ic_backspace(HangulInputContext *hic)
     if (hic == NULL)
 	return false;
 
+    hic->preedit_string[0] = 0;
+    hic->commit_string[0] = 0;
+
     ret = hangul_buffer_backspace(&hic->buffer);
     if (ret)
 	hangul_ic_save_preedit_string(hic);
