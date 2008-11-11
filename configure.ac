@@ -46,7 +46,6 @@ AC_CHECK_FUNCS([strcasecmp])
 AC_CONFIG_FILES([
 Makefile
 hangul/Makefile
-tools/Makefile
 data/Makefile
 data/hanja/Makefile
 test/Makefile

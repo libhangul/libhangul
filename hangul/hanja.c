@@ -44,23 +44,7 @@
 #define FALSE 0
 #endif
 
-enum {
-    HANGUL_ERROR_NOERROR,
-    HANGUL_ERROR_INVALID,
-    HANGUL_ERROR_RANGE,
-    HANGUL_ERROR_CANTOPEN,
-};
-
-enum {
-    HANJA_TABLE_TYPE_VECTOR,
-    HANJA_TABLE_TYPE_MMAP
-};
-
-typedef struct _PtrVector        PtrVector;
-typedef struct _HanjaKeyEntry    HanjaKeyEntry;
-
-typedef struct _HanjaVectorTable HanjaVectorTable;
-typedef struct _HanjaMMapTable   HanjaMMapTable;
+typedef struct _HanjaIndex     HanjaIndex;
 
 typedef struct _HanjaPair      HanjaPair;
 typedef struct _HanjaPairArray HanjaPairArray;
@@ -78,41 +62,16 @@ struct _HanjaList {
     const Hanja** items; 
 };
 
-typedef void (*HanjaTableDelete)(HanjaTable*);
-typedef void (*HanjaTableMatch)(const HanjaTable*, const char*, HanjaList**);
+struct _HanjaIndex {
+    unsigned offset;
+    char     key[8];
+};
 
 struct _HanjaTable {
-    int              type;
-    HanjaTableDelete destroy;
-    HanjaTableMatch  match;
-};
-
-struct _PtrVector {
-    void** ptrs; 
-    size_t len;
-    size_t alloc;
-};
-
-struct _HanjaVectorTable {
-    HanjaTable     parent;
-
-    PtrVector*     keytable;
-};
-
-struct _HanjaKeyEntry {
-    uint32_t hanja_offset;
-    uint32_t nitems;
-};
-
-struct _HanjaMMapTable {
-    HanjaTable     parent;
-
-    HanjaKeyEntry* keytable;
-    unsigned int   nkeys;
-    unsigned int   ndata;
-
-    void*          map;
-    size_t         map_length;
+    HanjaIndex*    keytable;
+    unsigned       nkeys;
+    unsigned       key_size;
+    FILE*          file;
 };
 
 struct _HanjaPair {
@@ -126,112 +85,6 @@ struct _HanjaPairArray {
 };
 
 #include "hanjacompatible.h"
-
-enum {
-    HANJA_STREAM_MEMORY,
-    HANJA_STREAM_FILE
-};
-
-typedef struct {
-    int            type;
-    unsigned char* data;
-    unsigned char* current;
-    size_t         length;
-} HanjaMemoryStream;
-
-typedef struct {
-    int                  type;
-    FILE*                file;
-} HanjaFileStream;
-
-typedef union {
-    int                  type;
-    HanjaMemoryStream    memory;
-    HanjaFileStream      file;
-} HangulStream;
-
-static void hanja_vector_table_delete(HanjaTable* hanja_table);
-static void hanja_vector_table_match(const HanjaTable* hanja_table,
-				     const char* key, HanjaList** list);
-
-static void hanja_mmap_table_delete(HanjaTable* hanja_table);
-static void hanja_mmap_table_match(const HanjaTable* hanja_table,
-				   const char* key, HanjaList** list);
-
-static inline int
-hangul_stream_init_as_memory(HangulStream* stream, void* data, size_t length)
-{
-    stream->type           = HANJA_STREAM_MEMORY;
-    stream->memory.data    = data;
-    stream->memory.current = data;
-    stream->memory.length  = length;
-    return 0;
-}
-
-static inline int
-hangul_stream_init_as_file(HangulStream* stream, FILE* file)
-{
-    stream->type      = HANJA_STREAM_FILE;
-    stream->file.file = file;
-    return 0;
-}
-
-static inline bool
-hangul_stream_check_range(HanjaMemoryStream* stream, unsigned char* p)
-{
-    if (p >= stream->data && p < stream->data + stream->length)
-	return true;
-    else
-	return false;
-}
-
-static inline int
-hangul_stream_seek(HangulStream* stream, size_t offset)
-{
-    if (stream->type == HANJA_STREAM_MEMORY) {
-	HanjaMemoryStream* mstream = &stream->memory;
-	if (!hangul_stream_check_range(mstream, mstream->current + offset))
-	    return HANGUL_ERROR_RANGE;
-	    
-	stream->memory.current += offset;
-	return 0;
-    }
-
-    return HANGUL_ERROR_INVALID;
-}
-
-static inline int
-hangul_stream_read_uint32(HangulStream* stream, uint32_t* value)
-{
-    if (stream->type == HANJA_STREAM_MEMORY) {
-	HanjaMemoryStream* mstream = &stream->memory;
-	if (!hangul_stream_check_range(mstream, mstream->current + sizeof(*value)))
-	    return HANGUL_ERROR_RANGE;
-
-	memcpy(value, mstream->current, sizeof(*value));
-	mstream->current += sizeof(*value);
-	return 0;
-    }
-
-    return HANGUL_ERROR_INVALID;
-}
-
-static inline int
-hangul_stream_write(HangulStream* stream, const void* ptr, size_t len)
-{
-    if (stream->type == HANJA_STREAM_MEMORY) {
-	HanjaMemoryStream* mstream = &stream->memory;
-	if (!hangul_stream_check_range(mstream, mstream->current + len))
-	    return HANGUL_ERROR_RANGE;
-
-	memcpy(mstream->current, ptr, len);
-	mstream->current += len;
-    } else if (stream->type == HANJA_STREAM_FILE) {
-	fwrite(ptr, len, 1, stream->file.file);
-    }
-
-    return 0;
-}
 
 static const char utf8_skip_table[256] = {
     1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
@@ -270,90 +123,6 @@ static inline char* utf8_prev(const char *str, const char *p)
 	    break;
     }
     return (char*)p;
-}
-
-#ifndef HAVE_MMAP
-
-#define PROT_READ 0
-#define MAP_SHARED 0
-static void*
-mmap(void *start, size_t length, int prot, int flags, int fd, size_t offset)
-{
-    start = malloc(length);
-    if (start != NULL) {
-	read(fd, start, length);
-    }
-    return start;
-}
-
-static int
-munmap(void *start, size_t length)
-{
-    free(start);
-}
-
-#endif
-
-static PtrVector*
-ptr_vector_new(size_t initial_size)
-{
-    PtrVector* vector;
-
-    if (initial_size == 0)
-	initial_size = 2;
-
-    if (initial_size > SIZE_MAX / sizeof(vector->ptrs[0]))
-	return NULL;
-
-    vector = malloc(sizeof(*vector));
-    vector->len = 0;
-    vector->alloc = initial_size;
-    vector->ptrs = malloc(initial_size * sizeof(vector->ptrs[0]));;
-
-    if (vector->ptrs == NULL) {
-	free(vector);
-	return NULL;
-    }
-
-    return vector;
-}
-
-static void
-ptr_vector_delete(PtrVector* vector)
-{
-    if (vector != NULL) {
-	free(vector->ptrs);
-	free(vector);
-    }
-}
-
-static inline size_t
-ptr_vector_get_length(PtrVector* vector)
-{
-    return vector->len;
-}
-
-static void
-ptr_vector_append(PtrVector* vector, void* data)
-{
-    if (vector->alloc > SIZE_MAX / sizeof(vector->ptrs[0]) / 2)
-	return;
-
-    if (vector->alloc < vector->len + 1) {
-	size_t alloc = vector->alloc * 2;
-	void** ptrs;
-
-	ptrs = realloc(vector->ptrs, alloc * sizeof(vector->ptrs[0]));
-	if (ptrs != NULL) {
-	    vector->alloc = alloc;
-	    vector->ptrs  = ptrs;
-	}
-    }
-
-    if (vector->len + 1 <= vector->alloc) {
-	vector->ptrs[vector->len] = data;
-	vector->len++;
-    }
 }
 
 /* hanja searching functions */
@@ -433,13 +202,6 @@ hanja_get_comment(const Hanja* hanja)
     return NULL;
 }
 
-static const Hanja*
-hanja_keyentry_get_hanja(const HanjaKeyEntry* entry)
-{
-    const char* p = (const char*)entry;
-    return (const Hanja*)(p + entry->hanja_offset);
-}
-
 static HanjaList *
 hanja_list_new(const char *key)
 {
@@ -499,490 +261,139 @@ hanja_list_append_n(HanjaList* list, const Hanja* hanja, int n)
 }
 
 static void
-hanja_list_append_nptrs(HanjaList* list, const Hanja** hanja, int n)
+hanja_table_match(const HanjaTable* table,
+		  const char* key, HanjaList** list)
 {
-    hanja_list_reserve(list, n);
+    int low, high, mid;
+    int res = -1;
 
-    if (list->alloc >= list->len + n) {
-	unsigned int i;
-	for (i = 0; i < n ; i++)
-	    list->items[list->len + i] = hanja[i];
-	list->len += n;
+    low = 0;
+    high = table->nkeys - 1;
+
+    while (low < high) {
+	mid = (low + high) / 2;
+	res = strncmp(table->keytable[mid].key, key, table->key_size);
+	if (res < 0) {
+	    low = mid + 1;
+	} else if (res > 0) {
+	    high = mid - 1;
+	} else {
+	    break;
+	}
+    }
+
+    if (res != 0) {
+	mid = low;
+	res = strncmp(table->keytable[mid].key, key, table->key_size);
+    }
+
+    if (res == 0) {
+	unsigned offset;
+	char buf[512];
+
+	offset = table->keytable[mid].offset;
+	fseek(table->file, offset, SEEK_SET);
+
+	while (fgets(buf, sizeof(buf), table->file) != NULL) {
+	    char* save = NULL;
+	    char* p = strtok_r(buf, ":", &save);
+	    res = strcmp(p, key);
+	    if (res == 0) {
+		char* value   = strtok_r(NULL, ":", &save);
+		char* comment = strtok_r(NULL, "\r\n", &save);
+
+		Hanja* hanja = hanja_new(p, value, comment);
+
+		if (*list == NULL) {
+		    *list = hanja_list_new(key);
+		}
+
+		hanja_list_append_n(*list, hanja, 1);
+	    } else if (res > 0) {
+		break;
+	    }
+	}
     }
 }
 
-
-static PtrVector*
-hanja_vectors_from_txt(const char *filename)
+HanjaTable*
+hanja_table_load(const char* filename)
 {
-    char *save_ptr = NULL;
-    char *key;
-    char *value;
-    char *comment;
-    char lastkey[64] = { 0, };
-    char buf[1024];
-
-    FILE *file;
-    PtrVector* keys = NULL;
-    PtrVector* data = NULL;
+    unsigned nkeys;
+    char buf[512];
+    int key_size = 5;
+    char last_key[8] = { '\0', };
+    char* save_ptr = NULL;
+    char* key;
+    long offset;
+    unsigned i;
+    FILE* file;
+    HanjaIndex* keytable;
+    HanjaTable* table;
 
     if (filename == NULL)
-	return NULL;
+	filename = LIBHANGUL_DEFAULT_HANJA_DIC;
 
     file = fopen(filename, "r");
     if (file == NULL) {
 	return NULL;
     }
 
+    nkeys = 0;
     while (fgets(buf, sizeof(buf), file) != NULL) {
-	Hanja* hanja;
-
 	/* skip comments and empty lines */
 	if (buf[0] == '#' || buf[0] == '\r' || buf[0] == '\n' || buf[0] == '\0')
 	    continue;
 
 	save_ptr = NULL;
 	key = strtok_r(buf, ":", &save_ptr);
-	value = strtok_r(NULL, ":", &save_ptr);
-	comment = strtok_r(NULL, "\r\n", &save_ptr);
 
 	if (key == NULL || strlen(key) == 0)
 	    continue;
 
-	if (value == NULL || strlen(value) == 0)
+	if (strncmp(last_key, key, key_size) != 0) {
+	    nkeys++;
+	    strncpy(last_key, key, key_size);
+	}
+    }
+
+    rewind(file);
+    keytable = malloc(nkeys * sizeof(keytable[0]));
+    memset(keytable, 0, nkeys * sizeof(keytable[0]));
+
+    i = 0;
+    offset = ftell(file);
+    while (fgets(buf, sizeof(buf), file) != NULL) {
+	/* skip comments and empty lines */
+	if (buf[0] == '#' || buf[0] == '\r' || buf[0] == '\n' || buf[0] == '\0')
 	    continue;
 
-	if (comment == NULL)
-	    comment = "";
+	save_ptr = NULL;
+	key = strtok_r(buf, ":", &save_ptr);
 
-	if (data != NULL && strcmp(key, lastkey) != 0) {
-	    if (keys == NULL)
-		keys = ptr_vector_new(32);
+	if (key == NULL || strlen(key) == 0)
+	    continue;
 
-	    ptr_vector_append(keys, data);
-	    strncpy(lastkey, key, sizeof(lastkey));
-	    data = NULL;
+	if (strncmp(last_key, key, key_size) != 0) {
+	    keytable[i].offset = offset;
+	    strncpy(keytable[i].key, key, key_size);
+	    strncpy(last_key, key, key_size);
+	    i++;
 	}
-
-	hanja = hanja_new(key, value, comment);
-	if (hanja != NULL) {
-	    if (data == NULL)
-		data = ptr_vector_new(1);
-	    ptr_vector_append(data, hanja);
-	}
+	offset = ftell(file);
     }
-
-    if (data != NULL) {
-	if (keys == NULL)
-	    keys = ptr_vector_new(1);
-	ptr_vector_append(keys, data);
-    }
-
-    fclose(file);
-
-    return keys;
-}
-
-static void
-hanja_vectors_delete(PtrVector* vectors)
-{
-    unsigned int i, j;
-    for (i = 0; i < vectors->len; i++) {
-	PtrVector* vector = vectors->ptrs[i];
-
-	for (j = 0; j < vector->len; j++)
-	    hanja_delete(vector->ptrs[j]);
-
-	ptr_vector_delete(vector);
-    }
-    ptr_vector_delete(vectors);
-}
-
-static int
-hanja_vectors_save(PtrVector* vectors, HangulStream* stream)
-{
-    unsigned int i, j, k;
-    uint32_t nkeys;
-    uint32_t ndata;
-    uint32_t keytable_size;
-    uint32_t datatable_size;
-    uint32_t last_offset;
-
-    /* signature */
-    hangul_stream_write(stream, "HANJADB\x0", 8);
-
-    nkeys = vectors->len;
-    hangul_stream_write(stream, &nkeys, sizeof(nkeys));
-
-    ndata = 0;
-    for (i = 0; i < nkeys; i++)
-	ndata += ptr_vector_get_length(vectors->ptrs[i]);
-    hangul_stream_write(stream, &ndata, sizeof(ndata));
-
-    keytable_size = nkeys * sizeof(HanjaKeyEntry);
-    datatable_size = ndata * sizeof(Hanja);
-
-    /* key table */
-    last_offset = keytable_size;
-    for (i = 0; i < nkeys; i++) {
-	HanjaKeyEntry entry;
-
-	entry.hanja_offset = last_offset - i * sizeof(entry);
-	entry.nitems       = ptr_vector_get_length(vectors->ptrs[i]);
-
-	hangul_stream_write(stream, &entry, sizeof(entry));
-
-	last_offset += entry.nitems * sizeof(Hanja);
-    }
-
-    /* data table */
-    last_offset = datatable_size;
-    k = 0;
-    for (i = 0; i < nkeys; i++) {
-	PtrVector* items = vectors->ptrs[i];
-	for (j = 0; j < items->len; j++) {
-	    const char* key;
-	    const char* value;
-	    const char* comment;
-	    size_t key_len;
-	    size_t value_len;
-	    size_t comment_len;
-	    Hanja hanja;
-	    Hanja* item = items->ptrs[j];
-
-	    key     = hanja_get_key(item);
-	    value   = hanja_get_value(item);
-	    comment = hanja_get_comment(item);
-
-	    hanja.key_offset     = last_offset - k * sizeof(hanja);
-	    hanja.value_offset   = last_offset - k * sizeof(hanja);
-	    hanja.comment_offset = last_offset - k * sizeof(hanja);
-
-	    key_len     = strlen(key) + 1;
-	    value_len   = strlen(value) + 1;
-	    comment_len = strlen(comment) + 1;
-
-	    hanja.value_offset   += key_len;
-	    hanja.comment_offset += key_len + value_len;
-
-	    hangul_stream_write(stream, &hanja, sizeof(hanja));
-
-	    last_offset += key_len + value_len + comment_len;
-	    k++;
-	}
-    }
-
-    /* data */
-    for (i = 0; i < nkeys; i++) {
-	PtrVector* items = vectors->ptrs[i];
-	for (j = 0; j < items->len; j++) {
-	    size_t len;
-	    const char* key;
-	    const char* value;
-	    const char* comment;
-	    Hanja* hanja = items->ptrs[j];
-
-	    key     = hanja_get_key(hanja);
-	    value   = hanja_get_value(hanja);
-	    comment = hanja_get_comment(hanja);
-
-	    len = strlen(key) + 1;
-	    hangul_stream_write(stream, key, len);
-
-	    len = strlen(value) + 1;
-	    hangul_stream_write(stream, value, len);
-
-	    len = strlen(comment) + 1;
-	    hangul_stream_write(stream, comment, len);
-	}
-    }
-
-    return 0;
-}
-
-int
-hanja_table_txt_to_bin(const char *txtfilename, const char* binfilename)
-{
-    PtrVector* vectors;
-
-    vectors = hanja_vectors_from_txt(txtfilename);
-    if (vectors != NULL) {
-	FILE* file;
-	HangulStream stream;
-
-	file = fopen(binfilename, "w");
-	if (file != NULL) {
-	    hangul_stream_init_as_file(&stream, file);
-	    hanja_vectors_save(vectors, &stream);
-	    fclose(file);
-	}
-
-	hanja_vectors_delete(vectors);
-    }
-
-    return 0;
-}
-
-HanjaTable*
-hanja_vector_table_load(PtrVector* vector)
-{
-    HanjaVectorTable* table;
 
     table = malloc(sizeof(*table));
-    if (table != NULL) {
-	table->parent.type = HANJA_TABLE_TYPE_VECTOR;
-	table->parent.destroy = hanja_vector_table_delete;
-	table->parent.match = hanja_vector_table_match;
-	table->keytable = vector;
+    if (table == NULL) {
+	free(keytable);
+	fclose(file);
+	return NULL;
     }
 
-    return (HanjaTable*)table;
-}
-
-static void
-hanja_vector_table_delete(HanjaTable* hanja_table)
-{
-    if (hanja_table != NULL) {
-	HanjaVectorTable* table = (HanjaVectorTable*)hanja_table;
-	hanja_vectors_delete(table->keytable);
-	free(table);
-    }
-}
-
-static int
-vector_table_cmp(const void* m1, const void* m2)
-{
-    const char*  key = m1;
-    const PtrVector* vector = *(const void**)m2;
-    const Hanja* hanja = vector->ptrs[0];
-    const char*  hanja_key = hanja_get_key(hanja);
-
-    return strcmp(key, hanja_key);
-}
-
-static void
-hanja_vector_table_match(const HanjaTable* hanja_table,
-		         const char* key, HanjaList** list)
-{
-    const HanjaVectorTable* table;
-    const PtrVector** res;
-
-    table = (const HanjaVectorTable*)hanja_table;
-    res = bsearch(key, table->keytable->ptrs, table->keytable->len,
-		  sizeof(PtrVector*), vector_table_cmp);
-    if (res != NULL && *res != NULL) {
-	const Hanja** hanja;
-
-	if (*list == NULL)
-	    *list = hanja_list_new(key);
-
-	hanja = (const Hanja**)res[0]->ptrs;
-	hanja_list_append_nptrs(*list, hanja, res[0]->len);
-    }
-}
-
-HanjaMMapTable*
-hanja_mmap_table_load(void* data, size_t length)
-{
-    unsigned int i, j;
-    uint32_t nkeys = 0;
-    uint32_t ndata = 0;
-    HanjaKeyEntry*  keytable = NULL;
-    HanjaMMapTable* table = NULL;
-    int res = 0;
-    const char* end;
-
-    HangulStream stream;
-
-    /* signature */
-    if (memcmp("HANJADB\x0", data, 8) != 0)
-	goto error;
-
-    res = hangul_stream_init_as_memory(&stream, data, length);
-
-    res = hangul_stream_seek(&stream, 8);
-
-    res = hangul_stream_read_uint32(&stream, &nkeys);
-    if (res != 0)
-	goto error;
-
-    res = hangul_stream_read_uint32(&stream, &ndata);
-    if (res != 0)
-	goto error;
-
-    end = (const char*)data + length;
-
-    keytable = (HanjaKeyEntry*)stream.memory.current;
-    if ((const char*)keytable > end)
-	goto error;
-
-    /* check integrity here.
-     * If the data file is wrong, the program may access the wrong address
-     * and it will be killed by segmentation fault.
-     * So we check it here, before to use. */
-    for (i = 0; i < nkeys; i++) {
-	const Hanja*         hanja;
-	const HanjaKeyEntry* entry;
-
-	entry = &keytable[i];
-	if ((const char*)entry > end)
-	    goto error;
-
-	hanja = hanja_keyentry_get_hanja(entry);
-	if ((const char*)hanja > end)
-	    goto error;
-
-	for (j = 0; j < entry->nitems; j++) {
-	    const char* key     = hanja_get_key(hanja + j);
-	    const char* value   = hanja_get_value(hanja + j);
-	    const char* comment = hanja_get_comment(hanja + j);
-
-	    if (key > end)
-		goto error;
-
-	    if (value > end)
-		goto error;
-
-	    if (comment > end)
-		goto error;
-	}
-    }
-
-    /* the last byte should be nul, or the last comment will be over the
-     * boundary */
-    end--;
-    if (end[0] != '\0')
-	goto error;
-
-    table = malloc(sizeof(*table));
-    if (table == NULL)
-	goto error;
-
-    table->parent.type = HANJA_TABLE_TYPE_MMAP;
-    table->parent.destroy = hanja_mmap_table_delete;
-    table->parent.match = hanja_mmap_table_match;
     table->keytable = keytable;
     table->nkeys = nkeys;
-    table->ndata = ndata;
-    table->map = data;
-    table->map_length = length;
-
-    return table;
-
-error:
-    return NULL;
-}
-
-static void
-hanja_mmap_table_delete(HanjaTable* hanja_table)
-{
-    if (hanja_table != NULL) {
-	HanjaMMapTable* table = (HanjaMMapTable*)hanja_table;
-	if (table->map != NULL) {
-	    munmap(table->map, table->map_length);
-	}
-	free(table);
-    }
-}
-
-static int
-mmap_table_cmp(const void* m1, const void* m2)
-{
-    const char*  key = m1;
-    const Hanja* hanja = hanja_keyentry_get_hanja(m2);
-    const char*  hanja_key = hanja_get_key(hanja);
-
-    return strcmp(key, hanja_key);
-}
-
-static void
-hanja_mmap_table_match(const HanjaTable* hanja_table,
-		       const char* key, HanjaList** list)
-{
-    const HanjaKeyEntry* res;
-    const HanjaMMapTable* table;
-
-    table = (const HanjaMMapTable*)hanja_table;
-    res = bsearch(key, table->keytable, table->nkeys,
-		  sizeof(table->keytable[0]), mmap_table_cmp);
-    if (res != NULL) {
-	const Hanja* hanja = hanja_keyentry_get_hanja(res); 
-	if (*list == NULL)
-	    *list = hanja_list_new(key);
-	hanja_list_append_n(*list, hanja, res->nitems);
-    }
-}
-
-HanjaTable*
-hanja_table_load_from_txt(const char *filename)
-{
-    PtrVector*  vectors;
-    HanjaTable* table;
-
-    vectors = hanja_vectors_from_txt(filename);
-    if (vectors == NULL)
-	return NULL;
-
-    table = hanja_vector_table_load(vectors);
-    if (table == NULL) {
-	hanja_vectors_delete(vectors);
-	return NULL;
-    }
-
-    return table;
-}
-
-HanjaTable*
-hanja_table_load_from_bin(const char *filename)
-{
-    struct stat buf;
-    FILE* file;
-    void* data;
-    size_t length;
-    HanjaTable *table = NULL;
-
-    file = fopen(filename, "r");
-    if (file == NULL)
-	return NULL;
-
-    fstat(fileno(file), &buf);
-
-    length = buf.st_size;
-    data = mmap(0, length, PROT_READ, MAP_SHARED, fileno(file), 0);
-    fclose(file);
-
-    table = (HanjaTable*)hanja_mmap_table_load(data, length);
-    if (table == NULL) {
-	munmap(data, length);
-	return NULL;
-    }
-
-    return table;
-}
-
-HanjaTable*
-hanja_table_load(const char* filename)
-{
-    size_t len;
-    HanjaTable* table = NULL;
-
-    if (filename == NULL)
-	filename = LIBHANGUL_DEFAULT_HANJA_DIC;
-
-    len = strlen(filename);
-    if (len > 4 &&
-	filename[len - 1] == 't' &&
-	filename[len - 2] == 'x' &&
-	filename[len - 3] == 't' &&
-	filename[len - 4] == '.') {
-	table = hanja_table_load_from_txt(filename);
-    }
-
-    if (table == NULL)
-	table = hanja_table_load_from_bin(filename);
-
-    if (table == NULL)
-	table = hanja_table_load_from_txt(filename);
+    table->key_size = key_size;
+    table->file = file;
 
     return table;
 }
@@ -991,7 +402,9 @@ void
 hanja_table_delete(HanjaTable *table)
 {
     if (table != NULL) {
-	table->destroy(table);
+	free(table->keytable);
+	fclose(table->file);
+	free(table);
     }
 }
 
@@ -1003,7 +416,7 @@ hanja_table_match_exact(const HanjaTable* table, const char *key)
     if (key == NULL || key[0] == '\0' || table == NULL)
 	return NULL;
 
-    table->match(table, key, &ret);
+    hanja_table_match(table, key, &ret);
 
     return ret;
 }
@@ -1024,7 +437,7 @@ hanja_table_match_prefix(const HanjaTable* table, const char *key)
 
     p = strchr(newkey, '\0');
     while (newkey[0] != '\0') {
-	table->match(table, newkey, &ret);
+	hanja_table_match(table, newkey, &ret);
 	p = utf8_prev(newkey, p);
 	p[0] = '\0';
     }
@@ -1044,7 +457,7 @@ hanja_table_match_suffix(const HanjaTable* table, const char *key)
 
     p = key;
     while (p[0] != '\0') {
-	table->match(table, p, &ret);
+	hanja_table_match(table, p, &ret);
 	p = utf8_next(p);
     }
 
@@ -1102,6 +515,10 @@ void
 hanja_list_delete(HanjaList *list)
 {
     if (list) {
+	size_t i;
+	for (i = 0; i < list->len; i++) {
+	    hanja_delete((Hanja*)list->items[i]);
+	}
 	free(list->items);
 	free(list->key);
 	free(list);

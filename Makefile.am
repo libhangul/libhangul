@@ -1,4 +1,4 @@
-SUBDIRS = hangul tools data test
+SUBDIRS = hangul data test
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = libhangul.pc
