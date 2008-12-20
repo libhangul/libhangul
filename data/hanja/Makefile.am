@@ -1,5 +1,5 @@
 
-hanjadicbindir   = $(libdir)/libhangul/hanja
-hanjadicbin_DATA = hanja.txt
+hanjadicdir   = $(libdir)/libhangul/hanja
+hanjadic_DATA = hanja.txt
 
-CLEANFILES = $(hanjadicbin_DATA)
+EXTRA_DIST = $(hanjadic_DATA)
