@@ -1,3 +1,12 @@
+0.0.9
+ * updated hanja searching routine
+  - remove binary data file format code
+  - look up hanja.txt file everytime to reduce memory usage
+  - http://lists.kldp.net/pipermail/hangul-hackers/2008-November/000385.html
+ * added new API for syllable iteration
+ * fixed configure script bug on MacOSX (#304873)
+ * updated for imhangul
+
 0.0.8
  * update hanja searching routine
   - reduce memory usage on hanja searching
