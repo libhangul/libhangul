@@ -42,6 +42,11 @@ AC_FUNC_REALLOC
 AC_CHECK_FUNCS([munmap])
 AC_CHECK_FUNCS([strcasecmp])
 
+# Checks for unit test framework
+PKG_PROG_PKG_CONFIG
+if test -n "$PKG_CONFIG"; then
+    PKG_CHECK_EXISTS(check, [ PKG_CHECK_MODULES([CHECK], [check]) ])
+fi
 
 AC_CONFIG_FILES([
 Makefile
