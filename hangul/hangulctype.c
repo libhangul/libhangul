@@ -29,7 +29,7 @@
 
 #include "hangul.h"
 
-static const ucschar hangul_base    = 0xac00;
+static const ucschar syllable_base  = 0xac00;
 static const ucschar choseong_base  = 0x1100;
 static const ucschar jungseong_base = 0x1161;
 static const ucschar jongseong_base = 0x11a7;
@@ -76,6 +76,15 @@ bool
 hangul_is_jongseong(ucschar c)
 {
     return c >= 0x11a8 && c <= 0x11f9;
+}
+
+bool
+hangul_is_combining_mark(ucschar c)
+{
+    return  c == 0x302e || c == 0x302f  ||
+	   (c >= 0x0300 && c <= 0x036F) ||
+	   (c >= 0x1dc0 && c <= 0x1dff) ||
+	   (c >= 0xfe20 && c <= 0xfe2f);
 }
 
 bool
@@ -372,7 +381,7 @@ hangul_jaso_to_syllable(ucschar choseong, ucschar jungseong, ucschar jongseong)
     jongseong -= jongseong_base;
 
     c = ((choseong * njungseong) + jungseong) * njongseong + jongseong
-	+ hangul_base;
+	+ syllable_base;
     return c;
 }
 
@@ -392,7 +401,7 @@ hangul_syllable_to_jaso(ucschar syllable,
     if (!hangul_is_syllable(syllable))
 	return;
 
-    syllable -= hangul_base;
+    syllable -= syllable_base;
     if (jongseong != NULL) {
 	if (syllable % njongseong != 0)
 	    *jongseong = jongseong_base + syllable % njongseong;
@@ -417,13 +426,45 @@ is_syllable_boundary(ucschar prev, ucschar next)
 	    return false;
 	if (hangul_is_jungseong(next))
 	    return false;
+	if (hangul_is_syllable(next))
+	    return false;
+	if (hangul_is_combining_mark(next))
+	    return false;
+	if (next == HANGUL_JUNGSEONG_FILLER)
+	    return false;
+    } else if (prev == HANGUL_CHOSEONG_FILLER) {
+	if (hangul_is_jungseong(next))
+	    return false;
+	if (next == HANGUL_JUNGSEONG_FILLER)
+	    return false;
     } else if (hangul_is_jungseong(prev)) {
 	if (hangul_is_jungseong(next))
 	    return false;
 	if (hangul_is_jongseong(next))
 	    return false;
+	if (hangul_is_combining_mark(next))
+	    return false;
+    } else if (prev == HANGUL_JUNGSEONG_FILLER) {
+	if (hangul_is_jongseong(next))
+	    return false;
     } else if (hangul_is_jongseong(prev)) {
 	if (hangul_is_jongseong(next))
+	    return false;
+	if (hangul_is_combining_mark(next))
+	    return false;
+    } else if (hangul_is_syllable(prev)) {
+	if ((prev - syllable_base) % njongseong == 0) {
+	    // 종성이 없는 음절: LV
+	    if (hangul_is_jungseong(next))
+		return false;
+	    if (hangul_is_jongseong(next))
+		return false;
+	} else {
+	    // 종성이 있는 음절: LVT
+	    if (hangul_is_jongseong(next))
+		return false;
+	}
+	if (hangul_is_combining_mark(next))
 	    return false;
     }
     
@@ -610,6 +651,64 @@ hangul_syllable_len(const ucschar* str, int max_len)
 }
 
 /**
+ * @brief @a iter를 기준으로 이전 음절의 첫자모 글자에 대한 포인터를 구한다.
+ * @param iter 현재 위치
+ * @param begin 스트링의 시작위치, 포인터가 이동할 한계값
+ * @return 이전 음절의 첫번째 자모에 대한 포인터
+ *
+ * 이 함수는 @a iter로 주어진 자모 스트링의 포인터를 기준으로 이전 음절의 
+ * 첫번째 자모에 대한 포인터를 리턴한다. 음절을 찾기위해서 begin보다 
+ * 앞쪽으로 이동하지 않는다. 
+ *
+ * 한 음절이라고 판단하는 기준은 L*V*T+M? 패턴에 따른다.
+ */
+const ucschar*
+hangul_syllable_iterator_prev(const ucschar* iter, const ucschar* begin)
+{
+    if (iter > begin)
+	iter--;
+
+    while (iter > begin) {
+	ucschar prev = iter[-1];
+	ucschar curr = iter[0];
+	if (is_syllable_boundary(prev, curr))
+	    break;
+	iter--;
+    }
+
+    return iter;
+}
+
+/**
+ * @brief @a iter를 기준으로 다음 음절의 첫자모 글자에 대한 포인터를 구한다.
+ * @param iter 현재 위치
+ * @param end 스트링의 끝위치, 포인터가 이동할 한계값
+ * @return 다음 음절의 첫번째 자모에 대한 포인터
+ *
+ * 이 함수는 @a iter로 주어진 자모 스트링의 포인터를 기준으로 다음 음절의 
+ * 첫번째 자모에 대한 포인터를 리턴한다. 음절을 찾기위해서 end를 넘어
+ * 이동하지 않는다. 
+ *
+ * 한 음절이라고 판단하는 기준은 L*V*T+M? 패턴에 따른다.
+ */
+const ucschar*
+hangul_syllable_iterator_next(const ucschar* iter, const ucschar* end)
+{
+    if (iter < end)
+	iter++;
+
+    while (iter < end) {
+	ucschar prev = iter[-1];
+	ucschar curr = iter[0];
+	if (is_syllable_boundary(prev, curr))
+	    break;
+	iter++;
+    }
+
+    return iter;
+}
+
+/**
  * @brief 자모 스트링을 음절 스트링을 변환한다
  * @param dest 음절형으로 변환된 결과가 저장될 버퍼
  * @param destlen 결과를 저장할 버퍼의 길이(ucschar 코드 단위)
@@ -617,7 +716,7 @@ hangul_syllable_len(const ucschar* str, int max_len)
  * @param srclen 변환할 자모 스트링의 길이(ucschar 코드 단위)
  * @return @a destlen 에 저장한 코드의 갯수
  *
- * 이 함수는 L+V+T* 패턴에 따라 자모 스트링 변환을 시도한다. 한 음절을 
+ * 이 함수는 L+V+T*M? 패턴에 따라 자모 스트링 변환을 시도한다. 한 음절을 
  * 판단하는 기준은 @ref hangul_syllable_len 을 참조한다.
  * 만일 @a src 가 적절한 음절형태로 변환이 불가능한 경우에는 자모 스트링이
  * 그대로 복사된다.

@@ -53,6 +53,11 @@ ucschar hangul_choseong_to_jongseong(ucschar ch);
 ucschar hangul_jongseong_to_choseong(ucschar ch);
 void    hangul_jongseong_dicompose(ucschar ch, ucschar* jong, ucschar* cho);
 
+const ucschar* hangul_syllable_iterator_prev(const ucschar* str,
+					     const ucschar* begin);
+const ucschar* hangul_syllable_iterator_next(const ucschar* str,
+					     const ucschar* end);
+
 int     hangul_syllable_len(const ucschar* str, int max_len);
 
 ucschar hangul_jaso_to_syllable(ucschar choseong,
