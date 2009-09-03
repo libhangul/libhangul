@@ -45,9 +45,6 @@ bool hangul_is_jaso(ucschar c);
 bool hangul_is_jamo(ucschar c);
 
 ucschar hangul_jaso_to_jamo(ucschar ch);
-ucschar hangul_choseong_to_jamo(ucschar ch);
-ucschar hangul_jungseong_to_jamo(ucschar ch);
-ucschar hangul_jongseong_to_jamo(ucschar ch);
 
 ucschar hangul_choseong_to_jongseong(ucschar ch);
 ucschar hangul_jongseong_to_choseong(ucschar ch);
@@ -137,9 +134,6 @@ HanjaList*   hanja_table_match_exact(const HanjaTable* table, const char *key);
 HanjaList*   hanja_table_match_prefix(const HanjaTable* table, const char *key);
 HanjaList*   hanja_table_match_suffix(const HanjaTable* table, const char *key);
 void         hanja_table_delete(HanjaTable *table);
-
-int          hanja_table_txt_to_bin(const char* txtfilename,
-				    const char* binfilename);
 
 int          hanja_list_get_size(const HanjaList *list);
 const char*  hanja_list_get_key(const HanjaList *list);
