@@ -37,45 +37,49 @@ static const int njungseong = 21;
 static const int njongseong = 28;
 
 /**
- * @brief check for a choseong
- * @param c ucs4 code value
- * @return true if the character c falls into choseong class
- *
- * This function check whether c, which must have ucs4 value, falls into
- * choseong (leading consonants) class.
+ * @brief 초성인지 확인하는 함수
+ * @param c UCS4 코드 값
+ * @return @param c 가 초성에 해당하면 true를 리턴함, 아니면 false
+ * 
+ * @param c 로 주어진 UCS4 코드가 초성인지 확인한다.
+ * Unicode 5.2 지원
  */
 bool
 hangul_is_choseong(ucschar c)
 {
-    return c >= 0x1100 && c <= 0x1159;
+    return (c >= 0x1100 && c <= 0x115f) ||
+	   (c >= 0xa960 && c <= 0xa97c);
+;
 }
 
 /**
- * @brief check for a jungseong
- * @param c ucs4 code value
- * @return true if the character c falls into jungseong class
- *
- * This function check whether c, which must have ucs4 value, falls into
- * jungseong (vowels) class.
+ * @brief 중성인지 확인하는 함수
+ * @param c UCS4 코드 값
+ * @return @param c 가 중성에 해당하면 true를 리턴함, 아니면 false
+ * 
+ * @param c 로 주어진 UCS4 코드가 중성인지 확인한다.
+ * Unicode 5.2 지원
  */
 bool
 hangul_is_jungseong(ucschar c)
 {
-    return c >= 0x1161 && c <= 0x11a2;
+    return (c >= 0x1161 && c <= 0x11a2) ||
+	   (c >= 0xd7b0 && c <= 0xd7c6);
 }
 
 /**
- * @brief check for a jongseong
- * @param c ucs4 code value
- * @return true if the character c falls into jongseong class
- *
- * This function check whether c, which must have ucs4 value, falls into
- * jongseong (trailing consonants) class.
+ * @brief 종성인지 확인하는 함수
+ * @param c UCS4 코드 값
+ * @return @param c 가 종성에 해당하면 true를 리턴함, 아니면 false
+ * 
+ * @param c 로 주어진 UCS4 코드가 종성인지 확인한다.
+ * Unicode 5.2 지원
  */
 bool
 hangul_is_jongseong(ucschar c)
 {
-    return c >= 0x11a8 && c <= 0x11f9;
+    return (c >= 0x11a8 && c <= 0x11f9) ||
+	   (c >= 0xd7cb && c <= 0xd7fb);
 }
 
 bool
@@ -87,18 +91,27 @@ hangul_is_combining_mark(ucschar c)
 	   (c >= 0xfe20 && c <= 0xfe2f);
 }
 
+/**
+ * @brief 초성이고 조합 가능한지 확인
+ */
 bool
 hangul_is_choseong_conjoinable(ucschar c)
 {
     return c >= 0x1100 && c <= 0x1112;
 }
 
+/**
+ * @brief 중성이고 조합 가능한지 확인
+ */
 bool
 hangul_is_jungseong_conjoinable(ucschar c)
 {
     return c >= 0x1161 && c <= 0x1175;
 }
 
+/**
+ * @brief 종성이고 조합 가능한지 확인
+ */
 bool
 hangul_is_jongseong_conjoinable(ucschar c)
 {
@@ -120,12 +133,12 @@ hangul_is_syllable(ucschar c)
 }
 
 /**
- * @brief check for a jamo
- * @param c ucs4 code value
- * @return true if the character c falls into jamo class
+ * @brief 자모 인지 확인
+ * @param c UCS4 코드 값
+ * @return @param c 가 자모 코드이면 true를 리턴, 그외에는 false
  *
- * This function check whether c, which must have ucs4 value, falls into
- * jamo class; that is choseong, jungseong or jongseong.
+ * @param c 로 주어진 UCS4 코드가 자모 코드인지 확인한다.
+ * Unicode 5.2 지원
  */
 bool
 hangul_is_jamo(ucschar c)
