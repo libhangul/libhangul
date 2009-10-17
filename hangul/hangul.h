@@ -41,10 +41,10 @@ bool hangul_is_choseong_conjoinable(ucschar c);
 bool hangul_is_jungseong_conjoinable(ucschar c);
 bool hangul_is_jongseong_conjoinable(ucschar c);
 bool hangul_is_syllable(ucschar c);
-bool hangul_is_jaso(ucschar c);
 bool hangul_is_jamo(ucschar c);
+bool hangul_is_cjamo(ucschar c);
 
-ucschar hangul_jaso_to_jamo(ucschar ch);
+ucschar hangul_jamo_to_cjamo(ucschar ch);
 
 ucschar hangul_choseong_to_jongseong(ucschar ch);
 ucschar hangul_jongseong_to_choseong(ucschar ch);
@@ -57,10 +57,10 @@ const ucschar* hangul_syllable_iterator_next(const ucschar* str,
 
 int     hangul_syllable_len(const ucschar* str, int max_len);
 
-ucschar hangul_jaso_to_syllable(ucschar choseong,
+ucschar hangul_jamo_to_syllable(ucschar choseong,
 				ucschar jungseong,
 				ucschar jongseong);
-void    hangul_syllable_to_jaso(ucschar syllable,
+void    hangul_syllable_to_jamo(ucschar syllable,
 				ucschar* choseong,
 				ucschar* jungseong,
 				ucschar* jongseong);
@@ -150,6 +150,15 @@ const char*  hanja_get_comment(const Hanja* hanja);
 
 
 /* deprecated */
+bool hangul_is_jaso(ucschar c);
+ucschar hangul_jaso_to_jamo(ucschar ch);
+ucschar hangul_jaso_to_syllable(ucschar choseong,
+				ucschar jungseong,
+				ucschar jongseong);
+void    hangul_syllable_to_jaso(ucschar syllable,
+				ucschar* choseong,
+				ucschar* jungseong,
+				ucschar* jongseong);
 typedef bool (*HangulICFilter) (ucschar*, ucschar, ucschar, ucschar, void*);
 void hangul_ic_set_filter(HangulInputContext *hic,
 			  HangulICFilter func, void *user_data);

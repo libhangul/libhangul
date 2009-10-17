@@ -120,19 +120,26 @@ hangul_is_syllable(ucschar c)
 }
 
 /**
- * @brief check for a jaso
+ * @brief check for a jamo
  * @param c ucs4 code value
- * @return true if the character c falls into jaso class
+ * @return true if the character c falls into jamo class
  *
  * This function check whether c, which must have ucs4 value, falls into
- * jaso class; that is choseong, jungseong or jongseong.
+ * jamo class; that is choseong, jungseong or jongseong.
  */
 bool
-hangul_is_jaso(ucschar c)
+hangul_is_jamo(ucschar c)
 {
     return hangul_is_choseong(c) ||
 	   hangul_is_jungseong(c) ||
 	   hangul_is_jongseong(c);
+}
+
+/* deprecated */
+bool
+hangul_is_jaso(ucschar c)
+{
+    return hangul_is_jamo(c);
 }
 
 /**
@@ -144,21 +151,21 @@ hangul_is_jaso(ucschar c)
  * compatibility jamo class.
  */
 bool
-hangul_is_jamo(ucschar c)
+hangul_is_cjamo(ucschar c)
 {
     return c >= 0x3131 && c <= 0x318e;
 }
 
 /**
- * @brief convert a jaso to the compatibility jamo
+ * @brief convert a jamo to the compatibility jamo
  * @param c ucs4 code value
  * @return converted value, or c
  *
- * This function converts the jaso c, which must have ucs4 value, to
+ * This function converts the jamo c, which must have ucs4 value, to
  * comaptibility jamo or c if the conversion is failed
  */
 ucschar
-hangul_jaso_to_jamo(ucschar c)
+hangul_jamo_to_cjamo(ucschar c)
 {
     static ucschar choseong[] = {
 	0x3131,	    /* 0x1100 */
@@ -245,6 +252,13 @@ hangul_jaso_to_jamo(ucschar c)
     }
 
     return c;
+}
+
+/* deprecated */
+ucschar
+hangul_jaso_to_jamo(ucschar c)
+{
+    return hangul_jamo_to_cjamo(c);
 }
 
 ucschar
@@ -357,11 +371,11 @@ hangul_jongseong_dicompose(ucschar c, ucschar* jong, ucschar* cho)
  * @param jongseong UCS4 code value
  * @return syllable code compose from choseong, jungseong and jongseong
  *
- * This function compose hangul jaso choseong, jungseong and jongseong and
+ * This function compose hangul jamo choseong, jungseong and jongseong and
  * return the syllable code.
  */
 ucschar
-hangul_jaso_to_syllable(ucschar choseong, ucschar jungseong, ucschar jongseong)
+hangul_jamo_to_syllable(ucschar choseong, ucschar jungseong, ucschar jongseong)
 {
     ucschar c;
 
@@ -385,8 +399,15 @@ hangul_jaso_to_syllable(ucschar choseong, ucschar jungseong, ucschar jongseong)
     return c;
 }
 
+/* deprecated */
+ucschar
+hangul_jaso_to_syllable(ucschar choseong, ucschar jungseong, ucschar jongseong)
+{
+    return hangul_jamo_to_syllable(choseong, jungseong, jongseong);
+}
+
 void
-hangul_syllable_to_jaso(ucschar syllable,
+hangul_syllable_to_jamo(ucschar syllable,
 			ucschar* choseong,
 			ucschar* jungseong,
 			ucschar* jongseong)
@@ -416,6 +437,16 @@ hangul_syllable_to_jaso(ucschar syllable,
     if (choseong != NULL) {
 	*choseong = choseong_base + syllable;
     }
+}
+
+/* deprecated */
+void
+hangul_syllable_to_jaso(ucschar syllable,
+			ucschar* choseong,
+			ucschar* jungseong,
+			ucschar* jongseong)
+{
+    return hangul_syllable_to_jamo(syllable, choseong, jungseong, jongseong);
 }
 
 static inline bool 
@@ -601,7 +632,7 @@ build_syllable(const ucschar* str, size_t len)
     if (i < len)
 	return 0;
 
-    return hangul_jaso_to_syllable(cho, jung, jong);
+    return hangul_jamo_to_syllable(cho, jung, jong);
 }
 
 /**
