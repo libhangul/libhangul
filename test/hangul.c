@@ -15,13 +15,6 @@
 #define UCS4 "UCS-4LE"
 #endif
 
-bool filter(ucschar *str, ucschar cho, ucschar jung, ucschar jong, void *data)
-{
-    //printf("Filter: %x %x %x\n", cho, jung, jong);
-    //return jong == 0;
-    return true;
-}
-
 void ucs4_to_utf8(char *buf, const ucschar *ucs4, size_t bufsize)
 {
     size_t n;
@@ -75,7 +68,6 @@ main(int argc, char *argv[])
 	printf("hic is null\n");
 	return -1;
     }
-    hangul_ic_set_filter(hic, filter, NULL);
 
     for (ascii = getchar(); ascii != EOF; ascii = getchar()) {
 	int ret = hangul_ic_process(hic, ascii);

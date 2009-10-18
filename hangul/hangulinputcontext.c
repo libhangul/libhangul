@@ -420,18 +420,18 @@ hangul_jaso_to_string(ucschar cho, ucschar jung, ucschar jong,
     if (cho) {
 	if (jung) {
 	    /* have cho, jung, jong or no jong */
-	    ch = hangul_jaso_to_syllable(cho, jung, jong);
+	    ch = hangul_jamo_to_syllable(cho, jung, jong);
 	    buf[n++] = ch;
 	} else {
 	    if (jong) {
 		/* have cho, jong */
-		ch = hangul_jaso_to_jamo(cho);
+		ch = hangul_jamo_to_cjamo(cho);
 		buf[n++] = ch;
-		ch = hangul_jaso_to_jamo(jong);
+		ch = hangul_jamo_to_cjamo(jong);
 		buf[n++] = ch;
 	    } else {
 		/* have cho */
-		ch = hangul_jaso_to_jamo(cho);
+		ch = hangul_jamo_to_cjamo(cho);
 		buf[n++] = ch;
 	    }
 	}
@@ -439,19 +439,19 @@ hangul_jaso_to_string(ucschar cho, ucschar jung, ucschar jong,
 	if (jung) {
 	    if (jong) {
 		/* have jung, jong */
-		ch = hangul_jaso_to_jamo(jung);
+		ch = hangul_jamo_to_cjamo(jung);
 		buf[n++] = ch;
-		ch = hangul_jaso_to_jamo(jong);
+		ch = hangul_jamo_to_cjamo(jong);
 		buf[n++] = ch;
 	    } else {
 		/* have jung */
-		ch = hangul_jaso_to_jamo(jung);
+		ch = hangul_jamo_to_cjamo(jung);
 		buf[n++] = ch;
 	    }
 	} else {
 	    if (jong) { 
 		/* have jong */
-		ch = hangul_jaso_to_jamo(jong);
+		ch = hangul_jamo_to_cjamo(jong);
 		buf[n++] = ch;
 	    } else {
 		/* have nothing */
@@ -534,7 +534,7 @@ hangul_ic_push(HangulInputContext *hic, ucschar c)
 	    return false;
 	}
     } else {
-	if (!hangul_is_jaso(c)) {
+	if (!hangul_is_jamo(c)) {
 	    hangul_ic_flush_internal(hic);
 	    return false;
 	}
@@ -614,7 +614,7 @@ hangul_ic_process_jamo(HangulInputContext *hic, ucschar ch)
     ucschar jong;
     ucschar combined;
 
-    if (!hangul_is_jaso(ch) && ch > 0) {
+    if (!hangul_is_jamo(ch) && ch > 0) {
 	hangul_ic_save_commit_string(hic);
 	hangul_ic_append_commit_string(hic, ch);
 	return true;
@@ -835,7 +835,7 @@ hangul_ic_process_romaja(HangulInputContext *hic, int ascii, ucschar ch)
     ucschar jong;
     ucschar combined;
 
-    if (!hangul_is_jaso(ch) && ch > 0) {
+    if (!hangul_is_jamo(ch) && ch > 0) {
 	hangul_ic_save_commit_string(hic);
 	hangul_ic_append_commit_string(hic, ch);
 	return true;

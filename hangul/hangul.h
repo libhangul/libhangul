@@ -22,6 +22,12 @@
 #include <stdbool.h>
 #include <inttypes.h>
 
+#ifdef __GNUC__
+#define LIBHANGUL_DEPRECATED __attribute__((deprecated));
+#else
+#define LIBHANGUL_DEPRECATED
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -150,21 +156,23 @@ const char*  hanja_get_comment(const Hanja* hanja);
 
 
 /* deprecated */
-bool hangul_is_jaso(ucschar c);
-ucschar hangul_jaso_to_jamo(ucschar ch);
+bool hangul_is_jaso(ucschar c) LIBHANGUL_DEPRECATED;
+ucschar hangul_jaso_to_jamo(ucschar ch) LIBHANGUL_DEPRECATED;
 ucschar hangul_jaso_to_syllable(ucschar choseong,
 				ucschar jungseong,
-				ucschar jongseong);
+				ucschar jongseong) LIBHANGUL_DEPRECATED;
 void    hangul_syllable_to_jaso(ucschar syllable,
 				ucschar* choseong,
 				ucschar* jungseong,
-				ucschar* jongseong);
+				ucschar* jongseong) LIBHANGUL_DEPRECATED;
 typedef bool (*HangulICFilter) (ucschar*, ucschar, ucschar, ucschar, void*);
 void hangul_ic_set_filter(HangulInputContext *hic,
-			  HangulICFilter func, void *user_data);
+			  HangulICFilter func, void *user_data) LIBHANGUL_DEPRECATED;
 
 #ifdef __cplusplus
 }
 #endif
+
+#undef LIBHANGUL_DEPRECATED
 
 #endif /* libhangul_hangul_h */
