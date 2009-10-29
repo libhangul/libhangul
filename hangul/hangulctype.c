@@ -1,8 +1,3 @@
-/**
- * @file    hangulctype.c
- * @brief   hangulctype source file
- */
-
 /* libhangul
  * Copyright (C) 2004 - 2006 Choe Hwanjin
  *
@@ -29,6 +24,31 @@
 
 #include "hangul.h"
 
+/**
+ * @defgroup hangulctype 한글 글자 조작
+ * 
+ * @section hangulctype 한글 글자 조작
+ * libhangul은 한글 각 글자를 구분하고 조작하는데 사용할 수 있는 몇가지 함수를
+ * 제공한다.  libhangul의 글자 구분 함수의 인터페이스에서 글자의 기본 단위는
+ * UCS4 코드값이다.
+ */
+
+/**
+ * @file hangulctype.c
+ */
+
+/**
+ * @ingroup hangulctype
+ * @typedef ucschar
+ * @brief UCS4 코드 단위의 글자 코드 값
+ *
+ * UCS4 코드 값을 저장한다. libhangul에서 사용하는 문자열의 기본단위이다.
+ * preedit 문자열과 commit 문자열 모두 ucschar 포인터 형으로 전달된다.
+ * 이 스트링은  C 스트링과 유사하게 0으로 끝난다.
+ * 유니코드 값이 한글의 어떤 범주에 속하는지 확인하는 함수도 모두 ucschar 형을
+ * 사용한다.
+ */
+
 static const ucschar syllable_base  = 0xac00;
 static const ucschar choseong_base  = 0x1100;
 static const ucschar jungseong_base = 0x1161;
@@ -37,11 +57,12 @@ static const int njungseong = 21;
 static const int njongseong = 28;
 
 /**
+ * @ingroup hangulctype
  * @brief 초성인지 확인하는 함수
  * @param c UCS4 코드 값
- * @return @param c 가 초성에 해당하면 true를 리턴함, 아니면 false
+ * @return @a c 가 초성에 해당하면 true를 리턴함, 아니면 false
  * 
- * @param c 로 주어진 UCS4 코드가 초성인지 확인한다.
+ * @a c 로 주어진 UCS4 코드가 초성인지 확인한다.
  * Unicode 5.2 지원
  */
 bool
@@ -53,11 +74,12 @@ hangul_is_choseong(ucschar c)
 }
 
 /**
+ * @ingroup hangulctype
  * @brief 중성인지 확인하는 함수
  * @param c UCS4 코드 값
- * @return @param c 가 중성에 해당하면 true를 리턴함, 아니면 false
+ * @return @a c 가 중성에 해당하면 true를 리턴함, 아니면 false
  * 
- * @param c 로 주어진 UCS4 코드가 중성인지 확인한다.
+ * @a c 로 주어진 UCS4 코드가 중성인지 확인한다.
  * Unicode 5.2 지원
  */
 bool
@@ -68,11 +90,12 @@ hangul_is_jungseong(ucschar c)
 }
 
 /**
+ * @ingroup hangulctype
  * @brief 종성인지 확인하는 함수
  * @param c UCS4 코드 값
- * @return @param c 가 종성에 해당하면 true를 리턴함, 아니면 false
+ * @return @a c 가 종성에 해당하면 true를 리턴함, 아니면 false
  * 
- * @param c 로 주어진 UCS4 코드가 종성인지 확인한다.
+ * @a c 로 주어진 UCS4 코드가 종성인지 확인한다.
  * Unicode 5.2 지원
  */
 bool
@@ -92,6 +115,7 @@ hangul_is_combining_mark(ucschar c)
 }
 
 /**
+ * @ingroup hangulctype
  * @brief 초성이고 조합 가능한지 확인
  */
 bool
@@ -101,6 +125,7 @@ hangul_is_choseong_conjoinable(ucschar c)
 }
 
 /**
+ * @ingroup hangulctype
  * @brief 중성이고 조합 가능한지 확인
  */
 bool
@@ -110,6 +135,7 @@ hangul_is_jungseong_conjoinable(ucschar c)
 }
 
 /**
+ * @ingroup hangulctype
  * @brief 종성이고 조합 가능한지 확인
  */
 bool
@@ -119,12 +145,13 @@ hangul_is_jongseong_conjoinable(ucschar c)
 }
 
 /**
- * @brief check for a syllable
- * @param c ucs4 code value
- * @return true if the character c falls into syllable class
+ * @ingroup hangulctype
+ * @brief 한글 음절 인지 확
+ * @param c UCS4 코드 값
+ * @return @a c가 한글 음절 코드이면 true, 그 외에는 false
  *
- * This function check whether c, which must have ucs4 value, falls into
- * syllable class; that is from U+AC00 to 0xD7A3.
+ * 이 함수는 @a c로 주어진 UCS4 코드가 현대 한글 음절에 해당하는지
+ * 확인한다.
  */
 bool
 hangul_is_syllable(ucschar c)
@@ -133,11 +160,12 @@ hangul_is_syllable(ucschar c)
 }
 
 /**
+ * @ingroup hangulctype
  * @brief 자모 인지 확인
  * @param c UCS4 코드 값
- * @return @param c 가 자모 코드이면 true를 리턴, 그외에는 false
+ * @return @a c 가 자모 코드이면 true를 리턴, 그외에는 false
  *
- * @param c 로 주어진 UCS4 코드가 자모 코드인지 확인한다.
+ * @a c 로 주어진 UCS4 코드가 자모 코드인지 확인한다.
  * Unicode 5.2 지원
  */
 bool
@@ -148,7 +176,7 @@ hangul_is_jamo(ucschar c)
 	   hangul_is_jongseong(c);
 }
 
-/* deprecated */
+/** @deprecated 이 함수 대신 hangul_is_jamo()함수를 사용한다. */
 bool
 hangul_is_jaso(ucschar c)
 {
@@ -156,12 +184,12 @@ hangul_is_jaso(ucschar c)
 }
 
 /**
- * @brief check for a compatibility jamo
- * @param c ucs4 code value
- * @return true if the character c falls into compatibility class
+ * @ingroup hangulctype
+ * @brief 호환 자모인지 확인
+ * @param c UCS4 코드 값
+ * @return @a c가 호환자모이면 true, 그 외에는 false
  *
- * This function check whether c, which must have ucs4 value, falls into
- * compatibility jamo class.
+ * 이 함수는 @a c로 주어진 UCS4 코드가 호환 자모인지 확인한다.
  */
 bool
 hangul_is_cjamo(ucschar c)
@@ -170,12 +198,14 @@ hangul_is_cjamo(ucschar c)
 }
 
 /**
- * @brief convert a jamo to the compatibility jamo
- * @param c ucs4 code value
- * @return converted value, or c
+ * @ingroup hangulctype
+ * @brief 자모 코드를 대응하는 호환 자모로 변환
+ * @param c 변환할 UCS4 코드 값
+ * @return @a c 에 대응되는 호환 자모 값, or c
  *
- * This function converts the jamo c, which must have ucs4 value, to
- * comaptibility jamo or c if the conversion is failed
+ * 이 함수는 @a c 로 주어진 자모 코드와 같은 형태를 가진 호환 자모 값을
+ * 리턴한다.  자모와 같은 형태를 가진 호환 자모가 없는 경우에는 @a c 의 
+ * 값을 그대로 리턴한다.
  */
 ucschar
 hangul_jamo_to_cjamo(ucschar c)
@@ -562,7 +592,7 @@ hangul_jamo_to_cjamo(ucschar c)
     return ret;
 }
 
-/* deprecated */
+/** @deprecated 이 함수 대신 hangul_jamo_to_cjamo()함수를 사용한다. */
 ucschar
 hangul_jaso_to_jamo(ucschar c)
 {
@@ -673,14 +703,18 @@ hangul_jongseong_dicompose(ucschar c, ucschar* jong, ucschar* cho)
 }
 
 /**
- * @brief compose a hangul syllable
- * @param choseong UCS4 code value
- * @param jungseong UCS4 code value
- * @param jongseong UCS4 code value
- * @return syllable code compose from choseong, jungseong and jongseong
+ * @ingroup hangulctype
+ * @brief 자모 코드를 조합하여 한글 음절로 변환
+ * @param choseong 초성이 될 UCS4 코드 값
+ * @param jungseong 중성이 될 UCS4 코드 값
+ * @param jongseong 종성이 될 UCS4 코드 값
+ * @return @a choseong @a jungseong @a jongseong을 조합한 현대 한글 음절 코드,
+ *         또는 0
  *
- * This function compose hangul jamo choseong, jungseong and jongseong and
- * return the syllable code.
+ * 이 함수는 @a choseong @a jungseong @a jongseong으로 주어진 코드 값을 각각
+ * 초성, 중성, 종성으로 하는 현대 한글 음절 코드를 구한다.
+ * @a choseong @a jungseong @a jongseong 이 조합 가능한 코드가 아니라면 
+ * 0을 리턴한다. 종성이 없는 글자를 만들기 위해서는 jongseong에 0을 주면 된다.
  */
 ucschar
 hangul_jamo_to_syllable(ucschar choseong, ucschar jungseong, ucschar jongseong)
@@ -707,13 +741,26 @@ hangul_jamo_to_syllable(ucschar choseong, ucschar jungseong, ucschar jongseong)
     return c;
 }
 
-/* deprecated */
+/** @deprecated 이 함수 대신 hangul_jamo_to_syllable()을 사용한다. */
 ucschar
 hangul_jaso_to_syllable(ucschar choseong, ucschar jungseong, ucschar jongseong)
 {
     return hangul_jamo_to_syllable(choseong, jungseong, jongseong);
 }
 
+/**
+ * @ingroup hangulctype
+ * @brief 음절을 자모로 분해
+ * @param syllable 분해할 음절
+ * @retval choseong 음절에서 초성 부분의 코드
+ * @retval jungseong 음절에서 중성 부분의 코드
+ * @retval jongseong 음절에서 종성 부분의 코드, 종성이 없으면 0을 반환한다
+ * @return 없음
+ *
+ * 이 함수는 @a syllable 로 주어진 음절 코드를 분해하여 자모 코드를 반환한다.
+ * 반환하는 값은 @a choseong, @a jungseong, @a jongseong 의 포인터에 대입하여
+ * 리턴한다. 종성이 없는 음절인 경우에는 @a jongseong 에 0을 반환한다.
+ */
 void
 hangul_syllable_to_jamo(ucschar syllable,
 			ucschar* choseong,
@@ -747,7 +794,7 @@ hangul_syllable_to_jamo(ucschar syllable,
     }
 }
 
-/* deprecated */
+/** @deprecated 이 함수 대신 hangul_syllable_to_jamo함수를 사용한다. */
 void
 hangul_syllable_to_jaso(ucschar syllable,
 			ucschar* choseong,
@@ -944,7 +991,8 @@ build_syllable(const ucschar* str, size_t len)
 }
 
 /**
- * @brief 한 음절에 해당하는 코드의 갯수를 구한다
+ * @ingroup hangulctype
+ * @brief 한 음절에 해당하는 코드의 갯수를 구하는 함수
  * @param str 음절의 길이를 구할 스트링
  * @param max_len @a str 에서 읽을 길이의 제한값
  * @return 한 음절에 해당하는 코드의 갯수
@@ -990,7 +1038,8 @@ hangul_syllable_len(const ucschar* str, int max_len)
 }
 
 /**
- * @brief @a iter를 기준으로 이전 음절의 첫자모 글자에 대한 포인터를 구한다.
+ * @ingroup hangulctype
+ * @brief @a iter를 기준으로 이전 음절의 첫자모 글자에 대한 포인터를 구하는 함수
  * @param iter 현재 위치
  * @param begin 스트링의 시작위치, 포인터가 이동할 한계값
  * @return 이전 음절의 첫번째 자모에 대한 포인터
@@ -1019,7 +1068,8 @@ hangul_syllable_iterator_prev(const ucschar* iter, const ucschar* begin)
 }
 
 /**
- * @brief @a iter를 기준으로 다음 음절의 첫자모 글자에 대한 포인터를 구한다.
+ * @ingroup hangulctype
+ * @brief @a iter를 기준으로 다음 음절의 첫자모 글자에 대한 포인터를 구하는 함수
  * @param iter 현재 위치
  * @param end 스트링의 끝위치, 포인터가 이동할 한계값
  * @return 다음 음절의 첫번째 자모에 대한 포인터
@@ -1048,7 +1098,8 @@ hangul_syllable_iterator_next(const ucschar* iter, const ucschar* end)
 }
 
 /**
- * @brief 자모 스트링을 음절 스트링을 변환한다
+ * @ingroup hangulctype
+ * @brief 자모 스트링을 음절 스트링으로 변환
  * @param dest 음절형으로 변환된 결과가 저장될 버퍼
  * @param destlen 결과를 저장할 버퍼의 길이(ucschar 코드 단위)
  * @param src 변환할 자모 스트링
