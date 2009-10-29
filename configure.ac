@@ -54,6 +54,7 @@ hangul/Makefile
 data/Makefile
 data/hanja/Makefile
 test/Makefile
+doc/Doxyfile
 libhangul.pc
 ])
 
