@@ -51,7 +51,7 @@ CREATE_SUBDIRS         = NO
 # Polish, Portuguese, Romanian, Russian, Serbian, Slovak, Slovene, Spanish, 
 # Swedish, and Ukrainian.
 
-OUTPUT_LANGUAGE        = Korean-en
+OUTPUT_LANGUAGE        = Korean
 
 # This tag can be used to specify the encoding used in the generated output. 
 # The encoding is not always determined by the language that is chosen, 
