@@ -1,15 +1,23 @@
 libhangul
-한글 입력을 위한 루틴을 구현한 라이브러리입니다.
+A library to support hangul input method logic, hanja dictionary and small
+hangul character classification.
 
-빌드 방법:
-    $ ./configure
-    $ make
-    # make install
+How to build
+ $ ./autogen.sh
+ $ ./configure
+ # make
 
+Download:
+ * http://kldp.net/frs/?group_id=362
 
-libhangul
+Bug report:
+ * bug tracker: http://kldp.net/tracker/?group_id=362
 
-How to build:
-    $ ./autogen.sh
-    $ ./configure
-    # make
+Mailing list
+ * mailing list: http://lists.kldp.net/mailman/listinfo/hangul-hackers
+ * mailing list archive: http://lists.kldp.net/pipermail/hangul-hackers/
+
+Web sites
+ * Home page: http://hangul.kldp.net/
+ * Project page: http://kldp.net/projects/hangul/
+ * Wiki page: http://wiki.kldp.org/wiki.php/libhangul

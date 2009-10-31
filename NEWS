@@ -1,3 +1,9 @@
+0.0.10
+ * implemented new logic romaja method
+ * updated to support the new Unicode standard 5.2
+ * updated API document
+ * fixed small bugs
+
 0.0.9
  * updated hanja searching routine
   - remove binary data file format code
