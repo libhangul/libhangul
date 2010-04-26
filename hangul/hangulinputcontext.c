@@ -272,6 +272,11 @@ static const HangulKeyboard hangul_keyboard_romaja = {
     (ucschar*)hangul_keyboard_table_romaja
 };
 
+static const HangulKeyboard hangul_keyboard_an = {
+    HANGUL_KEYBOARD_TYPE_JASO,
+    (ucschar*)hangul_keyboard_table_an
+};
+
 static const HangulCombination hangul_combination_default = {
     N_ELEMENTS(hangul_combination_table_default),
     (HangulCombinationItem*)hangul_combination_table_default
@@ -285,6 +290,11 @@ static const HangulCombination hangul_combination_romaja = {
 static const HangulCombination hangul_combination_full = {
     N_ELEMENTS(hangul_combination_table_full),
     (HangulCombinationItem*)hangul_combination_table_full
+};
+
+static const HangulCombination hangul_combination_an = {
+    N_ELEMENTS(hangul_combination_table_an),
+    (HangulCombinationItem*)hangul_combination_table_an
 };
 
 static void    hangul_buffer_push(HangulBuffer *buffer, ucschar ch);
@@ -1628,6 +1638,11 @@ hangul_ic_select_keyboard(HangulInputContext *hic, const char* id)
     } else if (strcmp(id, "ro") == 0) {
 	hic->keyboard = &hangul_keyboard_romaja;
 	hic->combination = &hangul_combination_romaja;
+	hic->output_mode = HANGUL_OUTPUT_SYLLABLE;
+	hic->use_jamo_mode_only = FALSE;
+    } else if (strcmp(id, "an") == 0) {
+	hic->keyboard = &hangul_keyboard_an;
+	hic->combination = &hangul_combination_an;
 	hic->output_mode = HANGUL_OUTPUT_SYLLABLE;
 	hic->use_jamo_mode_only = FALSE;
     } else {
