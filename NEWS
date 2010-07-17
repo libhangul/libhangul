@@ -1,3 +1,12 @@
+0.0.11
+ * fixed preedit string bug: #315256
+ * added Ahnmatae method
+ * updated hanja frequency data and reordered hanja table according to it:
+   #315200
+ * fixed bugs in hanja data
+ * updated old hangul jamo combination table according to Unicode standard 5.2:
+   #315127
+
 0.0.10
  * implemented new logic romaja method
  * updated to support the new Unicode standard 5.2
