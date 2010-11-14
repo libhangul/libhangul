@@ -125,6 +125,10 @@ void hangul_ic_set_combination(HangulInputContext *hic,
 void hangul_ic_connect_callback(HangulInputContext* hic, const char* event,
 				void* callback, void* user_data);
 
+unsigned    hangul_ic_get_n_keyboards();
+const char* hangul_ic_get_keyboard_id(unsigned index_);
+const char* hangul_ic_get_keyboard_name(unsigned index_);
+
 const ucschar* hangul_ic_get_preedit_string(HangulInputContext *hic);
 const ucschar* hangul_ic_get_commit_string(HangulInputContext *hic);
 const ucschar* hangul_ic_flush(HangulInputContext *hic);

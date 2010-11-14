@@ -188,7 +188,10 @@ typedef struct _HangulCombinationItem HangulCombinationItem;
 
 struct _HangulKeyboard {
     int type;
-    ucschar* table;
+    const char* id;
+    const char* name;
+    const ucschar* table;
+    const HangulCombination* combination_table;
 };
 
 struct _HangulCombinationItem {
@@ -237,46 +240,6 @@ struct _HangulInputContext {
 
 #include "hangulkeyboard.h"
 
-static const HangulKeyboard hangul_keyboard_2 = {
-    HANGUL_KEYBOARD_TYPE_JAMO,
-    (ucschar*)hangul_keyboard_table_2
-};
-
-static const HangulKeyboard hangul_keyboard_32 = {
-    HANGUL_KEYBOARD_TYPE_JASO,
-    (ucschar*)hangul_keyboard_table_32
-};
-
-static const HangulKeyboard hangul_keyboard_390 = {
-    HANGUL_KEYBOARD_TYPE_JASO,
-    (ucschar*)hangul_keyboard_table_390
-};
-
-static const HangulKeyboard hangul_keyboard_3final = {
-    HANGUL_KEYBOARD_TYPE_JASO,
-    (ucschar*)hangul_keyboard_table_3final
-};
-
-static const HangulKeyboard hangul_keyboard_3sun = {
-    HANGUL_KEYBOARD_TYPE_JASO,
-    (ucschar*)hangul_keyboard_table_3sun
-};
-
-static const HangulKeyboard hangul_keyboard_3yet = {
-    HANGUL_KEYBOARD_TYPE_JASO,
-    (ucschar*)hangul_keyboard_table_3yet
-};
-
-static const HangulKeyboard hangul_keyboard_romaja = {
-    HANGUL_KEYBOARD_TYPE_ROMAJA,
-    (ucschar*)hangul_keyboard_table_romaja
-};
-
-static const HangulKeyboard hangul_keyboard_an = {
-    HANGUL_KEYBOARD_TYPE_JASO,
-    (ucschar*)hangul_keyboard_table_an
-};
-
 static const HangulCombination hangul_combination_default = {
     N_ELEMENTS(hangul_combination_table_default),
     (HangulCombinationItem*)hangul_combination_table_default
@@ -292,10 +255,86 @@ static const HangulCombination hangul_combination_full = {
     (HangulCombinationItem*)hangul_combination_table_full
 };
 
-static const HangulCombination hangul_combination_an = {
-    N_ELEMENTS(hangul_combination_table_an),
-    (HangulCombinationItem*)hangul_combination_table_an
+static const HangulCombination hangul_combination_ahn = {
+    N_ELEMENTS(hangul_combination_table_ahn),
+    (HangulCombinationItem*)hangul_combination_table_ahn
 };
+
+static const HangulKeyboard hangul_keyboard_2 = {
+    HANGUL_KEYBOARD_TYPE_JAMO,
+    "2", 
+    "Dubeolsik", 
+    (ucschar*)hangul_keyboard_table_2,
+    &hangul_combination_default
+};
+
+static const HangulKeyboard hangul_keyboard_32 = {
+    HANGUL_KEYBOARD_TYPE_JASO,
+    "32",
+    "Sebeolsik dubeol layout",
+    (ucschar*)hangul_keyboard_table_32,
+    &hangul_combination_default
+};
+
+static const HangulKeyboard hangul_keyboard_390 = {
+    HANGUL_KEYBOARD_TYPE_JASO,
+    "39",
+    "Sebeolsik 390",
+    (ucschar*)hangul_keyboard_table_390,
+    &hangul_combination_default
+};
+
+static const HangulKeyboard hangul_keyboard_3final = {
+    HANGUL_KEYBOARD_TYPE_JASO,
+    "3f",
+    "Sebeolsik final",
+    (ucschar*)hangul_keyboard_table_3final,
+    &hangul_combination_default
+};
+
+static const HangulKeyboard hangul_keyboard_3sun = {
+    HANGUL_KEYBOARD_TYPE_JASO,
+    "3sun",
+    "Sebeolsik no-shift",
+    (ucschar*)hangul_keyboard_table_3sun,
+    &hangul_combination_default
+};
+
+static const HangulKeyboard hangul_keyboard_3yet = {
+    HANGUL_KEYBOARD_TYPE_JASO,
+    "3y",
+    "Sebeolsik yetgeul",
+    (ucschar*)hangul_keyboard_table_3yet,
+    &hangul_combination_full
+};
+
+static const HangulKeyboard hangul_keyboard_romaja = {
+    HANGUL_KEYBOARD_TYPE_ROMAJA,
+    "ro",
+    "Romaja",
+    (ucschar*)hangul_keyboard_table_romaja,
+    &hangul_combination_romaja
+};
+
+static const HangulKeyboard hangul_keyboard_ahn = {
+    HANGUL_KEYBOARD_TYPE_JASO,
+    "ahn",
+    "Ahnmatae",
+    (ucschar*)hangul_keyboard_table_ahn,
+    &hangul_combination_ahn
+};
+
+static const HangulKeyboard* hangul_keyboards[] = {
+    &hangul_keyboard_2,
+    &hangul_keyboard_32,
+    &hangul_keyboard_390,
+    &hangul_keyboard_3final,
+    &hangul_keyboard_3sun,
+    &hangul_keyboard_3yet,
+    &hangul_keyboard_romaja,
+    &hangul_keyboard_ahn,
+};
+
 
 static void    hangul_buffer_push(HangulBuffer *buffer, ucschar ch);
 static ucschar hangul_buffer_pop (HangulBuffer *buffer);
@@ -312,12 +351,13 @@ hangul_keyboard_new()
 {
     HangulKeyboard *keyboard = malloc(sizeof(HangulKeyboard));
     if (keyboard != NULL) {
-	keyboard->table = malloc(sizeof(ucschar) * HANGUL_KEYBOARD_TABLE_SIZE);
-	if (keyboard->table != NULL) {
+	ucschar* table = malloc(sizeof(ucschar) * HANGUL_KEYBOARD_TABLE_SIZE);
+	if (table != NULL) {
 	    int i;
 	    for (i = 0; i < HANGUL_KEYBOARD_TABLE_SIZE; i++)
-		keyboard->table[i] = 0;
+		table[i] = 0;
 
+	    keyboard->table = table;
 	    return keyboard;
 	}
 	free(keyboard);
@@ -341,8 +381,10 @@ void
 hangul_keyboard_set_value(HangulKeyboard *keyboard, int key, ucschar value)
 {
     if (keyboard != NULL) {
-	if (key >= 0 && key < N_ELEMENTS(keyboard->table))
-	    keyboard->table[key] = value;
+	if (key >= 0 && key < N_ELEMENTS(keyboard->table)) {
+	    ucschar* table = (ucschar*)keyboard->table;
+	    table[key] = value;
+	}
     }
 }
 
@@ -1580,6 +1622,25 @@ hangul_ic_set_keyboard(HangulInputContext *hic, const HangulKeyboard* keyboard)
     hic->keyboard = keyboard;
 }
 
+static const HangulKeyboard*
+hangul_ic_get_keyboard_by_id(const char* id)
+{
+    unsigned i;
+    unsigned n;
+
+    /* hangul_keyboards 테이블은 id 순으로 정렬되어 있지 않으므로
+     * binary search를 할수 없고 linear search를 한다. */
+    n = hangul_ic_get_n_keyboards();
+    for (i = 0; i < n; ++i) {
+	const HangulKeyboard* keyboard = hangul_keyboards[i];
+	if (strcmp(id, keyboard->id) == 0) {
+	    return keyboard;
+	}
+    }
+
+    return NULL;
+}
+
 /**
  * @ingroup hangulic
  * @brief @ref HangulInputContext의 자판 배열을 바꾸는 함수
@@ -1604,53 +1665,19 @@ hangul_ic_set_keyboard(HangulInputContext *hic, const HangulKeyboard* keyboard)
 void
 hangul_ic_select_keyboard(HangulInputContext *hic, const char* id)
 {
+    const HangulKeyboard* keyboard;
+
     if (hic == NULL)
 	return;
 
     if (id == NULL)
 	id = "2";
 
-    if (strcmp(id, "32") == 0) {
-	hic->keyboard = &hangul_keyboard_32;
-	hic->combination = &hangul_combination_default;
-	hic->output_mode = HANGUL_OUTPUT_SYLLABLE;
-	hic->use_jamo_mode_only = FALSE;
-    } else if (strcmp(id, "39") == 0) {
-	hic->keyboard = &hangul_keyboard_390;
-	hic->combination = &hangul_combination_default;
-	hic->output_mode = HANGUL_OUTPUT_SYLLABLE;
-	hic->use_jamo_mode_only = FALSE;
-    } else if (strcmp(id, "3f") == 0) {
-	hic->keyboard = &hangul_keyboard_3final;
-	hic->combination = &hangul_combination_default;
-	hic->output_mode = HANGUL_OUTPUT_SYLLABLE;
-	hic->use_jamo_mode_only = FALSE;
-    } else if (strcmp(id, "3s") == 0) {
-	hic->keyboard = &hangul_keyboard_3sun;
-	hic->combination = &hangul_combination_default;
-	hic->output_mode = HANGUL_OUTPUT_SYLLABLE;
-	hic->use_jamo_mode_only = FALSE;
-    } else if (strcmp(id, "3y") == 0) {
-	hic->keyboard = &hangul_keyboard_3yet;
-	hic->combination = &hangul_combination_full;
-	hic->output_mode = HANGUL_OUTPUT_JAMO;
-	hic->use_jamo_mode_only = TRUE;
-    } else if (strcmp(id, "ro") == 0) {
-	hic->keyboard = &hangul_keyboard_romaja;
-	hic->combination = &hangul_combination_romaja;
-	hic->output_mode = HANGUL_OUTPUT_SYLLABLE;
-	hic->use_jamo_mode_only = FALSE;
-    } else if (strcmp(id, "an") == 0) {
-	hic->keyboard = &hangul_keyboard_an;
-	hic->combination = &hangul_combination_an;
-	hic->output_mode = HANGUL_OUTPUT_SYLLABLE;
-	hic->use_jamo_mode_only = FALSE;
-    } else {
-	hic->keyboard = &hangul_keyboard_2;
-	hic->combination = &hangul_combination_default;
-	hic->output_mode = HANGUL_OUTPUT_SYLLABLE;
-	hic->use_jamo_mode_only = FALSE;
-    }
+    keyboard = hangul_ic_get_keyboard_by_id(id);
+    if (keyboard != NULL) {
+	hic->keyboard = keyboard;
+	hic->combination = keyboard->combination_table;
+    } 
 }
 
 void
@@ -1722,4 +1749,30 @@ hangul_ic_delete(HangulInputContext *hic)
 	return;
 
     free(hic);
+}
+
+unsigned int
+hangul_ic_get_n_keyboards()
+{
+    return N_ELEMENTS(hangul_keyboards);
+}
+
+const char*
+hangul_ic_get_keyboard_id(unsigned index_)
+{
+    if (index_ < N_ELEMENTS(hangul_keyboards)) {
+	return hangul_keyboards[index_]->id;
+    }
+
+    return NULL;
+}
+
+const char*
+hangul_ic_get_keyboard_name(unsigned index_)
+{
+    if (index_ < N_ELEMENTS(hangul_keyboards)) {
+	return hangul_keyboards[index_]->name;
+    }
+
+    return NULL;
 }

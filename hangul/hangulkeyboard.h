@@ -915,7 +915,7 @@ static const ucschar hangul_keyboard_table_romaja[] = {
     0x0000      /* 0x7F delete                                       */
 };
 
-static const ucschar hangul_keyboard_table_an[] = {
+static const ucschar hangul_keyboard_table_ahn[] = {
     0x0000,     /* 0x00 null                                         */
     0x0000,     /* 0x01 start of heading                             */
     0x0000,     /* 0x02 start of text                                */
@@ -1470,7 +1470,7 @@ static const HangulCombinationItem hangul_combination_table_full[] = {
   { 0xd7f711b8, 0xd7f8 }, /* jongseong cieuc-pieup + pieup     = cieuc-ssangpieup */
 };
 
-static const HangulCombinationItem hangul_combination_table_an[] = {
+static const HangulCombinationItem hangul_combination_table_ahn[] = {
   { 0x11001103, 0x1104 }, /* choseong  kiyeok       + tikeut = ssangtikeut   */
   { 0x1100110b, 0x1101 }, /* choseong  kiyeok       + ieung  = ssangkiyeok   */
   { 0x11001112, 0x110f }, /* choseong  kiyeok       + hieuh  = khieukh       */

@@ -234,6 +234,31 @@ START_TEST(test_syllable_iterator)
 }
 END_TEST
 
+START_TEST(test_hangul_keyboard)
+{
+    const char* id;
+    const char* name;
+    unsigned int n;
+    unsigned int i;
+
+    n = hangul_ic_get_n_keyboards();
+    fail_unless(n != 0,
+		"error: there is no builtin hangul keyboard");
+
+    for (i = 0; i < n; ++i) {
+	id = hangul_ic_get_keyboard_id(i);
+	fail_unless(id != NULL,
+		    "error: keyboard id == NULL");
+    }
+
+    for (i = 0; i < n; ++i) {
+	name = hangul_ic_get_keyboard_name(i);
+	fail_unless(name != NULL,
+		    "error: keyboard id == NULL");
+    }
+}
+END_TEST
+
 Suite* libhangul_suite()
 {
     Suite* s = suite_create("libhangul");
@@ -241,6 +266,7 @@ Suite* libhangul_suite()
     TCase* hangul = tcase_create("hangul");
     tcase_add_test(hangul, test_hangul_ic_process_romaja);
     tcase_add_test(hangul, test_syllable_iterator);
+    tcase_add_test(hangul, test_hangul_keyboard);
     suite_add_tcase(s, hangul);
 
     return s;
