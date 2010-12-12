@@ -1678,7 +1678,10 @@ hangul_ic_select_keyboard(HangulInputContext *hic, const char* id)
     if (keyboard != NULL) {
 	hic->keyboard = keyboard;
 	hic->combination = keyboard->combination_table;
-    } 
+    } else {
+	hic->keyboard = &hangul_keyboard_2;
+	hic->combination = hangul_keyboard_2.combination_table;
+    }
 }
 
 void
