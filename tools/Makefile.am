@@ -1,6 +1,6 @@
 
-bin_PROGRAMS = hanjac
+bin_PROGRAMS = hangul
 
-hanjac_CFLAGS =
-hanjac_SOURCES = hanjac.c
-hanjac_LDADD = ../hangul/libhangul.la
+hangul_CFLAGS = -I../hangul
+hangul_SOURCES = hangul.c
+hangul_LDADD = ../hangul/libhangul.la
