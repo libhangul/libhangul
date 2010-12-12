@@ -5,7 +5,6 @@ pkgconfig_DATA = libhangul.pc
 
 EXTRA_DIST = \
     config.rpath \
-    m4/ChangeLog  \
     doc/Makefile \
     doc/Doxyfile.in \
     doc/mainpage.dox
