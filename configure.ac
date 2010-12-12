@@ -42,6 +42,12 @@ AC_FUNC_REALLOC
 AC_CHECK_FUNCS([munmap])
 AC_CHECK_FUNCS([strcasecmp])
 
+# Checks for gettext stuff
+GETTEXT_PACKAGE="$PACKAGE"
+AC_SUBST(GETTEXT_PACKAGE)
+AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE", gettext package name)
+AM_GNU_GETTEXT([external])
+
 # Checks for unit test framework
 PKG_PROG_PKG_CONFIG
 if test -n "$PKG_CONFIG"; then
@@ -50,12 +56,14 @@ fi
 
 AC_CONFIG_FILES([
 Makefile
-hangul/Makefile
 data/Makefile
 data/hanja/Makefile
-test/Makefile
 doc/Doxyfile
+hangul/Makefile
 libhangul.pc
+po/Makefile.in
+test/Makefile
+tools/Makefile
 ])
 
 AC_OUTPUT

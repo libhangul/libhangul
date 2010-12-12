@@ -8,6 +8,7 @@ if test -z "$libtoolize"; then
     libtoolize=libtoolize
 fi
 
+gettextize --force --no-changelog
 $libtoolize --automake
 aclocal $ACLOCAL_AMFLAGS
 autoheader

@@ -25,6 +25,7 @@
 #include <inttypes.h>
 #include <limits.h>
 
+#include "hangul-gettext.h"
 #include "hangul.h"
 #include "hangulinternals.h"
 
@@ -263,7 +264,7 @@ static const HangulCombination hangul_combination_ahn = {
 static const HangulKeyboard hangul_keyboard_2 = {
     HANGUL_KEYBOARD_TYPE_JAMO,
     "2", 
-    "Dubeolsik", 
+    N_("Dubeolsik"), 
     (ucschar*)hangul_keyboard_table_2,
     &hangul_combination_default
 };
@@ -271,7 +272,7 @@ static const HangulKeyboard hangul_keyboard_2 = {
 static const HangulKeyboard hangul_keyboard_32 = {
     HANGUL_KEYBOARD_TYPE_JASO,
     "32",
-    "Sebeolsik dubeol layout",
+    N_("Sebeolsik dubeol layout"),
     (ucschar*)hangul_keyboard_table_32,
     &hangul_combination_default
 };
@@ -279,7 +280,7 @@ static const HangulKeyboard hangul_keyboard_32 = {
 static const HangulKeyboard hangul_keyboard_390 = {
     HANGUL_KEYBOARD_TYPE_JASO,
     "39",
-    "Sebeolsik 390",
+    N_("Sebeolsik 390"),
     (ucschar*)hangul_keyboard_table_390,
     &hangul_combination_default
 };
@@ -287,15 +288,15 @@ static const HangulKeyboard hangul_keyboard_390 = {
 static const HangulKeyboard hangul_keyboard_3final = {
     HANGUL_KEYBOARD_TYPE_JASO,
     "3f",
-    "Sebeolsik final",
+    N_("Sebeolsik final"),
     (ucschar*)hangul_keyboard_table_3final,
     &hangul_combination_default
 };
 
 static const HangulKeyboard hangul_keyboard_3sun = {
     HANGUL_KEYBOARD_TYPE_JASO,
-    "3sun",
-    "Sebeolsik no-shift",
+    "3s",
+    N_("Sebeolsik no-shift"),
     (ucschar*)hangul_keyboard_table_3sun,
     &hangul_combination_default
 };
@@ -303,7 +304,7 @@ static const HangulKeyboard hangul_keyboard_3sun = {
 static const HangulKeyboard hangul_keyboard_3yet = {
     HANGUL_KEYBOARD_TYPE_JASO,
     "3y",
-    "Sebeolsik yetgeul",
+    N_("Sebeolsik yetgeul"),
     (ucschar*)hangul_keyboard_table_3yet,
     &hangul_combination_full
 };
@@ -311,7 +312,7 @@ static const HangulKeyboard hangul_keyboard_3yet = {
 static const HangulKeyboard hangul_keyboard_romaja = {
     HANGUL_KEYBOARD_TYPE_ROMAJA,
     "ro",
-    "Romaja",
+    N_("Romaja"),
     (ucschar*)hangul_keyboard_table_romaja,
     &hangul_combination_romaja
 };
@@ -319,7 +320,7 @@ static const HangulKeyboard hangul_keyboard_romaja = {
 static const HangulKeyboard hangul_keyboard_ahn = {
     HANGUL_KEYBOARD_TYPE_JASO,
     "ahn",
-    "Ahnmatae",
+    N_("Ahnmatae"),
     (ucschar*)hangul_keyboard_table_ahn,
     &hangul_combination_ahn
 };
@@ -1770,8 +1771,16 @@ hangul_ic_get_keyboard_id(unsigned index_)
 const char*
 hangul_ic_get_keyboard_name(unsigned index_)
 {
+#ifdef ENABLE_NLS
+    static bool isGettextInitialized = false;
+    if (!isGettextInitialized) {
+	isGettextInitialized = true;
+	bindtextdomain(GETTEXT_PACKAGE, LOCALEDIR);
+    }
+#endif
+
     if (index_ < N_ELEMENTS(hangul_keyboards)) {
-	return hangul_keyboards[index_]->name;
+	return _(hangul_keyboards[index_]->name);
     }
 
     return NULL;
