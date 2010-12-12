@@ -9,8 +9,8 @@ if test -z "$libtoolize"; then
 fi
 
 gettextize --force --no-changelog
-$libtoolize --automake
+$libtoolize --automake --copy --force
 aclocal $ACLOCAL_AMFLAGS
 autoheader
-automake --add-missing
+automake --add-missing --copy
 autoconf
