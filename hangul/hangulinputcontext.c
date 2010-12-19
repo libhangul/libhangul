@@ -610,38 +610,60 @@ hangul_jaso_to_string(ucschar cho, ucschar jung, ucschar jong,
 	if (jung) {
 	    /* have cho, jung, jong or no jong */
 	    ch = hangul_jamo_to_syllable(cho, jung, jong);
-	    buf[n++] = ch;
+	    if (ch != 0) {
+		buf[n++] = ch;
+	    } else {
+		/* 한글 음절로 표현 불가능한 경우 */
+		buf[n++] = cho;
+		buf[n++] = jung;
+		if (jong != 0)
+		    buf[n++] = jong;
+	    }
 	} else {
 	    if (jong) {
 		/* have cho, jong */
-		ch = hangul_jamo_to_cjamo(cho);
-		buf[n++] = ch;
-		ch = hangul_jamo_to_cjamo(jong);
-		buf[n++] = ch;
+		buf[n++] = cho;
+		buf[n++] = HANGUL_JUNGSEONG_FILLER;
+		buf[n++] = jong;
 	    } else {
 		/* have cho */
 		ch = hangul_jamo_to_cjamo(cho);
-		buf[n++] = ch;
+		if (hangul_is_cjamo(ch)) {
+		    buf[n++] = ch;
+		} else {
+		    buf[n++] = cho;
+		    buf[n++] = HANGUL_JUNGSEONG_FILLER;
+		}
 	    }
 	}
     } else {
 	if (jung) {
 	    if (jong) {
 		/* have jung, jong */
-		ch = hangul_jamo_to_cjamo(jung);
-		buf[n++] = ch;
-		ch = hangul_jamo_to_cjamo(jong);
-		buf[n++] = ch;
+		buf[n++] = HANGUL_CHOSEONG_FILLER;
+		buf[n++] = jung;
+		buf[n++] = jong;
 	    } else {
 		/* have jung */
 		ch = hangul_jamo_to_cjamo(jung);
-		buf[n++] = ch;
+		if (hangul_is_cjamo(ch)) {
+		    buf[n++] = ch;
+		} else {
+		    buf[n++] = HANGUL_CHOSEONG_FILLER;
+		    buf[n++] = jung;
+		}
 	    }
 	} else {
 	    if (jong) { 
 		/* have jong */
 		ch = hangul_jamo_to_cjamo(jong);
-		buf[n++] = ch;
+		if (hangul_is_cjamo(ch)) {
+		    buf[n++] = ch;
+		} else {
+		    buf[n++] = HANGUL_CHOSEONG_FILLER;
+		    buf[n++] = HANGUL_JUNGSEONG_FILLER;
+		    buf[n++] = jong;
+		}
 	    } else {
 		/* have nothing */
 		buf[n] = 0;

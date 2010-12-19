@@ -1,9 +1,68 @@
+#include <stdarg.h>
 #include <stdlib.h>
 #include <check.h>
 
 #include "../hangul/hangul.h"
 
 #define countof(x)  ((sizeof(x)) / (sizeof(x[0])))
+
+static bool
+check_preedit(const char* keyboard, const char* input, ...)
+{
+    HangulInputContext* ic;
+    const char* p;
+    const ucschar* preedit;
+    ucschar code;
+    va_list ap;
+
+    ic = hangul_ic_new(keyboard);
+
+    p = input;
+    while (*p != '\0') {
+	hangul_ic_process(ic, *p);
+	p++;
+    }
+
+    preedit = hangul_ic_get_preedit_string(ic);
+
+    va_start(ap, input);
+
+    code = va_arg(ap, ucschar);
+    while (code != 0) {
+	if (*preedit != code)
+	    return false;
+
+	code = va_arg(ap, ucschar);
+	preedit++;
+    }
+
+    va_end(ap);
+
+    hangul_ic_delete(ic);
+
+    return true;
+}
+
+START_TEST(test_hangul_ic_process_3f)
+{
+    /* L V T  */
+    /* ㅎ     */
+    fail_unless(check_preedit("3f", "m", 0x314e, 0));
+    /*   ㅗ   */
+    fail_unless(check_preedit("3f", "v", 0x3157, 0));
+    /*     ㅌ */
+    fail_unless(check_preedit("3f", "W", 0x314c, 0));
+
+    /* ㄱㅏㅇ */
+    fail_unless(check_preedit("3f", "kfa", 0xac15, 0));
+    /* ㄹㅐ   */
+    fail_unless(check_preedit("3f", "yr", 0xb798, 0));
+    /* ㄴ  ㅁ */
+    fail_unless(check_preedit("3f", "hz", 0x1102, 0x1160, 0x11b7, 0));
+    /*   ㅜㅅ */ 
+    fail_unless(check_preedit("3f", "tq", 0x115f, 0x1165, 0x11ba, 0));
+}
+END_TEST
 
 START_TEST(test_hangul_ic_process_romaja)
 {
@@ -264,6 +323,7 @@ Suite* libhangul_suite()
     Suite* s = suite_create("libhangul");
 
     TCase* hangul = tcase_create("hangul");
+    tcase_add_test(hangul, test_hangul_ic_process_3f);
     tcase_add_test(hangul, test_hangul_ic_process_romaja);
     tcase_add_test(hangul, test_syllable_iterator);
     tcase_add_test(hangul, test_hangul_keyboard);
