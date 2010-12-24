@@ -4,6 +4,7 @@ libhangulinclude_HEADERS = hangul.h
 
 lib_LTLIBRARIES = libhangul.la
 noinst_HEADERS = \
+	hangul-gettext.h \
 	hangulkeyboard.h \
 	hangulinternals.h \
 	hanjacompatible.h
