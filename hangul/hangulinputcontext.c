@@ -836,6 +836,23 @@ hangul_ic_save_commit_string(HangulInputContext *hic)
     hangul_buffer_clear(&hic->buffer);
 }
 
+static ucschar
+hangul_ic_choseong_to_jongseong(HangulInputContext* hic, ucschar cho)
+{
+    ucschar jong = hangul_choseong_to_jongseong(cho);
+    if (hangul_is_jongseong_conjoinable(jong)) {
+	return jong;
+    } else {
+	/* 옛글 조합 규칙을 사용하는 자판의 경우에는 종성이 conjoinable
+	 * 하지 않아도 상관없다 */
+	if (hic->keyboard->combination_table == &hangul_combination_full) {
+	    return jong;
+	}
+    }
+
+    return 0;
+}
+
 static bool
 hangul_ic_process_jamo(HangulInputContext *hic, ucschar ch)
 {
@@ -850,7 +867,7 @@ hangul_ic_process_jamo(HangulInputContext *hic, ucschar ch)
 
     if (hic->buffer.jongseong) {
 	if (hangul_is_choseong(ch)) {
-	    jong = hangul_choseong_to_jongseong(ch);
+	    jong = hangul_ic_choseong_to_jongseong(hic, ch);
 	    combined = hangul_combination_combine(hic->combination,
 					      hic->buffer.jongseong, jong);
 	    if (hangul_is_jongseong(combined)) {
@@ -900,7 +917,7 @@ hangul_ic_process_jamo(HangulInputContext *hic, ucschar ch)
     } else if (hic->buffer.jungseong) {
 	if (hangul_is_choseong(ch)) {
 	    if (hic->buffer.choseong) {
-		jong = hangul_choseong_to_jongseong(ch);
+		jong = hangul_ic_choseong_to_jongseong(hic, ch);
 		if (hangul_is_jongseong(jong)) {
 		    if (!hangul_ic_push(hic, jong)) {
 			if (!hangul_ic_push(hic, ch)) {
@@ -1090,7 +1107,7 @@ hangul_ic_process_romaja(HangulInputContext *hic, int ascii, ucschar ch)
 	    if (hangul_is_jongseong(ch))
 		jong = ch;
 	    else
-		jong = hangul_choseong_to_jongseong(ch);
+		jong = hangul_ic_choseong_to_jongseong(hic, ch);
 	    combined = hangul_combination_combine(hic->combination,
 					      hic->buffer.jongseong, jong);
 	    if (hangul_is_jongseong(combined)) {
@@ -1118,6 +1135,7 @@ hangul_ic_process_romaja(HangulInputContext *hic, int ascii, ucschar ch)
 		if (hangul_is_jungseong(peek)) {
 		    if (pop == 0x11aa) {
 			hic->buffer.jongseong = 0x11a8;
+			pop = 0x11ba;
 		    } else {
 			hic->buffer.jongseong = 0;
 		    }
@@ -1144,7 +1162,7 @@ hangul_ic_process_romaja(HangulInputContext *hic, int ascii, ucschar ch)
     } else if (hic->buffer.jungseong) {
 	if (hangul_is_choseong(ch)) {
 	    if (hic->buffer.choseong) {
-		jong = hangul_choseong_to_jongseong(ch);
+		jong = hangul_ic_choseong_to_jongseong(hic, ch);
 		if (hangul_is_jongseong(jong)) {
 		    if (!hangul_ic_push(hic, jong)) {
 			if (!hangul_ic_push(hic, ch)) {
