@@ -483,7 +483,15 @@ hangul_combination_cmp(const void* p1, const void* p2)
 {
     const HangulCombinationItem *item1 = p1;
     const HangulCombinationItem *item2 = p2;
-    return item1->key - item2->key;
+
+    /* key는 unsigned int이므로 단순히 빼서 리턴하면 안된다.
+     * 두 수의 차가 큰 경우 int로 변환하면서 음수가 될 수 있다. */
+    if (item1->key < item2->key)
+	return -1;
+    else if (item1->key > item2->key)
+	return 1;
+    else
+	return 0;
 }
 
 ucschar
