@@ -1159,10 +1159,10 @@ hangul_jongseong_get_diff(ucschar prevjong, ucschar jong)
 	{ 0x1105, 0x1130 }, /* sios-rieul: rieul, sios-rieul               */
 	{ 0x1107, 0x1132 }, /* sios-pieup: pieup, sios-pieup               */
 	{ 0x1140, 0x1140 }, /* pansios: pansios, pansios                   */
-	{ 0x1100, 0x1141 }, /* ieung-kiyeok: kiyeok, ieung-kiyeok          */
-	{ 0x1100, 0x1101 }, /* ieung-ssangkiyeok: kiyeok, ssangkiyeok      */
-	{ 0x110b, 0x1147 }, /* ssangieung: ieung, ssangieung               */
-	{ 0x110f, 0      }, /* ieung-khieukh: khieukh                      */
+	{ 0x1100, 0      }, /* yesieung-kiyeok: kiyeok                     */
+	{ 0x1100, 0x1101 }, /* yesieung-ssangkiyeok: kiyeok, ssangkiyeok   */
+	{ 0x114c, 0      }, /* ssangyesieung: yesieung                     */
+	{ 0x110f, 0      }, /* yesieung-khieukh: khieukh                   */
 	{ 0x114c, 0x114c }, /* yesieung: yesieung, yesieung                */
 	{ 0x1109, 0      }, /* yesieung-sios: sios                         */
 	{ 0x1140, 0      }, /* yesieung-pansios: pansios                   */
