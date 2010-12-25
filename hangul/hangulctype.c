@@ -85,7 +85,7 @@ hangul_is_choseong(ucschar c)
 bool
 hangul_is_jungseong(ucschar c)
 {
-    return (c >= 0x1161 && c <= 0x11a2) ||
+    return (c >= 0x1160 && c <= 0x11a9) ||
 	   (c >= 0xd7b0 && c <= 0xd7c6);
 }
 
@@ -101,7 +101,7 @@ hangul_is_jungseong(ucschar c)
 bool
 hangul_is_jongseong(ucschar c)
 {
-    return (c >= 0x11a8 && c <= 0x11f9) ||
+    return (c >= 0x11a8 && c <= 0x11ff) ||
 	   (c >= 0xd7cb && c <= 0xd7fb);
 }
 
