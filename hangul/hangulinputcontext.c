@@ -269,6 +269,14 @@ static const HangulKeyboard hangul_keyboard_2 = {
     &hangul_combination_default
 };
 
+static const HangulKeyboard hangul_keyboard_2y = {
+    HANGUL_KEYBOARD_TYPE_JAMO,
+    "2y", 
+    N_("Dubeolsik yetgeul"), 
+    (ucschar*)hangul_keyboard_table_2y,
+    &hangul_combination_full
+};
+
 static const HangulKeyboard hangul_keyboard_32 = {
     HANGUL_KEYBOARD_TYPE_JASO,
     "32",
@@ -327,6 +335,7 @@ static const HangulKeyboard hangul_keyboard_ahn = {
 
 static const HangulKeyboard* hangul_keyboards[] = {
     &hangul_keyboard_2,
+    &hangul_keyboard_2y,
     &hangul_keyboard_32,
     &hangul_keyboard_390,
     &hangul_keyboard_3final,
@@ -853,20 +862,26 @@ hangul_ic_process_jamo(HangulInputContext *hic, ucschar ch)
 	    pop = hangul_ic_pop(hic);
 	    peek = hangul_ic_peek(hic);
 
-	    if (hangul_is_jungseong(peek)) {
+	    if (hangul_is_jongseong(peek)) {
+		ucschar choseong = hangul_jongseong_get_diff(peek,
+						 hic->buffer.jongseong);
+		if (choseong == 0) {
+		    hangul_ic_save_commit_string(hic);
+		    if (!hangul_ic_push(hic, ch)) {
+			return false;
+		    }
+		} else {
+		    hic->buffer.jongseong = peek;
+		    hangul_ic_save_commit_string(hic);
+		    hangul_ic_push(hic, choseong);
+		    if (!hangul_ic_push(hic, ch)) {
+			return false;
+		    }
+		}
+	    } else {
 		hic->buffer.jongseong = 0;
 		hangul_ic_save_commit_string(hic);
 		hangul_ic_push(hic, hangul_jongseong_to_choseong(pop));
-		if (!hangul_ic_push(hic, ch)) {
-		    return false;
-		}
-	    } else {
-		ucschar choseong = 0, jongseong = 0; 
-		hangul_jongseong_dicompose(hic->buffer.jongseong,
-					   &jongseong, &choseong);
-		hic->buffer.jongseong = jongseong;
-		hangul_ic_save_commit_string(hic);
-		hangul_ic_push(hic, choseong);
 		if (!hangul_ic_push(hic, ch)) {
 		    return false;
 		}

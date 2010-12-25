@@ -602,67 +602,297 @@ hangul_jaso_to_jamo(ucschar c)
 ucschar
 hangul_choseong_to_jongseong(ucschar c)
 {
-    static ucschar table[] = {
-	0x11a8,  /* choseong kiyeok      -> jongseong kiyeok      */
-	0x11a9,  /* choseong ssangkiyeok -> jongseong ssangkiyeok */
-	0x11ab,  /* choseong nieun       -> jongseong nieun       */
-	0x11ae,  /* choseong tikeut      -> jongseong tikeut      */
-	0x0,     /* choseong ssangtikeut -> jongseong tikeut      */
-	0x11af,  /* choseong rieul       -> jongseong rieul       */
-	0x11b7,  /* choseong mieum       -> jongseong mieum       */
-	0x11b8,  /* choseong pieup       -> jongseong pieup       */
-	0x0,     /* choseong ssangpieup  -> jongseong pieup       */
-	0x11ba,  /* choseong sios        -> jongseong sios        */
-	0x11bb,  /* choseong ssangsios   -> jongseong ssangsios   */
-	0x11bc,  /* choseong ieung       -> jongseong ieung       */
-	0x11bd,  /* choseong cieuc       -> jongseong cieuc       */
-	0x0,     /* choseong ssangcieuc  -> jongseong cieuc       */
-	0x11be,  /* choseong chieuch     -> jongseong chieuch     */
-	0x11bf,  /* choseong khieukh     -> jongseong khieukh     */
-	0x11c0,  /* choseong thieuth     -> jongseong thieuth     */
-	0x11c1,  /* choseong phieuph     -> jongseong phieuph     */
-	0x11c2   /* choseong hieuh       -> jongseong hieuh       */
+    static const ucschar table[] = {
+	0x11a8,  /* cho kiyeok               -> jong kiyeok               */
+	0x11a9,  /* cho ssangkiyeok          -> jong ssangkiyeok          */
+	0x11ab,  /* cho nieun                -> jong nieun                */
+	0x11ae,  /* cho tikeut               -> jong tikeut               */
+	0xd7cd,  /* cho ssangtikeut          -> jong ssangtikeut          */
+	0x11af,  /* cho rieul                -> jong rieul                */
+	0x11b7,  /* cho mieum                -> jong mieum                */
+	0x11b8,  /* cho pieup                -> jong pieup                */
+	0xd7e6,  /* cho ssangpieup           -> jong ssangpieup           */
+	0x11ba,  /* cho sios                 -> jong sios                 */
+	0x11bb,  /* cho ssangsios            -> jong ssangsios            */
+	0x11bc,  /* cho ieung                -> jong ieung                */
+	0x11bd,  /* cho cieuc                -> jong cieuc                */
+	0xd7f9,  /* cho ssangcieuc           -> jong ssangcieuc           */
+	0x11be,  /* cho chieuch              -> jong chieuch              */
+	0x11bf,  /* cho khieukh              -> jong khieukh              */
+	0x11c0,  /* cho thieuth              -> jong thieuth              */
+	0x11c1,  /* cho phieuph              -> jong phieuph              */
+	0x11c2,  /* cho hieuh                -> jong hieuh                */
+	0x11c5,  /* cho nieun-kiyeok         -> jong nieun-kiyeok         */
+	0x11ff,  /* cho ssangnieun           -> jong ssangnieun           */
+	0x11c6,  /* cho nieun-tikeut         -> jong nieun-tikeut         */
+	0,       /* cho nieun-pieup                                      */
+	0x11ca,  /* cho tikeut-kiyeok        -> jong tikeut-kiyeok        */
+	0x11cd,  /* cho rieul-nieun          -> jong rieul-nieun          */
+	0x11d0,  /* cho ssangrieul           -> jong ssangrieul           */
+	0x11b6,  /* cho rieul-hieuh          -> jong rieul-hieuh          */
+	0xd7dd,  /* cho kapyeounrieul        -> jong kapyeounrieul        */
+	0x11dc,  /* cho mieum-pieup          -> jong mieum-pieup          */
+	0x11e2,  /* cho kapyeounmieum        -> jong kapyeounmieum        */
+	0,       /* cho pieup-kiyeok                                     */
+	0,       /* cho pieup-nieun                                      */
+	0xd7e3,  /* cho pieup-tikeut         -> jong pieup-tikeut         */
+	0x11b9,  /* cho pieup-sios           -> jong pieup-sios           */
+	0,       /* cho pieup-sios-kiyeok                                */
+	0xd7e7,  /* cho pieup-sios-tikeut    -> jong pieup-sios-tikeut    */
+	0,       /* cho pieup-sios-pieup                                 */
+	0,       /* cho pieup-ssangsios                                  */
+	0,       /* cho pieup-sios-cieuc                                 */
+	0xd7e8,  /* cho pieup-cieuc          -> jong pieup-cieuc          */
+	0xd7e9,  /* cho pieup-chieuch        -> jong pieup-chieuch        */
+	0,       /* cho pieup-thieuth                                    */
+	0x11e4,  /* cho pieup-phieuph        -> jong pieup-phieuph        */
+	0x11e6,  /* cho kapyeounpieup        -> jong kapyeounpieup        */
+	0,       /* cho kapyeounssangpieup                               */
+	0x11e7,  /* cho sios-kiyeok          -> jong sios-kiyeok          */
+	0,       /* cho sios-nieun                                       */
+	0x11e8,  /* cho sios-tikeut          -> jong sios-tikeut          */
+	0x11e9,  /* cho sios-rieul           -> jong sios-rieul           */
+	0xd7ea,  /* cho sios-mieum           -> jong sios-mieum           */
+	0x11ea,  /* cho sios-pieup           -> jong sios-pieup           */
+	0,       /* cho sios-pieup-kiyeok                                */
+	0,       /* cho sios-ssangsios                                   */
+	0,       /* cho sios-ieung                                       */
+	0xd7ef,  /* cho sios-cieuc           -> jong sios-cieuc           */
+	0xd7f0,  /* cho sios-chieuch         -> jong sios-chieuch         */
+	0,       /* cho sios-khieukh                                     */
+	0xd7f1,  /* cho sios-thieuth         -> jong sios-thieuth         */
+	0,       /* cho sios-phieuph                                     */
+	0xd7f2,  /* cho sios-hieuh           -> jong sios-hieuh           */
+	0,       /* cho chitueumsios                                     */
+	0,       /* cho chitueumssangsios                                */
+	0,       /* cho ceongchieumsios                                  */
+	0,       /* cho ceongchieumssangsios                             */
+	0x11eb,  /* cho pansios              -> jong pansios              */
+	0x11ec,  /* cho ieung-kiyeok         -> jong ieung-kiyeok         */
+	0,       /* cho ieung-tikeut                                     */
+	0,       /* cho ieung-mieum                                      */
+	0,       /* cho ieung-pieup                                      */
+	0,       /* cho ieung-sios                                       */
+	0,       /* cho ieung-pansios                                    */
+	0x11ee,  /* cho ssangieung           -> jong ssangieung           */
+	0,       /* cho ieung-cieuc                                      */
+	0,       /* cho ieung-chieuch                                    */
+	0,       /* cho ieung-thieuth                                    */
+	0,       /* cho ieung-phieuph                                    */
+	0x11f0,  /* cho yesieung             -> jong yesieung             */
+	0,       /* cho cieuc-ieung                                      */
+	0,       /* cho chitueumcieuc                                    */
+	0,       /* cho chitueumssangcieuc                               */
+	0,       /* cho ceongchieumcieuc                                 */
+	0,       /* cho ceongchieumssangcieuc                            */
+	0,       /* cho chieuch-khieukh                                  */
+	0,       /* cho chieuch-hieuh                                    */
+	0,       /* cho chitueumchieuch                                  */
+	0,       /* cho ceongchieumchieuch                               */
+	0x11f3,  /* cho phieuph-pieup        -> jong phieuph-pieup        */
+	0x11f4,  /* cho kapyeounphieuph      -> jong kapyeounphieuph      */
+	0,       /* cho ssanghieuh                                       */
+	0x11f9,  /* cho yeorinhieuh          -> jong yeorinhieuh          */
+	0,       /* cho kiyeok-tikeut                                    */
+	0x11c7,  /* cho nieun-sios           -> jong nieun-sios           */
+	0x11ac,  /* cho nieun-cieuc          -> jong nieun-cieuc          */
+	0x11ad,  /* cho nieun-hieuh          -> jong nieun-hieuh          */
+	0x11cb,  /* cho tikeut-rieul         -> jong tikeut-rieul         */
+	0,       /* cho filler                                           */
     };
-    if (c < 0x1100 || c > 0x1112)
-	return 0;
-    return table[c - 0x1100];
+
+    static const ucschar table_ext_a[] = {
+	0,       /* cho tikeut-mieum                                     */
+	0xd7cf,  /* cho tikeut-pieup         -> jong tikeut-pieup         */
+	0xd7d0,  /* cho tikeut-sios          -> jong tikeut-sios          */
+	0xd7d2,  /* cho tikeut-cieuc         -> jong tikeut-cieuc         */
+	0x11b0,  /* cho rieul-kiyeok         -> jong rieul-kiyeok         */
+	0xd7d5,  /* cho rieul-ssangkiyeok    -> jong rieul-ssangkiyeok    */
+	0x11ce,  /* cho rieul-tikeut         -> jong rieul-tikeut         */
+	0,       /* cho rieul-ssangtikeut                                */
+	0x11b1,  /* cho rieul-mieum          -> jong rieul-mieum          */
+	0x11b2,  /* cho rieul-pieup          -> jong rieul-pieup          */
+	0,       /* cho rieul-ssangpieup                                 */
+	0x11d5,  /* cho rieul-kapyeounpieup  -> jong rieul-kapyeounpieup  */
+	0x11b3,  /* cho rieul-sios           -> jong rieul-sios           */
+	0,       /* cho rieul-cieuc                                      */
+	0x11d8,  /* cho rieul-khieukh        -> jong rieul-khieukh        */
+	0x11da,  /* cho mieum-kiyeok         -> jong mieum-kiyeok         */
+	0,       /* cho mieum-tikeut                                     */
+	0x11dd,  /* cho mieum-sios           -> jong mieum-sios           */
+	0,       /* cho pieup-sios-thieuth                               */
+	0,       /* cho pieup-khieukh                                    */
+	0x11e5,  /* cho pieup-hieuh          -> jong pieup-hieuh          */
+	0,       /* cho ssangsios-pieup                                  */
+	0,       /* cho ieung-rieul                                      */
+	0,       /* cho ieung-hieuh                                      */
+	0,       /* cho ssangcieuc-hieuh                                 */
+	0,       /* cho ssangthieuth                                     */
+	0,       /* cho phieuph-hieuh                                    */
+	0,       /* cho hieuh-sios                                       */
+	0,       /* cho ssangyeorinhieuh                                 */
+    };
+
+    if (c >= 0x1100 && c <= 0x115e)
+	return table[c - 0x1100];
+    else if (c >= 0xa960 && c <= 0xa97c)
+	return table_ext_a[c - 0xa960];
+
+    return 0;
 }
 
 ucschar
 hangul_jongseong_to_choseong(ucschar c)
 {
-    static ucschar table[] = {
-      0x1100,  /* jongseong kiyeok        -> choseong kiyeok       */
-      0x1101,  /* jongseong ssangkiyeok   -> choseong ssangkiyeok  */
-      0x1109,  /* jongseong kiyeok-sios   -> choseong sios         */
-      0x1102,  /* jongseong nieun         -> choseong nieun        */
-      0x110c,  /* jongseong nieun-cieuc   -> choseong cieuc        */
-      0x1112,  /* jongseong nieun-hieuh   -> choseong hieuh        */
-      0x1103,  /* jongseong tikeut        -> choseong tikeut       */
-      0x1105,  /* jongseong rieul         -> choseong rieul        */
-      0x1100,  /* jongseong rieul-kiyeok  -> choseong kiyeok       */
-      0x1106,  /* jongseong rieul-mieum   -> choseong mieum        */
-      0x1107,  /* jongseong rieul-pieup   -> choseong pieup        */
-      0x1109,  /* jongseong rieul-sios    -> choseong sios         */
-      0x1110,  /* jongseong rieul-thieuth -> choseong thieuth      */
-      0x1111,  /* jongseong rieul-phieuph -> choseong phieuph      */
-      0x1112,  /* jongseong rieul-hieuh   -> choseong hieuh        */
-      0x1106,  /* jongseong mieum         -> choseong mieum        */
-      0x1107,  /* jongseong pieup         -> choseong pieup        */
-      0x1109,  /* jongseong pieup-sios    -> choseong sios         */
-      0x1109,  /* jongseong sios          -> choseong sios         */
-      0x110a,  /* jongseong ssangsios     -> choseong ssangsios    */
-      0x110b,  /* jongseong ieung         -> choseong ieung        */
-      0x110c,  /* jongseong cieuc         -> choseong cieuc        */
-      0x110e,  /* jongseong chieuch       -> choseong chieuch      */
-      0x110f,  /* jongseong khieukh       -> choseong khieukh      */
-      0x1110,  /* jongseong thieuth       -> choseong thieuth      */
-      0x1111,  /* jongseong phieuph       -> choseong phieuph      */
-      0x1112   /* jongseong hieuh         -> choseong hieuh        */
+    static const ucschar table[] = {
+	0x1100,  /* jong kiyeok               -> cho kiyeok               */
+	0x1101,  /* jong ssangkiyeok          -> cho ssangkiyeok          */
+	0,       /* jong kiyeok-sios                                      */
+	0x1102,  /* jong nieun                -> cho nieun                */
+	0x115c,  /* jong nieun-cieuc          -> cho nieun-cieuc          */
+	0x115d,  /* jong nieun-hieuh          -> cho nieun-hieuh          */
+	0x1103,  /* jong tikeut               -> cho tikeut               */
+	0x1105,  /* jong rieul                -> cho rieul                */
+	0xa964,  /* jong rieul-kiyeok         -> cho rieul-kiyeok         */
+	0xa968,  /* jong rieul-mieum          -> cho rieul-mieum          */
+	0xa969,  /* jong rieul-pieup          -> cho rieul-pieup          */
+	0xa96c,  /* jong rieul-sios           -> cho rieul-sios           */
+	0,       /* jong rieul-thieuth                                    */
+	0,       /* jong rieul-phieuph                                    */
+	0x111a,  /* jong rieul-hieuh          -> cho rieul-hieuh          */
+	0x1106,  /* jong mieum                -> cho mieum                */
+	0x1107,  /* jong pieup                -> cho pieup                */
+	0x1121,  /* jong pieup-sios           -> cho pieup-sios           */
+	0x1109,  /* jong sios                 -> cho sios                 */
+	0x110a,  /* jong ssangsios            -> cho ssangsios            */
+	0x110b,  /* jong ieung                -> cho ieung                */
+	0x110c,  /* jong cieuc                -> cho cieuc                */
+	0x110e,  /* jong chieuch              -> cho chieuch              */
+	0x110f,  /* jong khieukh              -> cho khieukh              */
+	0x1110,  /* jong thieuth              -> cho thieuth              */
+	0x1111,  /* jong phieuph              -> cho phieuph              */
+	0x1112,  /* jong hieuh                -> cho hieuh                */
+	0,       /* jong kiyeok-rieul                                     */
+	0,       /* jong kiyeok-sios-kiyeok                               */
+	0x1113,  /* jong nieun-kiyeok         -> cho nieun-kiyeok         */
+	0x1115,  /* jong nieun-tikeut         -> cho nieun-tikeut         */
+	0x115b,  /* jong nieun-sios           -> cho nieun-sios           */
+	0,       /* jong nieun-pansios                                    */
+	0,       /* jong nieun-thieuth                                    */
+	0x1117,  /* jong tikeut-kiyeok        -> cho tikeut-kiyeok        */
+	0x115e,  /* jong tikeut-rieul         -> cho tikeut-rieul         */
+	0,       /* jong rieul-kiyeok-sios                                */
+	0x1118,  /* jong rieul-nieun          -> cho rieul-nieun          */
+	0xa966,  /* jong rieul-tikeut         -> cho rieul-tikeut         */
+	0,       /* jong rieul-tikeut-hieuh                               */
+	0x1119,  /* jong ssangrieul           -> cho ssangrieul           */
+	0,       /* jong rieul-mieum-kiyeok                               */
+	0,       /* jong rieul-mieum-sios                                 */
+	0,       /* jong rieul-pieup-sios                                 */
+	0,       /* jong rieul-pieup-hieuh                                */
+	0xa96b,  /* jong rieul-kapyeounpieup  -> cho rieul-kapyeounpieup  */
+	0,       /* jong rieul-ssangsios                                  */
+	0,       /* jong rieul-pansios                                    */
+	0xa96e,  /* jong rieul-khieukh        -> cho rieul-khieukh        */
+	0,       /* jong rieul-yeorinhieuh                                */
+	0xa96f,  /* jong mieum-kiyeok         -> cho mieum-kiyeok         */
+	0,       /* jong mieum-rieul                                      */
+	0x111c,  /* jong mieum-pieup          -> cho mieum-pieup          */
+	0xa971,  /* jong mieum-sios           -> cho mieum-sios           */
+	0,       /* jong mieum-ssangsios                                  */
+	0,       /* jong mieum-pansios                                    */
+	0,       /* jong mieum-chieuch                                    */
+	0,       /* jong mieum-hieuh                                      */
+	0x111d,  /* jong kapyeounmieum        -> cho kapyeounmieum        */
+	0,       /* jong pieup-rieul                                      */
+	0x112a,  /* jong pieup-phieuph        -> cho pieup-phieuph        */
+	0xa974,  /* jong pieup-hieuh          -> cho pieup-hieuh          */
+	0x112b,  /* jong kapyeounpieup        -> cho kapyeounpieup        */
+	0x112d,  /* jong sios-kiyeok          -> cho sios-kiyeok          */
+	0x112f,  /* jong sios-tikeut          -> cho sios-tikeut          */
+	0x1130,  /* jong sios-rieul           -> cho sios-rieul           */
+	0x1132,  /* jong sios-pieup           -> cho sios-pieup           */
+	0x1140,  /* jong pansios              -> cho pansios              */
+	0x1141,  /* jong ieung-kiyeok         -> cho ieung-kiyeok         */
+	0,       /* jong ieung-ssangkiyeok                                */
+	0x1147,  /* jong ssangieung           -> cho ssangieung           */
+	0,       /* jong ieung-khieukh                                    */
+	0x114c,  /* jong yesieung             -> cho yesieung             */
+	0,       /* jong yesieung-sios                                    */
+	0,       /* jong yesieung-pansios                                 */
+	0x1156,  /* jong phieuph-pieup        -> cho phieuph-pieup        */
+	0x1157,  /* jong kapyeounphieuph      -> cho kapyeounphieuph      */
+	0,       /* jong hieuh-nieun                                      */
+	0,       /* jong hieuh-rieul                                      */
+	0,       /* jong hieuh-mieum                                      */
+	0,       /* jong hieuh-pieup                                      */
+	0x1159,  /* jong yeorinhieuh          -> cho yeorinhieuh          */
+	0,       /* jong kiyeok-nieun                                     */
+	0,       /* jong kiyeok-pieup                                     */
+	0,       /* jong kiyeok-chieuch                                   */
+	0,       /* jong kiyeok-khieukh                                   */
+	0,       /* jong kiyeok-hieuh                                     */
+	0x1114,  /* jong ssangnieun           -> cho ssangnieun           */
     };
-    if (c < 0x11a8 || c > 0x11c2)
-	return 0;
-    return table[c - 0x11a8];
+
+    static const ucschar table_ext_b[] = {
+	0,       /* jong nieun-rieul                                      */
+	0,       /* jong nieun-chieuch                                    */
+	0x1104,  /* jong ssangtikeut          -> cho ssangtikeut          */
+	0,       /* jong ssangtikeut-pieup                                */
+	0xa961,  /* jong tikeut-pieup         -> cho tikeut-pieup         */
+	0xa962,  /* jong tikeut-sios          -> cho tikeut-sios          */
+	0,       /* jong tikeut-sios-kiyeok                               */
+	0xa963,  /* jong tikeut-cieuc         -> cho tikeut-cieuc         */
+	0,       /* jong tikeut-chieuch                                   */
+	0,       /* jong tikeut-thieuth                                   */
+	0xa965,  /* jong rieul-ssangkiyeok    -> cho rieul-ssangkiyeok    */
+	0,       /* jong rieul-kiyeok-hieuh                               */
+	0,       /* jong ssangrieul-khieukh                               */
+	0,       /* jong rieul-mieum-hieuh                                */
+	0,       /* jong rieul-pieup-tikeut                               */
+	0,       /* jong rieul-pieup-phieuph                              */
+	0,       /* jong rieul-yesieung                                   */
+	0,       /* jong rieul-yeorinhieuh-hieuh                          */
+	0x111b,  /* jong kapyeounrieul        -> cho kapyeounrieul        */
+	0,       /* jong mieum-nieun                                      */
+	0,       /* jong mieum-ssangnieun                                 */
+	0,       /* jong ssangmieum                                       */
+	0,       /* jong mieum-pieup-sios                                 */
+	0,       /* jong mieum-cieuc                                      */
+	0x1120,  /* jong pieup-tikeut         -> cho pieup-tikeut         */
+	0,       /* jong pieup-rieul-phieuph                              */
+	0,       /* jong pieup-mieum                                      */
+	0x1108,  /* jong ssangpieup           -> cho ssangpieup           */
+	0x1123,  /* jong pieup-sios-tikeut    -> cho pieup-sios-tikeut    */
+	0x1127,  /* jong pieup-cieuc          -> cho pieup-cieuc          */
+	0x1128,  /* jong pieup-chieuch        -> cho pieup-chieuch        */
+	0x1131,  /* jong sios-mieum           -> cho sios-mieum           */
+	0,       /* jong sios-kapyeounpieup                               */
+	0,       /* jong ssangsios-kiyeok                                 */
+	0,       /* jong ssangsios-tikeut                                 */
+	0,       /* jong sios-pansios                                     */
+	0x1136,  /* jong sios-cieuc           -> cho sios-cieuc           */
+	0x1137,  /* jong sios-chieuch         -> cho sios-chieuch         */
+	0x1139,  /* jong sios-thieuth         -> cho sios-thieuth         */
+	0x113b,  /* jong sios-hieuh           -> cho sios-hieuh           */
+	0,       /* jong pansios-pieup                                    */
+	0,       /* jong pansios-kapyeounpieup                            */
+	0,       /* jong yesieung-mieum                                   */
+	0,       /* jong yesieung-hieuh                                   */
+	0,       /* jong cieuc-pieup                                      */
+	0,       /* jong cieuc-ssangpieup                                 */
+	0x110d,  /* jong ssangcieuc           -> cho ssangcieuc           */
+	0,       /* jong phieuph-sios                                     */
+	0,       /* jong phieuph-thieuth                                  */
+    };
+
+    if (c >= 0x11a8 && c <= 0x11ff)
+	return table[c - 0x11a8];
+    else if (c >= 0xd7cb && c <= 0xd7fb)
+	return table_ext_b[c - 0xd7cb];
+
+    return 0;
 }
 
 void
@@ -700,6 +930,334 @@ hangul_jongseong_dicompose(ucschar c, ucschar* jong, ucschar* cho)
 
     *jong = table[c - 0x11a8][0];
     *cho  = table[c - 0x11a8][1];
+}
+
+static int
+hangul_jongseong_get_ncomponent(ucschar jong)
+{
+    static const char table[] = {
+	1, /* kiyeok                            */
+	2, /* ssangkiyeok                       */
+	2, /* kiyeok-sios                       */
+	1, /* nieun                             */
+	2, /* nieun-cieuc                       */
+	2, /* nieun-hieuh                       */
+	1, /* tikeut                            */
+	1, /* rieul                             */
+	2, /* rieul-kiyeok                      */
+	2, /* rieul-mieum                       */
+	2, /* rieul-pieup                       */
+	2, /* rieul-sios                        */
+	2, /* rieul-thieuth                     */
+	2, /* rieul-phieuph                     */
+	2, /* rieul-hieuh                       */
+	1, /* mieum                             */
+	1, /* pieup                             */
+	2, /* pieup-sios                        */
+	1, /* sios                              */
+	2, /* ssangsios                         */
+	1, /* ieung                             */
+	1, /* cieuc                             */
+	1, /* chieuch                           */
+	1, /* khieukh                           */
+	1, /* thieuth                           */
+	1, /* phieuph                           */
+	1, /* hieuh                             */
+	2, /* kiyeok-rieul                      */
+	3, /* kiyeok-sios-kiyeok                */
+	2, /* nieun-kiyeok                      */
+	2, /* nieun-tikeut                      */
+	2, /* nieun-sios                        */
+	2, /* nieun-pansios                     */
+	2, /* nieun-thieuth                     */
+	2, /* tikeut-kiyeok                     */
+	2, /* tikeut-rieul                      */
+	3, /* rieul-kiyeok-sios                 */
+	2, /* rieul-nieun                       */
+	2, /* rieul-tikeut                      */
+	3, /* rieul-tikeut-hieuh                */
+	2, /* ssangrieul                        */
+	3, /* rieul-mieum-kiyeok                */
+	3, /* rieul-mieum-sios                  */
+	3, /* rieul-pieup-sios                  */
+	3, /* rieul-pieup-hieuh                 */
+	3, /* rieul-kapyeounpieup               */
+	3, /* rieul-ssangsios                   */
+	2, /* rieul-pansios                     */
+	2, /* rieul-khieukh                     */
+	2, /* rieul-yeorinhieuh                 */
+	2, /* mieum-kiyeok                      */
+	2, /* mieum-rieul                       */
+	2, /* mieum-pieup                       */
+	2, /* mieum-sios                        */
+	3, /* mieum-ssangsios                   */
+	2, /* mieum-pansios                     */
+	2, /* mieum-chieuch                     */
+	2, /* mieum-hieuh                       */
+	2, /* kapyeounmieum                     */
+	2, /* pieup-rieul                       */
+	2, /* pieup-phieuph                     */
+	2, /* pieup-hieuh                       */
+	2, /* kapyeounpieup                     */
+	2, /* sios-kiyeok                       */
+	2, /* sios-tikeut                       */
+	2, /* sios-rieul                        */
+	2, /* sios-pieup                        */
+	1, /* pansios                           */
+	2, /* ieung-kiyeok                      */
+	3, /* ieung-ssangkiyeok                 */
+	2, /* ssangieung                        */
+	2, /* ieung-khieukh                     */
+	1, /* yesieung                          */
+	2, /* yesieung-sios                     */
+	2, /* yesieung-pansios                  */
+	2, /* phieuph-pieup                     */
+	2, /* kapyeounphieuph                   */
+	2, /* hieuh-nieun                       */
+	2, /* hieuh-rieul                       */
+	2, /* hieuh-mieum                       */
+	2, /* hieuh-pieup                       */
+	1, /* yeorinhieuh                       */
+	2, /* kiyeok-nieun                      */
+	2, /* kiyeok-pieup                      */
+	2, /* kiyeok-chieuch                    */
+	2, /* kiyeok-khieukh                    */
+	2, /* kiyeok-hieuh                      */
+	2, /* ssangnieun                        */
+    };
+
+    static const char table_ext_b[] = {
+	2, /* nieun-rieul                       */
+	2, /* nieun-chieuch                     */
+	2, /* ssangtikeut                       */
+	3, /* ssangtikeut-pieup                 */
+	2, /* tikeut-pieup                      */
+	2, /* tikeut-sios                       */
+	3, /* tikeut-sios-kiyeok                */
+	2, /* tikeut-cieuc                      */
+	2, /* tikeut-chieuch                    */
+	2, /* tikeut-thieuth                    */
+	3, /* rieul-ssangkiyeok                 */
+	3, /* rieul-kiyeok-hieuh                */
+	3, /* ssangrieul-khieukh                */
+	3, /* rieul-mieum-hieuh                 */
+	3, /* rieul-pieup-tikeut                */
+	3, /* rieul-pieup-phieuph               */
+	2, /* rieul-yesieung                    */
+	3, /* rieul-yeorinhieuh-hieuh           */
+	2, /* kapyeounrieul                     */
+	2, /* mieum-nieun                       */
+	3, /* mieum-ssangnieun                  */
+	2, /* ssangmieum                        */
+	3, /* mieum-pieup-sios                  */
+	2, /* mieum-cieuc                       */
+	2, /* pieup-tikeut                      */
+	3, /* pieup-rieul-phieuph               */
+	2, /* pieup-mieum                       */
+	2, /* ssangpieup                        */
+	3, /* pieup-sios-tikeut                 */
+	2, /* pieup-cieuc                       */
+	2, /* pieup-chieuch                     */
+	2, /* sios-mieum                        */
+	3, /* sios-kapyeounpieup                */
+	3, /* ssangsios-kiyeok                  */
+	3, /* ssangsios-tikeut                  */
+	2, /* sios-pansios                      */
+	2, /* sios-cieuc                        */
+	2, /* sios-chieuch                      */
+	2, /* sios-thieuth                      */
+	2, /* sios-hieuh                        */
+	2, /* pansios-pieup                     */
+	3, /* pansios-kapyeounpieup             */
+	2, /* yesieung-mieum                    */
+	2, /* yesieung-hieuh                    */
+	2, /* cieuc-pieup                       */
+	3, /* cieuc-ssangpieup                  */
+	2, /* ssangcieuc                        */
+	2, /* phieuph-sios                      */
+	2, /* phieuph-thieuth                   */
+    };
+
+    if (jong >= 0x11a8 && jong <= 0x11ff) {
+	return table[jong - 0x11a8];
+    } else if (jong >= 0xd7cb && jong <= 0xd7fb) {
+	return table_ext_b[jong - 0xd7cb];
+    }
+
+    return 0;
+}
+
+ucschar
+hangul_jongseong_get_diff(ucschar prevjong, ucschar jong)
+{
+    static const ucschar table[][2] = {
+	{ 0x1100, 0x1100 }, /* kiyeok: kiyeok, kiyeok                      */
+	{ 0x1100, 0x1101 }, /* ssangkiyeok: kiyeok, ssangkiyeok            */
+	{ 0x1109, 0      }, /* kiyeok-sios: sios                           */
+	{ 0x1102, 0x1102 }, /* nieun: nieun, nieun                         */
+	{ 0x110c, 0x115c }, /* nieun-cieuc: cieuc, nieun-cieuc             */
+	{ 0x1112, 0x115d }, /* nieun-hieuh: hieuh, nieun-hieuh             */
+	{ 0x1103, 0x1103 }, /* tikeut: tikeut, tikeut                      */
+	{ 0x1105, 0x1105 }, /* rieul: rieul, rieul                         */
+	{ 0x1100, 0xa964 }, /* rieul-kiyeok: kiyeok, rieul-kiyeok          */
+	{ 0x1106, 0xa968 }, /* rieul-mieum: mieum, rieul-mieum             */
+	{ 0x1107, 0xa969 }, /* rieul-pieup: pieup, rieul-pieup             */
+	{ 0x1109, 0xa96c }, /* rieul-sios: sios, rieul-sios                */
+	{ 0x1110, 0      }, /* rieul-thieuth: thieuth                      */
+	{ 0x1111, 0      }, /* rieul-phieuph: phieuph                      */
+	{ 0x1112, 0x111a }, /* rieul-hieuh: hieuh, rieul-hieuh             */
+	{ 0x1106, 0x1106 }, /* mieum: mieum, mieum                         */
+	{ 0x1107, 0x1107 }, /* pieup: pieup, pieup                         */
+	{ 0x1109, 0x1121 }, /* pieup-sios: sios, pieup-sios                */
+	{ 0x1109, 0x1109 }, /* sios: sios, sios                            */
+	{ 0x1109, 0x110a }, /* ssangsios: sios, ssangsios                  */
+	{ 0x110b, 0x110b }, /* ieung: ieung, ieung                         */
+	{ 0x110c, 0x110c }, /* cieuc: cieuc, cieuc                         */
+	{ 0x110e, 0x110e }, /* chieuch: chieuch, chieuch                   */
+	{ 0x110f, 0x110f }, /* khieukh: khieukh, khieukh                   */
+	{ 0x1110, 0x1110 }, /* thieuth: thieuth, thieuth                   */
+	{ 0x1111, 0x1111 }, /* phieuph: phieuph, phieuph                   */
+	{ 0x1112, 0x1112 }, /* hieuh: hieuh, hieuh                         */
+	{ 0x1105, 0      }, /* kiyeok-rieul: rieul                         */
+	{ 0x1100, 0x112d }, /* kiyeok-sios-kiyeok: kiyeok, sios-kiyeok     */
+	{ 0x1100, 0x1113 }, /* nieun-kiyeok: kiyeok, nieun-kiyeok          */
+	{ 0x1103, 0x1115 }, /* nieun-tikeut: tikeut, nieun-tikeut          */
+	{ 0x1109, 0x115b }, /* nieun-sios: sios, nieun-sios                */
+	{ 0x1140, 0      }, /* nieun-pansios: pansios                      */
+	{ 0x1110, 0      }, /* nieun-thieuth: thieuth                      */
+	{ 0x1100, 0x1117 }, /* tikeut-kiyeok: kiyeok, tikeut-kiyeok        */
+	{ 0x1105, 0x115e }, /* tikeut-rieul: rieul, tikeut-rieul           */
+	{ 0x1109, 0      }, /* rieul-kiyeok-sios: sios                     */
+	{ 0x1102, 0x1118 }, /* rieul-nieun: nieun, rieul-nieun             */
+	{ 0x1103, 0xa966 }, /* rieul-tikeut: tikeut, rieul-tikeut          */
+	{ 0x1112, 0      }, /* rieul-tikeut-hieuh: hieuh                   */
+	{ 0x1105, 0x1119 }, /* ssangrieul: rieul, ssangrieul               */
+	{ 0x1100, 0xa96f }, /* rieul-mieum-kiyeok: kiyeok, mieum-kiyeok    */
+	{ 0x1109, 0xa971 }, /* rieul-mieum-sios: sios, mieum-sios          */
+	{ 0x1109, 0x1121 }, /* rieul-pieup-sios: sios, pieup-sios          */
+	{ 0x1112, 0xa974 }, /* rieul-pieup-hieuh: hieuh, pieup-hieuh       */
+	{ 0x110b, 0x112b }, /* rieul-kapyeounpieup: ieung, kapyeounpieup   */
+	{ 0x1109, 0x110a }, /* rieul-ssangsios: sios, ssangsios            */
+	{ 0x1140, 0      }, /* rieul-pansios: pansios                      */
+	{ 0x110f, 0xa96e }, /* rieul-khieukh: khieukh, rieul-khieukh       */
+	{ 0x1159, 0      }, /* rieul-yeorinhieuh: yeorinhieuh              */
+	{ 0x1100, 0xa96f }, /* mieum-kiyeok: kiyeok, mieum-kiyeok          */
+	{ 0x1105, 0      }, /* mieum-rieul: rieul                          */
+	{ 0x1107, 0x111c }, /* mieum-pieup: pieup, mieum-pieup             */
+	{ 0x1109, 0xa971 }, /* mieum-sios: sios, mieum-sios                */
+	{ 0x1109, 0x110a }, /* mieum-ssangsios: sios, ssangsios            */
+	{ 0x1140, 0      }, /* mieum-pansios: pansios                      */
+	{ 0x110e, 0      }, /* mieum-chieuch: chieuch                      */
+	{ 0x1112, 0      }, /* mieum-hieuh: hieuh                          */
+	{ 0x110b, 0x111d }, /* kapyeounmieum: ieung, kapyeounmieum         */
+	{ 0x1105, 0      }, /* pieup-rieul: rieul                          */
+	{ 0x1111, 0x112a }, /* pieup-phieuph: phieuph, pieup-phieuph       */
+	{ 0x1112, 0xa974 }, /* pieup-hieuh: hieuh, pieup-hieuh             */
+	{ 0x110b, 0x112b }, /* kapyeounpieup: ieung, kapyeounpieup         */
+	{ 0x1100, 0x112d }, /* sios-kiyeok: kiyeok, sios-kiyeok            */
+	{ 0x1103, 0x112f }, /* sios-tikeut: tikeut, sios-tikeut            */
+	{ 0x1105, 0x1130 }, /* sios-rieul: rieul, sios-rieul               */
+	{ 0x1107, 0x1132 }, /* sios-pieup: pieup, sios-pieup               */
+	{ 0x1140, 0x1140 }, /* pansios: pansios, pansios                   */
+	{ 0x1100, 0x1141 }, /* ieung-kiyeok: kiyeok, ieung-kiyeok          */
+	{ 0x1100, 0x1101 }, /* ieung-ssangkiyeok: kiyeok, ssangkiyeok      */
+	{ 0x110b, 0x1147 }, /* ssangieung: ieung, ssangieung               */
+	{ 0x110f, 0      }, /* ieung-khieukh: khieukh                      */
+	{ 0x114c, 0x114c }, /* yesieung: yesieung, yesieung                */
+	{ 0x1109, 0      }, /* yesieung-sios: sios                         */
+	{ 0x1140, 0      }, /* yesieung-pansios: pansios                   */
+	{ 0x1107, 0x1156 }, /* phieuph-pieup: pieup, phieuph-pieup         */
+	{ 0x110b, 0x1157 }, /* kapyeounphieuph: ieung, kapyeounphieuph     */
+	{ 0x1102, 0      }, /* hieuh-nieun: nieun                          */
+	{ 0x1105, 0      }, /* hieuh-rieul: rieul                          */
+	{ 0x1106, 0      }, /* hieuh-mieum: mieum                          */
+	{ 0x1107, 0      }, /* hieuh-pieup: pieup                          */
+	{ 0x1159, 0x1159 }, /* yeorinhieuh: yeorinhieuh, yeorinhieuh       */
+	{ 0x1102, 0      }, /* kiyeok-nieun: nieun                         */
+	{ 0x1107, 0      }, /* kiyeok-pieup: pieup                         */
+	{ 0x110e, 0      }, /* kiyeok-chieuch: chieuch                     */
+	{ 0x110f, 0      }, /* kiyeok-khieukh: khieukh                     */
+	{ 0x1112, 0      }, /* kiyeok-hieuh: hieuh                         */
+	{ 0x1102, 0x1114 }, /* ssangnieun: nieun, ssangnieun               */
+    };
+
+    static const ucschar table_ext_b[][2] = {
+	{ 0x1105, 0      }, /* nieun-rieul: rieul                          */
+	{ 0x110e, 0      }, /* nieun-chieuch: chieuch                      */
+	{ 0x1103, 0x1104 }, /* ssangtikeut: tikeut, ssangtikeut            */
+	{ 0x1107, 0xa961 }, /* ssangtikeut-pieup: pieup, tikeut-pieup      */
+	{ 0x1107, 0xa961 }, /* tikeut-pieup: pieup, tikeut-pieup           */
+	{ 0x1109, 0xa962 }, /* tikeut-sios: sios, tikeut-sios              */
+	{ 0x1100, 0x112d }, /* tikeut-sios-kiyeok: kiyeok, sios-kiyeok     */
+	{ 0x110c, 0xa963 }, /* tikeut-cieuc: cieuc, tikeut-cieuc           */
+	{ 0x110e, 0      }, /* tikeut-chieuch: chieuch                     */
+	{ 0x1110, 0      }, /* tikeut-thieuth: thieuth                     */
+	{ 0x1100, 0x1101 }, /* rieul-ssangkiyeok: kiyeok, ssangkiyeok      */
+	{ 0x1112, 0      }, /* rieul-kiyeok-hieuh: hieuh                   */
+	{ 0x110f, 0xa96e }, /* ssangrieul-khieukh: khieukh, rieul-khieukh  */
+	{ 0x1112, 0      }, /* rieul-mieum-hieuh: hieuh                    */
+	{ 0x1103, 0x1120 }, /* rieul-pieup-tikeut: tikeut, pieup-tikeut    */
+	{ 0x1111, 0x112a }, /* rieul-pieup-phieuph: phieuph, pieup-phieuph */
+	{ 0x114c, 0      }, /* rieul-yesieung: yesieung                    */
+	{ 0x1112, 0      }, /* rieul-yeorinhieuh-hieuh: hieuh              */
+	{ 0x110b, 0x111b }, /* kapyeounrieul: ieung, kapyeounrieul         */
+	{ 0x1102, 0      }, /* mieum-nieun: nieun                          */
+	{ 0x1102, 0x1114 }, /* mieum-ssangnieun: nieun, ssangnieun         */
+	{ 0x1106, 0      }, /* ssangmieum: mieum                           */
+	{ 0x1109, 0x1121 }, /* mieum-pieup-sios: sios, pieup-sios          */
+	{ 0x110c, 0      }, /* mieum-cieuc: cieuc                          */
+	{ 0x1103, 0x1120 }, /* pieup-tikeut: tikeut, pieup-tikeut          */
+	{ 0x1111, 0      }, /* pieup-rieul-phieuph: phieuph                */
+	{ 0x1106, 0      }, /* pieup-mieum: mieum                          */
+	{ 0x1107, 0x1108 }, /* ssangpieup: pieup, ssangpieup               */
+	{ 0x1103, 0x112f }, /* pieup-sios-tikeut: tikeut, sios-tikeut      */
+	{ 0x110c, 0x1127 }, /* pieup-cieuc: cieuc, pieup-cieuc             */
+	{ 0x110e, 0x1128 }, /* pieup-chieuch: chieuch, pieup-chieuch       */
+	{ 0x1106, 0x1131 }, /* sios-mieum: mieum, sios-mieum               */
+	{ 0x110b, 0x112b }, /* sios-kapyeounpieup: ieung, kapyeounpieup    */
+	{ 0x1100, 0x112d }, /* ssangsios-kiyeok: kiyeok, sios-kiyeok       */
+	{ 0x1103, 0x112f }, /* ssangsios-tikeut: tikeut, sios-tikeut       */
+	{ 0x1140, 0      }, /* sios-pansios: pansios                       */
+	{ 0x110c, 0x1136 }, /* sios-cieuc: cieuc, sios-cieuc               */
+	{ 0x110e, 0x1137 }, /* sios-chieuch: chieuch, sios-chieuch         */
+	{ 0x1110, 0x1139 }, /* sios-thieuth: thieuth, sios-thieuth         */
+	{ 0x1112, 0x113b }, /* sios-hieuh: hieuh, sios-hieuh               */
+	{ 0x1107, 0      }, /* pansios-pieup: pieup                        */
+	{ 0x110b, 0x112b }, /* pansios-kapyeounpieup: ieung, kapyeounpieup */
+	{ 0x1106, 0      }, /* yesieung-mieum: mieum                       */
+	{ 0x1112, 0      }, /* yesieung-hieuh: hieuh                       */
+	{ 0x1107, 0      }, /* cieuc-pieup: pieup                          */
+	{ 0x1107, 0x1108 }, /* cieuc-ssangpieup: pieup, ssangpieup         */
+	{ 0x110c, 0x110d }, /* ssangcieuc: cieuc, ssangcieuc               */
+	{ 0x1109, 0      }, /* phieuph-sios: sios                          */
+	{ 0x1110, 0      }, /* phieuph-thieuth: thieuth                    */
+    };
+
+    ucschar cho = 0;
+
+    if (prevjong == 0) {
+	cho = hangul_jongseong_to_choseong(jong);
+    } else {
+	int diff;
+	int n1;
+	int n2;
+
+	n1 = hangul_jongseong_get_ncomponent(prevjong);
+	n2 = hangul_jongseong_get_ncomponent(jong);
+
+	diff = n2 - n1 - 1;
+	if (diff >= 0 && diff < 2) {
+	    if (jong >= 0x11a8 && jong <= 0x11ff) {
+		cho = table[jong - 0x11a8][diff];
+	    } else if (jong >= 0xd7cb && jong <= 0xd7fb) {
+		cho = table_ext_b[jong - 0xd7cb][diff];
+	    }
+	} else if (diff == 2) {
+	    cho = hangul_jongseong_to_choseong(jong);
+	}
+    }
+
+    return cho;
 }
 
 /**
