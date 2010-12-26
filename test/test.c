@@ -43,6 +43,102 @@ check_preedit(const char* keyboard, const char* input, ...)
     return true;
 }
 
+static bool
+check_commit(const char* keyboard, const char* input, ...)
+{
+    HangulInputContext* ic;
+    const char* p;
+    const ucschar* commit;
+    ucschar code;
+    va_list ap;
+
+    ic = hangul_ic_new(keyboard);
+
+    p = input;
+    while (*p != '\0') {
+	hangul_ic_process(ic, *p);
+	p++;
+    }
+
+    commit = hangul_ic_get_commit_string(ic);
+
+    va_start(ap, input);
+
+    code = va_arg(ap, ucschar);
+    while (code != 0) {
+	if (*commit != code)
+	    return false;
+
+	code = va_arg(ap, ucschar);
+	commit++;
+    }
+
+    va_end(ap);
+
+    hangul_ic_delete(ic);
+
+    return true;
+}
+
+START_TEST(test_hangul_ic_process_2)
+{
+    /* ㄱㅏㅉ */
+    fail_unless(check_commit("2", "rkW", 0xac00, 0));
+    fail_unless(check_preedit("2", "rkW", 0x3149, 0));
+    /* ㅂㅓㅅㅅㅡ */
+    fail_unless(check_commit("2", "qjttm", 0xbc97, 0));
+    fail_unless(check_preedit("2", "qjttm", 0xc2a4, 0));
+    /* ㅂㅓㅆㅡ */
+    fail_unless(check_commit("2", "qjTm", 0xbc84, 0));
+    fail_unless(check_preedit("2", "qjTm", 0xc4f0, 0));
+}
+END_TEST
+
+START_TEST(test_hangul_ic_process_2y)
+{
+    /* ㅎ     */
+    fail_unless(check_preedit("2y", "g", 0x314e, 0));
+    /*   ㅗ   */
+    fail_unless(check_preedit("2y", "h", 0x3157, 0));
+    /*     ㅌ */
+    fail_unless(check_preedit("2y", "x", 0x314c, 0));
+    /* ㅂㅇ   */
+    fail_unless(check_preedit("2y", "qd", 0x3178, 0));
+    /* ᄼ     */
+    fail_unless(check_preedit("2y", "Z", 0x113c, 0x1160, 0));
+    /* ᅐ     */
+    fail_unless(check_preedit("2y", "V", 0x1150, 0x1160, 0));
+    /* ᅝ     */
+    fail_unless(check_preedit("2y", "sg", 0x115d, 0x1160, 0));
+
+    /* ㄱㅏㅇ */
+    fail_unless(check_preedit("2y", "rkd", 0xac15, 0));
+    /* ㄹㅐ   */
+    fail_unless(check_preedit("2y", "fo", 0xb798, 0));
+    /* ㅎ. ㄴ */
+    fail_unless(check_preedit("2y", "gKs", 0x1112, 0x119e, 0x11ab, 0));
+    /* ㅂㅂㅇㅏㅁㅅㅅ */ 
+    fail_unless(check_preedit("2y", "qqdhatt", 0x112c, 0x1169, 0x11de, 0));
+    /* ㅂㅂㅇㅏㅁㅅㅅㅛ */ 
+    fail_unless(check_commit("2y", "qqdhatty", 0x112c, 0x1169, 0x11dd, 0));
+    fail_unless(check_preedit("2y", "qqdhatty", 0xc1fc, 0));
+    /* ㅂㅂㅇㅏㅁㅆㅛ */ 
+    fail_unless(check_commit("2y", "qqdhaTy", 0x112c, 0x1169, 0x11b7, 0));
+    fail_unless(check_preedit("2y", "qqdhaTy", 0xc448, 0));
+    /* 옛이응 처리 */
+    /* ㅇㅇㅏㅇㅇㅏ */
+    fail_unless(check_commit("2y", "ddkdd", 0x1147, 0x1161, 0x11bc, 0));
+    fail_unless(check_preedit("2y", "ddkdd", 0x3147, 0));
+    /* ㄱㅏㆁㆁ */
+    fail_unless(check_preedit("2y", "rkDD", 0x1100, 0x1161, 0x11ee, 0));
+    /* ㄱㅏㆁㆁㅏ */
+    fail_unless(check_commit("2y", "rkDDk", 0x1100, 0x1161, 0x11f0, 0));
+    fail_unless(check_preedit("2y", "rkDDk", 0x114c, 0x1161, 0));
+    /* ㅏㅏㅏㅏ */
+    fail_unless(check_preedit("2y", "kkkk", 0x115f, 0x11a2, 0));
+}
+END_TEST
+
 START_TEST(test_hangul_ic_process_3f)
 {
     /* L V T  */
@@ -323,6 +419,8 @@ Suite* libhangul_suite()
     Suite* s = suite_create("libhangul");
 
     TCase* hangul = tcase_create("hangul");
+    tcase_add_test(hangul, test_hangul_ic_process_2);
+    tcase_add_test(hangul, test_hangul_ic_process_2y);
     tcase_add_test(hangul, test_hangul_ic_process_3f);
     tcase_add_test(hangul, test_hangul_ic_process_romaja);
     tcase_add_test(hangul, test_syllable_iterator);
@@ -338,6 +436,7 @@ int main()
     Suite* s = libhangul_suite();
     SRunner* sr = srunner_create(s);
 
+    srunner_set_fork_status(sr, CK_NOFORK);
     srunner_run_all(sr, CK_NORMAL);
 
     number_failed = srunner_ntests_failed(sr);
