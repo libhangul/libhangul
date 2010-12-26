@@ -851,13 +851,13 @@ static const ucschar hangul_keyboard_table_3yet[] = {
     0x003f,     /* 0x3F question:       question mark                */
     0x11eb,     /* 0x40 at:             jongseong pansios            */
     0x11ae,     /* 0x41 A:              jongseong tikeut             */
-    0x116e,     /* 0x42 B:              jungseong u                  */
+    0x0021,     /* 0x42 B:              exclamation mark             */
     0x11b1,     /* 0x43 C:              jongseong rieul-mieum        */
     0x11b0,     /* 0x44 D:              jongseong rieul-kiyeok       */
     0x11bf,     /* 0x45 E:              jongseong khieukh            */
     0x11a9,     /* 0x46 F:              jongseong ssangkiyeok        */
     0x119e,     /* 0x47 G:              jungseong araea              */
-    0x1102,     /* 0x48 H:              choseong nieun               */
+    0x0027,     /* 0x48 H:              apostrophe                   */
     0x1154,     /* 0x49 I:              choseong chitueumchieuch     */
     0x114c,     /* 0x4A J:              choseong yesieung            */
     0x114e,     /* 0x4B K:              choseong chitueumcieuc       */
@@ -865,21 +865,21 @@ static const ucschar hangul_keyboard_table_3yet[] = {
     0x1159,     /* 0x4D M:              choseong yeorinhieuh         */
     0x1140,     /* 0x4E N:              choseong pansios             */
     0x1155,     /* 0x4F O:              choseong ceongchieumchieuch  */
-    0x1111,     /* 0x50 P:              choseong phieuph             */
+    0x003e,     /* 0x50 P:              greater-than sign            */
     0x11c1,     /* 0x51 Q:              jongseong phieuph            */
     0x1164,     /* 0x52 R:              jungseong yae                */
     0x11ad,     /* 0x53 S:              jongseong nieun-hieuh        */
-    0x1165,     /* 0x54 T:              jungseong eo                 */
-    0x302e,     /* 0x55 U:              single dot tone mark         */
+    0x003b,     /* 0x54 T:              semicolon                    */
+    0x00b7,     /* 0x55 U:              middle dot                   */
     0x11b6,     /* 0x56 V:              jongseong rieul-hieuh        */
     0x11c0,     /* 0x57 W:              jongseong thikeuth           */
     0x11b9,     /* 0x58 X:              jongseong pieup-sios         */
-    0x302f,     /* 0x59 Y:              double dot tone mark         */
+    0x003c,     /* 0x59 Y:              less-than sign               */
     0x11be,     /* 0x5A Z:              jongseong chieuch            */
     0x005b,     /* 0x5B bracketleft:    left bracket                 */
     0x005c,     /* 0x5C backslash:      backslash                    */
     0x005d,     /* 0x5D bracketright:   right bracket                */
-    0x005e,     /* 0x5E asciicircum:    circumflex accent            */
+    0x114c,     /* 0x5E asciicircum:    choseong yesieung            */
     0x005f,     /* 0x5F underscore:     underscore                   */
     0x11f9,     /* 0x60 quoteleft:      jongseong yeorinhieuh        */
     0x11bc,     /* 0x61 a:              jongseong ieung              */
