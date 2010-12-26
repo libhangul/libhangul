@@ -13,7 +13,7 @@
 
 #include <iconv.h>
 
-#include <hangul.h>
+#include "../hangul/hangul.h"
 
 #define _(x) (x)
 
