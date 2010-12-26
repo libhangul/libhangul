@@ -56,6 +56,7 @@ Mandatory arguments to long options are mandatory for short options too.\n\
   -l, --list                  list available keyboard and exit\n\
   -i, --input=STRING          use STRING as input instead of standard input\n\
   -o, --output=FILE           write result to FILE instead of standard output\n\
+  -s, --strict-order          do not allow wrong input sequence\n\
 "), stdout);
 
 	fputs(_("\
@@ -109,6 +110,21 @@ list_keyboards()
     }
 
     exit(EXIT_SUCCESS);
+}
+
+static bool
+on_hic_transition(HangulInputContext* ic,
+	 ucschar c, const ucschar* preedit, void * data)
+{
+    if (hangul_is_choseong(c)) {
+	if (hangul_ic_has_jungseong(ic) || hangul_ic_has_jongseong(ic))
+	    return false;
+    } else if (hangul_is_jungseong(c)) {
+	if (hangul_ic_has_jongseong(ic))
+	    return false;
+    }
+
+    return true;
 }
 
 size_t ucschar_strlen(const ucschar* str)
@@ -242,6 +258,7 @@ main(int argc, char *argv[])
     const char* keyboard;
     FILE* output;
     HangulInputContext* ic;
+    bool strict_order = false;
 
     setlocale(LC_ALL, "");
 
@@ -256,12 +273,13 @@ main(int argc, char *argv[])
 	    { "list",        no_argument,        NULL, 'l' },
 	    { "input",       required_argument,  NULL, 'i' },
 	    { "output",      required_argument,  NULL, 'o' },
+	    { "strict-order",no_argument,        NULL, 's' },
 	    { "help",        no_argument,        NULL, 'h' },
 	    { "version",     no_argument,        NULL, 'v' },
 	    { NULL,          0,                  NULL, 0   }
 	};
 
-	c = getopt_long(argc, argv, "k:li:o:", long_options, NULL);
+	c = getopt_long(argc, argv, "k:li:o:s", long_options, NULL);
 	if (c == -1)
 	    break;
 
@@ -277,6 +295,9 @@ main(int argc, char *argv[])
 	    break;
 	case 'o':
 	    output_file = optarg;
+	    break;
+	case 's':
+	    strict_order = true;
 	    break;
 	case 'h':
 	    usage(EXIT_SUCCESS);
@@ -306,6 +327,10 @@ main(int argc, char *argv[])
     }
 
     ic = hangul_ic_new(keyboard);
+
+    if (strict_order) {
+	hangul_ic_connect_callback(ic, "transition", on_hic_transition, NULL);
+    }
 
     if (input_string != NULL) {
 	hangul_process_with_string(ic, input_string, output);
