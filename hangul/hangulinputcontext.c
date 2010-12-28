@@ -272,7 +272,7 @@ static const HangulKeyboard hangul_keyboard_2 = {
 static const HangulKeyboard hangul_keyboard_2y = {
     HANGUL_KEYBOARD_TYPE_JAMO,
     "2y", 
-    N_("Dubeolsik yetgeul"), 
+    N_("Dubeolsik Yetgeul"), 
     (ucschar*)hangul_keyboard_table_2y,
     &hangul_combination_full
 };
@@ -280,7 +280,7 @@ static const HangulKeyboard hangul_keyboard_2y = {
 static const HangulKeyboard hangul_keyboard_32 = {
     HANGUL_KEYBOARD_TYPE_JASO,
     "32",
-    N_("Sebeolsik dubeol layout"),
+    N_("Sebeolsik Dubeol Layout"),
     (ucschar*)hangul_keyboard_table_32,
     &hangul_combination_default
 };
@@ -296,7 +296,7 @@ static const HangulKeyboard hangul_keyboard_390 = {
 static const HangulKeyboard hangul_keyboard_3final = {
     HANGUL_KEYBOARD_TYPE_JASO,
     "3f",
-    N_("Sebeolsik final"),
+    N_("Sebeolsik Final"),
     (ucschar*)hangul_keyboard_table_3final,
     &hangul_combination_default
 };
@@ -304,7 +304,7 @@ static const HangulKeyboard hangul_keyboard_3final = {
 static const HangulKeyboard hangul_keyboard_3sun = {
     HANGUL_KEYBOARD_TYPE_JASO,
     "3s",
-    N_("Sebeolsik no-shift"),
+    N_("Sebeolsik Noshift"),
     (ucschar*)hangul_keyboard_table_3sun,
     &hangul_combination_default
 };
@@ -312,7 +312,7 @@ static const HangulKeyboard hangul_keyboard_3sun = {
 static const HangulKeyboard hangul_keyboard_3yet = {
     HANGUL_KEYBOARD_TYPE_JASO,
     "3y",
-    N_("Sebeolsik yetgeul"),
+    N_("Sebeolsik Yetgeul"),
     (ucschar*)hangul_keyboard_table_3yet,
     &hangul_combination_full
 };
