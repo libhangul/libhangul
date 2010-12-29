@@ -27,6 +27,7 @@ AC_PROG_INSTALL
 # Checks for header files.
 AC_HEADER_STDC
 AC_CHECK_HEADERS([stdlib.h string.h limits.h])
+AC_CHECK_HEADERS([langinfo.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_HEADER_STDBOOL
@@ -41,6 +42,7 @@ AC_FUNC_MMAP
 AC_FUNC_REALLOC
 AC_CHECK_FUNCS([munmap])
 AC_CHECK_FUNCS([strcasecmp])
+AC_CHECK_FUNCS([nl_langinfo])
 
 # Checks for gettext stuff
 GETTEXT_PACKAGE="$PACKAGE"

@@ -1842,6 +1842,7 @@ hangul_ic_get_keyboard_name(unsigned index_)
     if (!isGettextInitialized) {
 	isGettextInitialized = true;
 	bindtextdomain(GETTEXT_PACKAGE, LOCALEDIR);
+	bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8");
     }
 #endif
 

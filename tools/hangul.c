@@ -11,6 +11,10 @@
 #include <getopt.h>
 #include <errno.h>
 
+#ifdef HAVE_LANGINFO_H
+#include <langinfo.h>
+#endif
+
 #include <iconv.h>
 
 #include "../hangul/hangul.h"
@@ -98,6 +102,24 @@ list_keyboards()
     unsigned n;
 
     n = hangul_ic_get_n_keyboards();
+
+#if defined(ENABLE_NLS) && defined(HAVE_NL_LANGINFO)
+    if (n > 0) {
+	// hangul_ic_get_keyboard_name() 함수가 UTF-8 스트링으로 리턴하므로
+	// 여기서는 locale 인코딩으로 변환해야 한다.
+	// 그런데 iconv를 호출하여 변환하기가 번거로우므로
+	// bind_textdomain_codeset을 다시 호출하여 gettext가 리턴하는 스트링의
+	// 인코딩을 바꿔준다. 이렇게 하기 위해서는
+	// hangul_ic_get_keyboard_name()을 먼저 호출하여
+	// bind_textdomain_codeset() 함수가 불린후 다시 설정하도록 한다.
+	const char* codeset = nl_langinfo(CODESET);
+	if (codeset != NULL) {
+	    hangul_ic_get_keyboard_name(0);
+	    bind_textdomain_codeset(GETTEXT_PACKAGE, codeset);
+	}
+    }
+#endif
+
     for (i = 0; i < n; ++i) {
 	const char* id;
 	const char* name;
