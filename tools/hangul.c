@@ -14,8 +14,7 @@
 #include <iconv.h>
 
 #include "../hangul/hangul.h"
-
-#define _(x) (x)
+#include "../hangul/hangul-gettext.h"
 
 #ifdef WORDS_BIGENDIAN
 #define UCS4  "UCS-4BE"
@@ -259,6 +258,10 @@ main(int argc, char *argv[])
     FILE* output;
     HangulInputContext* ic;
     bool strict_order = false;
+
+#ifdef ENABLE_NLS
+    bindtextdomain(GETTEXT_PACKAGE, LOCALEDIR);
+#endif
 
     setlocale(LC_ALL, "");
 
