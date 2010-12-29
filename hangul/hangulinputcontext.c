@@ -336,11 +336,11 @@ static const HangulKeyboard hangul_keyboard_ahn = {
 static const HangulKeyboard* hangul_keyboards[] = {
     &hangul_keyboard_2,
     &hangul_keyboard_2y,
-    &hangul_keyboard_32,
     &hangul_keyboard_390,
     &hangul_keyboard_3final,
     &hangul_keyboard_3sun,
     &hangul_keyboard_3yet,
+    &hangul_keyboard_32,
     &hangul_keyboard_romaja,
     &hangul_keyboard_ahn,
 };
