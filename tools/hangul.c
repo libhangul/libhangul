@@ -75,9 +75,10 @@ With no FILE, or when FILE is -, read standard input.\n\
          printf(_("\
 \n\
 Examples:\n\
-  %s -i gksrmfdlqfur  Convert specified string into korean characters.\n\
+  %s -i gksrmfdlqfur  Convert specified string into korean characters\n\
+                          and print them to standard output.\n\
   %s                  Convert standard input into korean characters\n\
-                             and print them to standard output.\n\
+                          and print them to standard output.\n\
 "),
               program_name, program_name);
     } else {
