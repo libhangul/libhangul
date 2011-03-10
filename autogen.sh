@@ -8,7 +8,7 @@ if test -z "$libtoolize"; then
     libtoolize=libtoolize
 fi
 
-gettextize --force --no-changelog
+autopoint --force
 $libtoolize --automake --copy --force
 aclocal $ACLOCAL_AMFLAGS
 autoheader
