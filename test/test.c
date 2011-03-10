@@ -91,6 +91,10 @@ START_TEST(test_hangul_ic_process_2)
     /* ㅂㅓㅆㅡ */
     fail_unless(check_commit("2", "qjTm", 0xbc84, 0));
     fail_unless(check_preedit("2", "qjTm", 0xc4f0, 0));
+    /* ㅁㅏㄹㄱㅗ */
+    fail_unless(check_preedit("2", "akfr", 0xb9d1, 0));
+    fail_unless(check_commit("2", "akfrh", 0xb9d0, 0));
+    fail_unless(check_preedit("2", "akfrh", 0xace0, 0));
 }
 END_TEST
 
