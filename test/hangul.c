@@ -15,10 +15,14 @@
 #define UCS4 "UCS-4LE"
 #endif
 
+#ifndef ICONV_CONST
+#define ICONV_CONST
+#endif
+
 void ucs4_to_utf8(char *buf, const ucschar *ucs4, size_t bufsize)
 {
     size_t n;
-    char*  inbuf;
+    ICONV_CONST char*  inbuf;
     size_t inbytesleft;
     char*  outbuf;
     size_t outbytesleft;

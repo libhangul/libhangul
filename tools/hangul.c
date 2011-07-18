@@ -44,6 +44,10 @@
 #define UCS4  "UCS-4LE"
 #endif
 
+#ifndef ICONV_CONST
+#define ICONV_CONST
+#endif
+
 static const char* program_name = "hangul";
 static iconv_t cd_ucs4_to_utf8 = (iconv_t)-1;
 
@@ -181,7 +185,7 @@ static int
 fputs_ucschar(const ucschar* str, FILE* stream)
 {
     char buf[512];
-    char* inbuf;
+    ICONV_CONST char* inbuf;
     char* outbuf;
     size_t inbytesleft;
     size_t outbytesleft;

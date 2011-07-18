@@ -3,7 +3,7 @@ noinst_PROGRAMS = hangul hanja
 
 hangul_CFLAGS =
 hangul_SOURCES = hangul.c
-hangul_LDADD = ../hangul/libhangul.la $(LTLIBINTL)
+hangul_LDADD = ../hangul/libhangul.la $(LTLIBINTL) $(LTLIBICONV)
 
 hanja_CFLAGS =
 hanja_SOURCES = hanja.c
