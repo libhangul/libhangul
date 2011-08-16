@@ -192,7 +192,7 @@ struct _HangulKeyboard {
     const char* id;
     const char* name;
     const ucschar* table;
-    const HangulCombination* combination_table;
+    const HangulCombination* combination;
 };
 
 struct _HangulCombinationItem {
@@ -218,7 +218,6 @@ struct _HangulInputContext {
     int type;
 
     const HangulKeyboard*    keyboard;
-    const HangulCombination* combination;
 
     HangulBuffer buffer;
     int output_mode;
@@ -845,7 +844,7 @@ hangul_ic_choseong_to_jongseong(HangulInputContext* hic, ucschar cho)
     } else {
 	/* 옛글 조합 규칙을 사용하는 자판의 경우에는 종성이 conjoinable
 	 * 하지 않아도 상관없다 */
-	if (hic->keyboard->combination_table == &hangul_combination_full) {
+	if (hic->keyboard->combination == &hangul_combination_full) {
 	    return jong;
 	}
     }
@@ -868,7 +867,7 @@ hangul_ic_process_jamo(HangulInputContext *hic, ucschar ch)
     if (hic->buffer.jongseong) {
 	if (hangul_is_choseong(ch)) {
 	    jong = hangul_ic_choseong_to_jongseong(hic, ch);
-	    combined = hangul_combination_combine(hic->combination,
+	    combined = hangul_combination_combine(hic->keyboard->combination,
 					      hic->buffer.jongseong, jong);
 	    if (hangul_is_jongseong(combined)) {
 		if (!hangul_ic_push(hic, combined)) {
@@ -938,7 +937,7 @@ hangul_ic_process_jamo(HangulInputContext *hic, ucschar ch)
 		}
 	    }
 	} else if (hangul_is_jungseong(ch)) {
-	    combined = hangul_combination_combine(hic->combination,
+	    combined = hangul_combination_combine(hic->keyboard->combination,
 						  hic->buffer.jungseong, ch);
 	    if (hangul_is_jungseong(combined)) {
 		if (!hangul_ic_push(hic, combined)) {
@@ -955,7 +954,7 @@ hangul_ic_process_jamo(HangulInputContext *hic, ucschar ch)
 	}
     } else if (hic->buffer.choseong) {
 	if (hangul_is_choseong(ch)) {
-	    combined = hangul_combination_combine(hic->combination,
+	    combined = hangul_combination_combine(hic->keyboard->combination,
 						  hic->buffer.choseong, ch);
 	    if (!hangul_ic_push(hic, combined)) {
 		if (!hangul_ic_push(hic, ch)) {
@@ -996,7 +995,7 @@ hangul_ic_process_jaso(HangulInputContext *hic, ucschar ch)
 	} else {
 	    ucschar choseong = 0;
 	    if (hangul_is_choseong(hangul_ic_peek(hic))) {
-		choseong = hangul_combination_combine(hic->combination,
+		choseong = hangul_combination_combine(hic->keyboard->combination,
 						  hic->buffer.choseong, ch);
 	    }
 	    if (choseong) {
@@ -1022,7 +1021,7 @@ hangul_ic_process_jaso(HangulInputContext *hic, ucschar ch)
 	} else {
 	    ucschar jungseong = 0;
 	    if (hangul_is_jungseong(hangul_ic_peek(hic))) {
-		jungseong = hangul_combination_combine(hic->combination,
+		jungseong = hangul_combination_combine(hic->keyboard->combination,
 						 hic->buffer.jungseong, ch);
 	    }
 	    if (jungseong) {
@@ -1050,7 +1049,7 @@ hangul_ic_process_jaso(HangulInputContext *hic, ucschar ch)
 	} else {
 	    ucschar jongseong = 0;
 	    if (hangul_is_jongseong(hangul_ic_peek(hic))) {
-		jongseong = hangul_combination_combine(hic->combination,
+		jongseong = hangul_combination_combine(hic->keyboard->combination,
 						   hic->buffer.jongseong, ch);
 	    }
 	    if (jongseong) {
@@ -1108,7 +1107,7 @@ hangul_ic_process_romaja(HangulInputContext *hic, int ascii, ucschar ch)
 		jong = ch;
 	    else
 		jong = hangul_ic_choseong_to_jongseong(hic, ch);
-	    combined = hangul_combination_combine(hic->combination,
+	    combined = hangul_combination_combine(hic->keyboard->combination,
 					      hic->buffer.jongseong, jong);
 	    if (hangul_is_jongseong(combined)) {
 		if (!hangul_ic_push(hic, combined)) {
@@ -1183,7 +1182,7 @@ hangul_ic_process_romaja(HangulInputContext *hic, int ascii, ucschar ch)
 		}
 	    }
 	} else if (hangul_is_jungseong(ch)) {
-	    combined = hangul_combination_combine(hic->combination,
+	    combined = hangul_combination_combine(hic->keyboard->combination,
 						  hic->buffer.jungseong, ch);
 	    if (hangul_is_jungseong(combined)) {
 		if (!hangul_ic_push(hic, combined)) {
@@ -1207,7 +1206,7 @@ hangul_ic_process_romaja(HangulInputContext *hic, int ascii, ucschar ch)
 	}
     } else if (hic->buffer.choseong) {
 	if (hangul_is_choseong(ch)) {
-	    combined = hangul_combination_combine(hic->combination,
+	    combined = hangul_combination_combine(hic->keyboard->combination,
 						  hic->buffer.choseong, ch);
 	    if (combined == 0) {
 		hic->buffer.jungseong = 0x1173;
@@ -1740,10 +1739,8 @@ hangul_ic_select_keyboard(HangulInputContext *hic, const char* id)
     keyboard = hangul_ic_get_keyboard_by_id(id);
     if (keyboard != NULL) {
 	hic->keyboard = keyboard;
-	hic->combination = keyboard->combination_table;
     } else {
 	hic->keyboard = &hangul_keyboard_2;
-	hic->combination = hangul_keyboard_2.combination_table;
     }
 }
 
@@ -1751,10 +1748,6 @@ void
 hangul_ic_set_combination(HangulInputContext *hic,
 			  const HangulCombination* combination)
 {
-    if (hic == NULL || combination == NULL)
-	return;
-
-    hic->combination = combination;
 }
 
 /**
