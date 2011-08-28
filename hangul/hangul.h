@@ -114,6 +114,7 @@ bool hangul_ic_is_empty(HangulInputContext *hic);
 bool hangul_ic_has_choseong(HangulInputContext *hic);
 bool hangul_ic_has_jungseong(HangulInputContext *hic);
 bool hangul_ic_has_jongseong(HangulInputContext *hic);
+bool hangul_ic_is_transliteration(HangulInputContext *hic);
 
 void hangul_ic_set_output_mode(HangulInputContext *hic, int mode);
 void hangul_ic_set_keyboard(HangulInputContext *hic,

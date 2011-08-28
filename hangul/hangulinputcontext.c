@@ -1845,3 +1845,30 @@ hangul_ic_get_keyboard_name(unsigned index_)
 
     return NULL;
 }
+
+/**
+ * @ingroup hangulic
+ * @brief 주어진 hic가 transliteration method인지 판별
+ * @param hic 상태를 알고자 하는 HangulInputContext 포인터
+ * @return hic가 transliteration method인 경우 true를 리턴, 아니면 false
+ *
+ * 이 함수는 @a hic 가 transliteration method인지 판별하는 함수다.
+ * 이 함수가 false를 리턴할 경우에는 process 함수에 keycode를 넘기기 전에
+ * 키보드 자판 배열에 독립적인 값으로 변환한 후 넘겨야 한다.
+ * 그렇지 않으면 유럽어 자판과 한국어 자판을 같이 쓸때 한글 입력이 제대로
+ * 되지 않는다.
+ */
+bool
+hangul_ic_is_transliteration(HangulInputContext *hic)
+{
+    int type;
+
+    if (hic == NULL)
+	return false;
+
+    type = hangul_keyboard_get_type(hic->keyboard);
+    if (type == HANGUL_KEYBOARD_TYPE_ROMAJA)
+	return true;
+
+    return false;
+}
