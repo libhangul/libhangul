@@ -176,13 +176,6 @@ hangul_is_jamo(ucschar c)
 	   hangul_is_jongseong(c);
 }
 
-/** @deprecated 이 함수 대신 hangul_is_jamo()함수를 사용한다. */
-bool
-hangul_is_jaso(ucschar c)
-{
-    return hangul_is_jamo(c);
-}
-
 /**
  * @ingroup hangulctype
  * @brief 호환 자모인지 확인
@@ -590,13 +583,6 @@ hangul_jamo_to_cjamo(ucschar c)
 	ret = c;
 
     return ret;
-}
-
-/** @deprecated 이 함수 대신 hangul_jamo_to_cjamo()함수를 사용한다. */
-ucschar
-hangul_jaso_to_jamo(ucschar c)
-{
-    return hangul_jamo_to_cjamo(c);
 }
 
 ucschar
@@ -1297,13 +1283,6 @@ hangul_jamo_to_syllable(ucschar choseong, ucschar jungseong, ucschar jongseong)
     c = ((choseong * njungseong) + jungseong) * njongseong + jongseong
 	+ syllable_base;
     return c;
-}
-
-/** @deprecated 이 함수 대신 hangul_jamo_to_syllable()을 사용한다. */
-ucschar
-hangul_jaso_to_syllable(ucschar choseong, ucschar jungseong, ucschar jongseong)
-{
-    return hangul_jamo_to_syllable(choseong, jungseong, jongseong);
 }
 
 /**

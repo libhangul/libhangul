@@ -232,9 +232,6 @@ struct _HangulInputContext {
     HangulOnTransition  on_transition;
     void*               on_transition_data;
 
-    HangulICFilter filter;
-    void *filter_data;
-
     unsigned int use_jamo_mode_only : 1;
 };
 
@@ -1457,112 +1454,6 @@ hangul_ic_backspace(HangulInputContext *hic)
     return ret;
 }
 
-int
-hangul_ic_dvorak_to_qwerty(int qwerty)
-{
-    static const int table[] = {
-	'!',	/* ! */
-	'Q',	/* " */
-	'#',	/* # */
-	'$',	/* $ */
-	'%',	/* % */
-	'&',	/* & */
-	'q',	/* ' */
-	'(',	/* ( */
-	')',	/* ) */
-	'*',	/* * */
-	'}',	/* + */
-	'w',	/* , */
-	'\'',	/* - */
-	'e',	/* . */
-	'[',	/* / */
-	'0',	/* 0 */
-	'1',	/* 1 */
-	'2',	/* 2 */
-	'3',	/* 3 */
-	'4',	/* 4 */
-	'5',	/* 5 */
-	'6',	/* 6 */
-	'7',	/* 7 */
-	'8',	/* 8 */
-	'9',	/* 9 */
-	'Z',	/* : */
-	'z',	/* ; */
-	'W',	/* < */
-	']',	/* = */
-	'E',	/* > */
-	'{',	/* ? */
-	'@',	/* @ */
-	'A',	/* A */
-	'N',	/* B */
-	'I',	/* C */
-	'H',	/* D */
-	'D',	/* E */
-	'Y',	/* F */
-	'U',	/* G */
-	'J',	/* H */
-	'G',	/* I */
-	'C',	/* J */
-	'V',	/* K */
-	'P',	/* L */
-	'M',	/* M */
-	'L',	/* N */
-	'S',	/* O */
-	'R',	/* P */
-	'X',	/* Q */
-	'O',	/* R */
-	':',	/* S */
-	'K',	/* T */
-	'F',	/* U */
-	'>',	/* V */
-	'<',	/* W */
-	'B',	/* X */
-	'T',	/* Y */
-	'?',	/* Z */
-	'-',	/* [ */
-	'\\',	/* \ */
-	'=',	/* ] */
-	'^',	/* ^ */
-	'"',	/* _ */
-	'`',	/* ` */
-	'a',	/* a */
-	'n',	/* b */
-	'i',	/* c */
-	'h',	/* d */
-	'd',	/* e */
-	'y',	/* f */
-	'u',	/* g */
-	'j',	/* h */
-	'g',	/* i */
-	'c',	/* j */
-	'v',	/* k */
-	'p',	/* l */
-	'm',	/* m */
-	'l',	/* n */
-	's',	/* o */
-	'r',	/* p */
-	'x',	/* q */
-	'o',	/* r */
-	';',	/* s */
-	'k',	/* t */
-	'f',	/* u */
-	'.',	/* v */
-	',',	/* w */
-	'b',	/* x */
-	't',	/* y */
-	'/',	/* z */
-	'_',	/* { */
-	'|',	/* | */
-	'+',	/* } */
-	'~'	/* ~ */
-    };
-
-    if (qwerty >= '!' && qwerty <= '~')
-	return table[qwerty - '!'];
-
-    return qwerty;
-}
-
 /**
  * @ingroup hangulic
  * @brief @ref HangulInputContext가 조합중인 글자를 가지고 있는지 확인하는 함수
@@ -1668,12 +1559,6 @@ void hangul_ic_connect_callback(HangulInputContext* hic, const char* event,
 	hic->on_transition      = (HangulOnTransition)callback;
 	hic->on_transition_data = user_data;
     }
-}
-
-void hangul_ic_set_filter(HangulInputContext *hic,
-			  HangulICFilter func, void *user_data)
-{
-    return;
 }
 
 void
