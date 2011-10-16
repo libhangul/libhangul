@@ -1,3 +1,9 @@
+0.1.0
+ * add new API for keycode normalization
+ * remove deprecated API
+ * add supports for freebsd
+ * update some test codes
+
 0.0.12
  * add dubeolsik yetgeul keyboard
  * make sebeolsik yetgeul keyboard layout conform to HWP
