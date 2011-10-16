@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libhangul 0.0.12\n"
 "Report-Msgid-Bugs-To: http://kldp.net/projects/hangul\n"
-"POT-Creation-Date: 2011-01-02 18:58+0900\n"
+"POT-Creation-Date: 2011-08-29 23:30+0900\n"
 "PO-Revision-Date: 2010-11-14 21:34+0900\n"
 "Last-Translator: Choe Hwanjin <choe.hwanjin@gmail.com>\n"
 "Language-Team: Korean <ko@li.org>\n"
@@ -16,38 +16,38 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: hangul/hangulinputcontext.c:267
+#: hangul/hangulinputcontext.c:263
 msgid "Dubeolsik"
 msgstr "두벌식"
 
-#: hangul/hangulinputcontext.c:275
+#: hangul/hangulinputcontext.c:271
 msgid "Dubeolsik Yetgeul"
 msgstr "두벌식 옛글"
 
-#: hangul/hangulinputcontext.c:283
+#: hangul/hangulinputcontext.c:279
 msgid "Sebeolsik Dubeol Layout"
 msgstr "세벌식 두벌자판"
 
-#: hangul/hangulinputcontext.c:291
+#: hangul/hangulinputcontext.c:287
 msgid "Sebeolsik 390"
 msgstr "세벌식 390"
 
-#: hangul/hangulinputcontext.c:299
+#: hangul/hangulinputcontext.c:295
 msgid "Sebeolsik Final"
 msgstr "세벌식 최종"
 
-#: hangul/hangulinputcontext.c:307
+#: hangul/hangulinputcontext.c:303
 msgid "Sebeolsik Noshift"
 msgstr "세벌식 순아래"
 
-#: hangul/hangulinputcontext.c:315
+#: hangul/hangulinputcontext.c:311
 msgid "Sebeolsik Yetgeul"
 msgstr "세벌식 옛글"
 
-#: hangul/hangulinputcontext.c:323
+#: hangul/hangulinputcontext.c:319
 msgid "Romaja"
 msgstr "로마자"
 
-#: hangul/hangulinputcontext.c:331
+#: hangul/hangulinputcontext.c:327
 msgid "Ahnmatae"
 msgstr "안마태"
