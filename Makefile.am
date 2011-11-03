@@ -15,10 +15,9 @@ EXTRA_DIST = \
     test/hanja.c \
     test/test.c
 
-log:
-	unset LC_ALL; \
-	export LANG=C ; \
-	export LC_CTYPE=ko_KR.UTF-8; \
-	svn log -v > ChangeLog
-
 ACLOCAL_AMFLAGS = -I m4
+
+dist-hook:
+	if test -d .git; then \
+		git log --name-status --date=iso > $(distdir)/ChangeLog ; \
+	fi
