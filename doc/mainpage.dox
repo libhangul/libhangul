@@ -17,26 +17,20 @@ libhangul에서 제공하는 기능들은 다음 레퍼런스에서 찾아볼 �
 
 @section download 다운로드
 최근 릴리스들은 libhangul의 프로젝트 페이지에서 받을 수 있습니다.
-@li http://kldp.net/frs/?group_id=362
+@li http://code.google.com/p/libhangul/downloads/list
 
-개발버젼의 소스는 <a href="http://kldp.net/">KLDP.net</a>의 subversion 
+개발버젼의 소스는 <a href="http://github.com/">github</a>의 
 repository에서 받을 수 있습니다.
-@li subversion: http://kldp.net/scm/?group_id=362
+@li git: git://github.com/choehwanjin/libhangul.git
 
 @section bug 버그리포트
-libhangul의 버그는 <a href="http://kldp.net/">KLDP.net</a>의 버그트래커로
+libhangul의 버그는 <a href="http://code.google.com/">Google code</a>의 버그트래커로
 관리하고 있습니다.
 
-@li 버그트래커: http://kldp.net/tracker/?group_id=362
-
-@section mailinglist 메일링 리스트
-@li 메일링리스트: http://lists.kldp.net/mailman/listinfo/hangul-hackers
-@li 메일링리스트 아카이브: http://lists.kldp.net/pipermail/hangul-hackers/
+@li 버그트래커: http://code.google.com/p/libhangul/issues/list
 
 @section website 웹주소
-libhangul은 <a href="http://kldp.net/">KLDP.net</a>에서 호스팅되고 있습니다.
- @li Home page: http://hangul.kldp.net/
- @li Project page: http://kldp.net/projects/hangul/
- @li Wiki page: http://wiki.kldp.org/wiki.php/libhangul
+libhangul은 <a href="http://code.google.com/">Google code</a>에서 호스팅되고 있습니다.
+ @li Project page: http://code.google.com/p/libhangul/
 
  */
