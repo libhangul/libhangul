@@ -918,7 +918,7 @@ hangul_jongseong_decompose(ucschar c, ucschar* jong, ucschar* cho)
     *cho  = table[c - 0x11a8][1];
 }
 
-inline void
+void
 hangul_jongseong_dicompose(ucschar c, ucschar* jong, ucschar* cho)
 {
     hangul_jongseong_decompose(c, jong, cho);
