@@ -1142,7 +1142,7 @@ hangul_ic_process_romaja(HangulInputContext *hic, int ascii, ucschar ch)
 		    }
 		} else {
 		    ucschar choseong = 0, jongseong = 0; 
-		    hangul_jongseong_dicompose(hic->buffer.jongseong,
+		    hangul_jongseong_decompose(hic->buffer.jongseong,
 					       &jongseong, &choseong);
 		    hic->buffer.jongseong = jongseong;
 		    hangul_ic_save_commit_string(hic);

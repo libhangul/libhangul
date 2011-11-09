@@ -882,7 +882,7 @@ hangul_jongseong_to_choseong(ucschar c)
 }
 
 void
-hangul_jongseong_dicompose(ucschar c, ucschar* jong, ucschar* cho)
+hangul_jongseong_decompose(ucschar c, ucschar* jong, ucschar* cho)
 {
     static ucschar table[][2] = {
     { 0,      0x1100 }, /* jong kiyeok	      = cho  kiyeok               */
@@ -916,6 +916,12 @@ hangul_jongseong_dicompose(ucschar c, ucschar* jong, ucschar* cho)
 
     *jong = table[c - 0x11a8][0];
     *cho  = table[c - 0x11a8][1];
+}
+
+void
+hangul_jongseong_dicompose(ucschar c, ucschar* jong, ucschar* cho)
+{
+    hangul_jongseong_decompose(c, jong, cho);
 }
 
 static int
