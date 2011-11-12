@@ -52,11 +52,6 @@ bool hangul_is_cjamo(ucschar c);
 
 ucschar hangul_jamo_to_cjamo(ucschar ch);
 
-ucschar hangul_choseong_to_jongseong(ucschar ch);
-ucschar hangul_jongseong_to_choseong(ucschar ch);
-void    hangul_jongseong_decompose(ucschar ch, ucschar* jong, ucschar* cho);
-void    hangul_jongseong_dicompose(ucschar ch, ucschar* jong, ucschar* cho) LIBHANGUL_DEPRECATED;
-
 const ucschar* hangul_syllable_iterator_prev(const ucschar* str,
 					     const ucschar* begin);
 const ucschar* hangul_syllable_iterator_next(const ucschar* str,
