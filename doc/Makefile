@@ -1,10 +1,11 @@
-doc:
-	./gen_hangulkeyboards.py > hangulkeyboards.dox
+doc: Doxyfile hangulkeyboards.dox
 	doxygen
+
+hangulkeyboards.dox: gen_hangulkeyboards.py
+	./gen_hangulkeyboards.py > $@
+
+Doxyfile: Doxyfile.in
+	cd .. && ./config.status doc/$@
 
 clean:
 	rm -rf html
-
-upload:
-	cd html ; \
-	scp -pr * $(USER)@hangul.kldp.net:/var/lib/gforge/chroot/home/groups/hangul/htdocs

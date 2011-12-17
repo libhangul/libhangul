@@ -454,7 +454,8 @@ INPUT                  = ../hangul/hangul.h \
 			 ../hangul/hangulctype.c \
 			 ../hangul/hangulinputcontext.c \
 			 ../hangul/hanja.c \
-			 mainpage.dox
+			 mainpage.dox \
+			 hangulkeyboards.dox
 
 # If the value of the INPUT tag contains directories, you can use the 
 # FILE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp 
