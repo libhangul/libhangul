@@ -1,4 +1,5 @@
 doc:
+	./gen_hangulkeyboards.py > hangulkeyboards.dox
 	doxygen
 
 clean:

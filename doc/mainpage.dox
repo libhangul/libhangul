@@ -3,34 +3,43 @@
 @mainpage
 
 @section introduction libhangul 소개
-libhangul은 기본적인 한글 관련 루틴들을 구현한 라이브러리입니다.
+libhangul은 기본적인 한글 관련 루틴들을 구현한 라이브러리다.
 주로 한글 입력기능을 구현한 것으로 이 라이브러리를 사용하면 비교적 손쉽게
-한글 입력기를 구현할 수 있습니다. 현재 많은 linux의 입력기들이 이 라이브러리로
-구현되어 있습니다.
+한글 입력기를 구현할 수 있다. 현재 많은 linux의 입력기들이 이 라이브러리로
+구현되어 있다.
 
 @section documentation 개발 문서
-libhangul에서 제공하는 기능들은 다음 레퍼런스에서 찾아볼 수 있습니다.
-@li @ref hangulctype : 유니코드에서 한글 글자를 구분하고 조작하는 함수들입니다.
-이 함수들을 이용하면 자모 코드를 음절로 조합할 수 있고 또 음절을 자모 코드로 분리할 수 있습니다.
-@li @ref hangulicusage : 한글 입력 기능을 제공합니다. 이 함수들을 이용하여 키 입력에 따른 한글 조합 기능을 손쉽게 구현할 수 있습니다.
-@li @ref hanjadictionaryusage : 한자 사전 파일 관련 기능을 제공합니다. 이 함수들을 이용하여 libhangul에서 제공하는 한자 사전 파일을 찾아볼 수 있습니다.
+libhangul에서 제공하는 기능들은 다음 레퍼런스에서 찾아볼 수 있다.
+@li @ref hangulctype : 유니코드로된 한글 글자를 구분하고 조작하는 함수이다.
+이 함수들을 이용하면 자모 코드를 음절로 조합할 수 있고 또 음절을 자모 코드로
+분리할 수 있다.
+@li @ref hangulicusage : 한글 입력 기능을 제공한다. 이 함수들을 이용하여 키
+입력에 따른 한글 조합 기능을 손쉽게 구현할 수 있다.
+@li @ref hanjadictionaryusage : 한자 사전 파일 관련 기능을 제공한다.
+이 함수들을 이용하여 libhangul에서 제공하는 한자 사전 파일을 찾아볼 수 있다.
 
 @section download 다운로드
-최근 릴리스들은 libhangul의 프로젝트 페이지에서 받을 수 있습니다.
-@li http://code.google.com/p/libhangul/downloads/list
+최근 릴리스들은 libhangul의 프로젝트 페이지에서 받을 수 있다.
+
+http://code.google.com/p/libhangul/downloads/list
 
 개발버젼의 소스는 <a href="http://github.com/">github</a>의 
-repository에서 받을 수 있습니다.
-@li git: git://github.com/choehwanjin/libhangul.git
+repository에서 받을 수 있다.
+
+@code
+git clone git://github.com/choehwanjin/libhangul.git
+@endcode
 
 @section bug 버그리포트
-libhangul의 버그는 <a href="http://code.google.com/">Google code</a>의 버그트래커로
-관리하고 있습니다.
+libhangul의 버그는 <a href="http://code.google.com/">Google code</a>의
+버그트래커로 관리하고 있다.
 
-@li 버그트래커: http://code.google.com/p/libhangul/issues/list
+버그트래커: http://code.google.com/p/libhangul/issues/list
 
 @section website 웹주소
-libhangul은 <a href="http://code.google.com/">Google code</a>에서 호스팅되고 있습니다.
- @li Project page: http://code.google.com/p/libhangul/
+libhangul은 <a href="http://code.google.com/">Google code</a>에서 호스팅되고
+있다.
+
+Project page: http://code.google.com/p/libhangul/
 
  */

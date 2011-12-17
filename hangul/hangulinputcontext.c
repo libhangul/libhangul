@@ -55,8 +55,8 @@
  * string 형태로 보내여 입력을 완료하는 것이다. 다음 키를 받게 되면 
  * 이 과정을 반복해서 수행한다.
  * 
- * libhangul에서 한글 조합 기능은 @ref HangulInputContext를 이용해서 구현하게
- * 되는데 기본 적인 방법은 @ref HangulInputContext에 사용자로부터의 입력을
+ * libhangul에서 한글 조합 기능은 @ref HangulInputContext 를 이용해서 구현하게
+ * 되는데 기본 적인 방법은 @ref HangulInputContext 에 사용자로부터의 입력을
  * 순서대로 전달하면서 그 상태가 바뀜에 따라서 preedit 나 commit 스트링을
  * 상황에 맞게 변화시키는 것이다.
  * 
@@ -1259,7 +1259,7 @@ flush:
  * @brief 키 입력을 처리하여 실제로 한글 조합을 하는 함수
  * @param hic @ref HangulInputContext 오브젝트
  * @param ascii 키 이벤트
- * @return @ref HangulInputContext가 이 키를 사용했으면 true,
+ * @return @ref HangulInputContext 가 이 키를 사용했으면 true,
  *	     사용하지 않았으면 false
  *
  * ascii 값으로 주어진 키 이벤트를 받아서 내부의 한글 조합 상태를
@@ -1278,7 +1278,7 @@ flush:
  * 
  * 이 함수의 사용법에 대한 설명은 @ref hangulicusage 부분을 참조한다.
  *
- * @remarks 이 함수는 @ref HangulInputContext의 상태를 변화 시킨다.
+ * @remarks 이 함수는 @ref HangulInputContext 의 상태를 변화 시킨다.
  */
 bool
 hangul_ic_process(HangulInputContext *hic, int ascii)
@@ -1313,7 +1313,7 @@ hangul_ic_process(HangulInputContext *hic, int ascii)
  * 이 함수는  @a hic 내부의 현재 상태의 preedit string을 리턴한다.
  * 따라서 hic가 다른 키 이벤트를 처리하고 나면 그 내용이 바뀔 수 있다.
  * 
- * @remarks 이 함수는 @ref HangulInputContext의 상태를 변화 시키지 않는다.
+ * @remarks 이 함수는 @ref HangulInputContext 의 상태를 변화 시키지 않는다.
  */
 const ucschar*
 hangul_ic_get_preedit_string(HangulInputContext *hic)
@@ -1334,7 +1334,7 @@ hangul_ic_get_preedit_string(HangulInputContext *hic)
  * 이 함수는  @a hic 내부의 현재 상태의 commit string을 리턴한다.
  * 따라서 hic가 다른 키 이벤트를 처리하고 나면 그 내용이 바뀔 수 있다.
  *
- * @remarks 이 함수는 @ref HangulInputContext의 상태를 변화 시키지 않는다.
+ * @remarks 이 함수는 @ref HangulInputContext 의 상태를 변화 시키지 않는다.
  */
 const ucschar*
 hangul_ic_get_commit_string(HangulInputContext *hic)
@@ -1347,17 +1347,17 @@ hangul_ic_get_commit_string(HangulInputContext *hic)
 
 /**
  * @ingroup hangulic
- * @brief @ref HangulInputContext를 초기상태로 되돌리는 함수
- * @param hic @ref HangulInputContext를 가리키는 포인터
+ * @brief @ref HangulInputContext 를 초기상태로 되돌리는 함수
+ * @param hic @ref HangulInputContext 를 가리키는 포인터
  * 
- * 이 함수는 @a hic가 가리키는 @ref HangulInputContext의 상태를 
+ * 이 함수는 @a hic가 가리키는 @ref HangulInputContext 의 상태를 
  * 처음 상태로 되돌린다. preedit 스트링, commit 스트링, flush 스트링이
  * 없어지고, 입력되었던 키에 대한 기록이 없어진다.
  * 영어 상태로 바뀌는 것이 아니다.
  *
  * 비교: hangul_ic_flush()
  *
- * @remarks 이 함수는 @ref HangulInputContext의 상태를 변화 시킨다.
+ * @remarks 이 함수는 @ref HangulInputContext 의 상태를 변화 시킨다.
  */
 void
 hangul_ic_reset(HangulInputContext *hic)
@@ -1385,12 +1385,12 @@ hangul_ic_flush_internal(HangulInputContext *hic)
 
 /**
  * @ingroup hangulic
- * @brief @ref HangulInputContext의 입력 상태를 완료하는 함수
- * @param hic @ref HangulInputContext를 가리키는 포인터
+ * @brief @ref HangulInputContext 의 입력 상태를 완료하는 함수
+ * @param hic @ref HangulInputContext 를 가리키는 포인터
  * @return 조합 완료된 스트링, 스트링의 길이가 0이면 조합 완료된 스트링이 
  *	  없는 것
  *
- * 이 함수는 @a hic가 가리키는 @ref HangulInputContext의 입력 상태를 완료한다.
+ * 이 함수는 @a hic가 가리키는 @ref HangulInputContext 의 입력 상태를 완료한다.
  * 조합중이던 스트링을 완성하여 리턴한다. 그리고 입력 상태가 초기 상태로 
  * 되돌아 간다. 조합중이던 글자를 강제로 commit하고 싶을때 사용하는 함수다.
  * 보통의 경우 입력 framework에서 focus가 나갈때 이 함수를 불러서 마지막 
@@ -1398,7 +1398,7 @@ hangul_ic_flush_internal(HangulInputContext *hic)
  *
  * 비교: hangul_ic_reset()
  *
- * @remarks 이 함수는 @ref HangulInputContext의 상태를 변화 시킨다.
+ * @remarks 이 함수는 @ref HangulInputContext 의 상태를 변화 시킨다.
  */
 const ucschar*
 hangul_ic_flush(HangulInputContext *hic)
@@ -1426,16 +1426,16 @@ hangul_ic_flush(HangulInputContext *hic)
 
 /**
  * @ingroup hangulic
- * @brief @ref HangulInputContext가 backspace 키를 처리하도록 하는 함수
- * @param hic @ref HangulInputContext를 가리키는 포인터
+ * @brief @ref HangulInputContext 가 backspace 키를 처리하도록 하는 함수
+ * @param hic @ref HangulInputContext 를 가리키는 포인터
  * @return @a hic가 키를 사용했으면 true, 사용하지 않았으면 false
  * 
- * 이 함수는 @a hic가 가리키는 @ref HangulInputContext의 조합중이던 글자를
+ * 이 함수는 @a hic가 가리키는 @ref HangulInputContext 의 조합중이던 글자를
  * 뒤에서부터 하나 지우는 기능을 한다. backspace 키를 눌렀을 때 발생하는 
  * 동작을 한다. 따라서 이 함수를 부르고 나면 preedit string이 바뀌므로
  * 반드시 업데이트를 해야 한다.
  *
- * @remarks 이 함수는 @ref HangulInputContext의 상태를 변화 시킨다.
+ * @remarks 이 함수는 @ref HangulInputContext 의 상태를 변화 시킨다.
  */
 bool
 hangul_ic_backspace(HangulInputContext *hic)
@@ -1456,12 +1456,12 @@ hangul_ic_backspace(HangulInputContext *hic)
 
 /**
  * @ingroup hangulic
- * @brief @ref HangulInputContext가 조합중인 글자를 가지고 있는지 확인하는 함수
- * @param hic @ref HangulInputContext를 가리키는 포인터
+ * @brief @ref HangulInputContext 가 조합중인 글자를 가지고 있는지 확인하는 함수
+ * @param hic @ref HangulInputContext 를 가리키는 포인터
  *
- * @ref HangulInputContext가 조합중인 글자가 있으면 true를 리턴한다.
+ * @ref HangulInputContext 가 조합중인 글자가 있으면 true를 리턴한다.
  *
- * @remarks 이 함수는 @ref HangulInputContext의 상태를 변화 시키지 않는다.
+ * @remarks 이 함수는 @ref HangulInputContext 의 상태를 변화 시키지 않는다.
  */
 bool
 hangul_ic_is_empty(HangulInputContext *hic)
@@ -1471,12 +1471,12 @@ hangul_ic_is_empty(HangulInputContext *hic)
 
 /**
  * @ingroup hangulic
- * @brief @ref HangulInputContext가 조합중인 초성을 가지고 있는지 확인하는 함수
- * @param hic @ref HangulInputContext를 가리키는 포인터
+ * @brief @ref HangulInputContext 가 조합중인 초성을 가지고 있는지 확인하는 함수
+ * @param hic @ref HangulInputContext 를 가리키는 포인터
  *
- * @ref HangulInputContext가 조합중인 글자가 초성이 있으면 true를 리턴한다.
+ * @ref HangulInputContext 가 조합중인 글자가 초성이 있으면 true를 리턴한다.
  *
- * @remarks 이 함수는 @ref HangulInputContext의 상태를 변화 시키지 않는다.
+ * @remarks 이 함수는 @ref HangulInputContext 의 상태를 변화 시키지 않는다.
  */
 bool
 hangul_ic_has_choseong(HangulInputContext *hic)
@@ -1486,12 +1486,12 @@ hangul_ic_has_choseong(HangulInputContext *hic)
 
 /**
  * @ingroup hangulic
- * @brief @ref HangulInputContext가 조합중인 중성을 가지고 있는지 확인하는 함수
- * @param hic @ref HangulInputContext를 가리키는 포인터
+ * @brief @ref HangulInputContext 가 조합중인 중성을 가지고 있는지 확인하는 함수
+ * @param hic @ref HangulInputContext 를 가리키는 포인터
  *
- * @ref HangulInputContext가 조합중인 글자가 중성이 있으면 true를 리턴한다.
+ * @ref HangulInputContext 가 조합중인 글자가 중성이 있으면 true를 리턴한다.
  *
- * @remarks 이 함수는 @ref HangulInputContext의 상태를 변화 시키지 않는다.
+ * @remarks 이 함수는 @ref HangulInputContext 의 상태를 변화 시키지 않는다.
  */
 bool
 hangul_ic_has_jungseong(HangulInputContext *hic)
@@ -1501,12 +1501,12 @@ hangul_ic_has_jungseong(HangulInputContext *hic)
 
 /**
  * @ingroup hangulic
- * @brief @ref HangulInputContext가 조합중인 종성을 가지고 있는지 확인하는 함수
- * @param hic @ref HangulInputContext를 가리키는 포인터
+ * @brief @ref HangulInputContext 가 조합중인 종성을 가지고 있는지 확인하는 함수
+ * @param hic @ref HangulInputContext 를 가리키는 포인터
  *
- * @ref HangulInputContext가 조합중인 글자가 종성이 있으면 true를 리턴한다.
+ * @ref HangulInputContext 가 조합중인 글자가 종성이 있으면 true를 리턴한다.
  *
- * @remarks 이 함수는 @ref HangulInputContext의 상태를 변화 시키지 않는다.
+ * @remarks 이 함수는 @ref HangulInputContext 의 상태를 변화 시키지 않는다.
  */
 bool
 hangul_ic_has_jongseong(HangulInputContext *hic)
@@ -1591,23 +1591,25 @@ hangul_ic_get_keyboard_by_id(const char* id)
 
 /**
  * @ingroup hangulic
- * @brief @ref HangulInputContext의 자판 배열을 바꾸는 함수
+ * @brief @ref HangulInputContext 의 자판 배열을 바꾸는 함수
  * @param hic @ref HangulInputContext 오브젝트
  * @param id 선택하고자 하는 자판, 아래와 같은 값을 선택할 수 있다.
- *	    @li "2"   두벌식 자판
- *	    @li "32"  세벌식 자판으로 두벌식의 배열을 가진 자판.
- *		      두벌식 사용자가 쉽게 세벌식 테스트를 할 수 있다.
- *		      shift를 누르면 자음이 종성으로 동작한다.
- *	    @li "3f"  세벌식 최종
- *	    @li "39"  세벌식 390
- *	    @li "3s"  세벌식 순아래
- *	    @li "3y"  세벌식 옛글
- *	    @li "ro"  로마자 방식 자판
+ *   @li "2"   @ref layout_2 자판
+ *   @li "2y"  @ref layout_2y 자판
+ *   @li "3f"  @ref layout_3f 자판
+ *   @li "39"  @ref layout_390 자판
+ *   @li "3s"  @ref layout_3s 자판
+ *   @li "3y"  @ref layout_3y 자판
+ *   @li "32"  @ref layout_32 자판
+ *   @li "ro"  @ref layout_ro 자판
+ *
+ *   libhangul이 지원하는 자판에 대한 정보는 @ref hangulkeyboards 페이지를
+ *   참조하라.
  * @return 없음
  * 
- * 이 함수는 @ref HangulInputContext의 자판을 @a id로 지정된 것으로 변경한다.
+ * 이 함수는 @ref HangulInputContext 의 자판을 @a id로 지정된 것으로 변경한다.
  * 
- * @remarks 이 함수는 @ref HangulInputContext의 내부 조합 상태에는 영향을
+ * @remarks 이 함수는 @ref HangulInputContext 의 내부 조합 상태에는 영향을
  * 미치지 않는다.  따라서 입력 중간에 자판을 변경하더라도 조합 상태는 유지된다.
  */
 void
@@ -1640,7 +1642,7 @@ hangul_ic_set_combination(HangulInputContext *hic,
  * @brief @ref HangulInputContext 오브젝트를 생성한다.
  * @param keyboard 사용하고자 하는 키보드, 사용 가능한 값에 대해서는
  *	hangul_ic_select_keyboard() 함수 설명을 참조한다.
- * @return 새로 생성된 @ref HangulInputContext에 대한 포인터
+ * @return 새로 생성된 @ref HangulInputContext 에 대한 포인터
  * 
  * 이 함수는 한글 조합 기능을 제공하는 @ref HangulInputContext 오브젝트를 
  * 생성한다. 생성할때 지정한 자판은 나중에 hangul_ic_select_keyboard() 함수로
@@ -1678,7 +1680,7 @@ hangul_ic_new(const char* keyboard)
 
 /**
  * @ingroup hangulic
- * @brief @ref HangulInputContext를 삭제하는 함수
+ * @brief @ref HangulInputContext 를 삭제하는 함수
  * @param hic @ref HangulInputContext 오브젝트
  * 
  * @a hic가 가리키는 @ref HangulInputContext 오브젝트의 메모리를 해제한다.

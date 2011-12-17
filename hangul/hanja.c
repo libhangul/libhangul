@@ -93,8 +93,8 @@
  * 한자 사전 포맷은 @ref HanjaTable 부분을 참조한다.
  *
  * 한자 사전을 검색하면 결과는 Hanja 오브젝트의 리스트 형태로 전달된다.
- * @ref HanjaList에서 각 엔트리의 내용을 하나씩 확인할 수 있다.
- * Hanja의 멤버는 직접 참조할 수 없고, hanja_get_key(), hanja_get_value(),
+ * @ref HanjaList 에서 각 엔트리의 내용을 하나씩 확인할 수 있다.
+ * @ref Hanja 의 멤버는 직접 참조할 수 없고, hanja_get_key(), hanja_get_value(),
  * hanja_get_comment() 함수로 찾아볼 수 있다.
  * char 스트링으로 전달되는 내용은 모두 UTF-8 인코딩으로 되어 있다.
  */
@@ -107,7 +107,7 @@
  * 한자 사전의 검색 함수를 사용하면 이 타입으로 결과를 리턴한다. 
  * 이 오브젝트에서 hanja_list_get_nth()함수를 이용하여 검색 결과를
  * 이터레이션할 수 있다.  내부 구현 내용은 외부로 노출되어 있지 않다.
- * @ref HanjaList가 가지고 있는 아이템들은 accessor 함수들을 이용해서 참조한다.
+ * @ref HanjaList 가 가지고 있는 아이템들은 accessor 함수들을 이용해서 참조한다.
  *
  * 참조: hanja_list_get_nth(), hanja_list_get_nth_key(),
  * hanja_list_get_nth_value(), hanja_list_get_nth_comment()
@@ -133,7 +133,7 @@
  *
  * 각 필드는 @b @c : 으로 구분하고, 첫번째 필드는 각 한자를 찾을 키값이고 
  * 두번째 필드는 그 키값에 해당하는 한자 스트링, 세번째 필드는 이 키와
- * 값에 대한 설명이다. #으로 시작하는 라인은 주석으로 무시된다.
+ * 값에 대한 설명이다. @# 으로 시작하는 라인은 주석으로 무시된다.
  *
  * 실제 예를 들면 다음과 같은 식이다.
  *
@@ -276,7 +276,7 @@ hanja_delete(Hanja* hanja)
 
 /**
  * @ingroup hanjadictionary
- * @brief @ref Hanja의 키를 찾아본다.
+ * @brief @ref Hanja 의 키를 찾아본다.
  * @return @a hanja 오브젝트의 키, UTF-8
  *
  * 일반적으로 @ref Hanja 아이템의 키는 한글이다.
@@ -295,7 +295,7 @@ hanja_get_key(const Hanja* hanja)
 
 /**
  * @ingroup hanjadictionary
- * @brief @ref Hanja의 값을 찾아본다.
+ * @brief @ref Hanja 의 값을 찾아본다.
  * @return @a hanja 오브젝트의 값, UTF-8
  *
  * 일반적으로 @ref Hanja 아이템의 값은 key에 대응되는 한자다.
@@ -314,7 +314,7 @@ hanja_get_value(const Hanja* hanja)
 
 /**
  * @ingroup hanjadictionary
- * @brief @ref Hanja의 설명을 찾아본다.
+ * @brief @ref Hanja 의 설명을 찾아본다.
  * @return @a hanja 오브젝트의 comment 필드, UTF-8
  *
  * 일반적으로 @ref Hanja 아이템의 설명은 한글과 그 한자에 대한 설명이다.
@@ -660,7 +660,7 @@ hanja_table_match_suffix(const HanjaTable* table, const char *key)
 
 /**
  * @ingroup hanjadictionary
- * @brief @ref HanjaList가 가지고 있는 아이템의 갯수를 구하는 함수
+ * @brief @ref HanjaList 가 가지고 있는 아이템의 갯수를 구하는 함수
  */
 int
 hanja_list_get_size(const HanjaList *list)
@@ -672,18 +672,18 @@ hanja_list_get_size(const HanjaList *list)
 
 /**
  * @ingroup hanjadictionary
- * @brief @ref HanjaList가 생성될때 검색함수에서 사용한 키를 구하는 함수
- * @return @ref HanjaList의 key 스트링
+ * @brief @ref HanjaList 가 생성될때 검색함수에서 사용한 키를 구하는 함수
+ * @return @ref HanjaList 의 key 스트링
  *
- * 한자 사전 검색 함수로 HanjaList를 생성하면 HanjaList는 그 검색할때 사용한
- * 키를 기억하고 있다. 이 값을 확인할때 사용한다.
+ * 한자 사전 검색 함수로 @ref HanjaList 를 생성하면 @ref HanjaList 는
+ * 그 검색할때 사용한 키를 기억하고 있다. 이 값을 확인할때 사용한다.
  * 주의할 점은, 각 Hanja 아이템들은 각각의 키를 가지고 있지만, 이것이
- * 반드시 @ref HanjaList와 일치하지는 않는다는 것이다.
+ * 반드시 @ref HanjaList 와 일치하지는 않는다는 것이다.
  * 검색할 당시에 사용한 함수가 prefix나 suffix계열이면 더 짧은 키로도 
- * 검색하기 때문에 @ref HanjaList의 키와 검색 결과의 키와 다른 것들도 
+ * 검색하기 때문에 @ref HanjaList 의 키와 검색 결과의 키와 다른 것들도 
  * 가지고 있게 된다.
  *
- * 리턴된 스트링 포인터는 @ref HanjaList에서 관리하는 스트링으로
+ * 리턴된 스트링 포인터는 @ref HanjaList 에서 관리하는 스트링으로
  * 수정하거나 free해서는 안된다.
  */
 const char*
@@ -697,15 +697,15 @@ hanja_list_get_key(const HanjaList *list)
 /**
  * @ingroup hanjadictionary
  * @brief @ref HanjaList 의 n번째 @ref Hanja 아이템의 포인터를 구하는 함수
- * @param list @ref HanjaList를 가리키는 포인터
+ * @param list @ref HanjaList 를 가리키는 포인터
  * @param n 참조할 아이템의 인덱스
- * @return @ref Hanja를 가리키는 포인터
+ * @return @ref Hanja 를 가리키는 포인터
  * 
- * 이 함수는 @a list가 가리키는 @ref HanjaList의 n번째 @ref Hanja 오브젝트를
+ * 이 함수는 @a list가 가리키는 @ref HanjaList 의 n번째 @ref Hanja 오브젝트를
  * 가리키는 포인터를 리턴한다.
  * @ref HanjaList 의 각 아이템은 정수형 인덱스로 각각 참조할 수 있다.
  * @ref HanjaList 가 가진 엔트리 갯수를 넘어서는 인덱스를 주면 NULL을 리턴한다.
- * 리턴된 @ref Hanja 오브젝트는 @ref HanjaList가 관리하는 오브젝트로 free하거나
+ * 리턴된 @ref Hanja 오브젝트는 @ref HanjaList 가 관리하는 오브젝트로 free하거나
  * 수정해서는 안된다.
  *
  * 다음의 예제는 list로 주어진 @ref HanjaList 의 모든 값을 프린트 하는 
@@ -749,7 +749,7 @@ hanja_list_get_nth_key(const HanjaList *list, unsigned int n)
 
 /**
  * @ingroup hanjadictionary
- * @brief @ref HanjaList의 n번째 아이템의 값를 구하는 함수
+ * @brief @ref HanjaList 의 n번째 아이템의 값를 구하는 함수
  * @return n번째 아이템의 값(value), UTF-8
  *
  * HanjaList_get_nth()의 convenient 함수
@@ -763,7 +763,7 @@ hanja_list_get_nth_value(const HanjaList *list, unsigned int n)
 
 /**
  * @ingroup hanjadictionary
- * @brief @ref HanjaList의 n번째 아이템의 설명을 구하는 함수
+ * @brief @ref HanjaList 의 n번째 아이템의 설명을 구하는 함수
  * @return n번째 아이템의 설명(comment), UTF-8
  *
  * HanjaList_get_nth()의 convenient 함수
