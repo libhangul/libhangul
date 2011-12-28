@@ -237,9 +237,24 @@ struct _HangulInputContext {
 
 #include "hangulkeyboard.h"
 
-static const HangulCombination hangul_combination_default = {
-    N_ELEMENTS(hangul_combination_table_default),
-    (HangulCombinationItem*)hangul_combination_table_default
+static const HangulCombination hangul_combination_2 = {
+    N_ELEMENTS(hangul_combination_table_2),
+    (HangulCombinationItem*)hangul_combination_table_2
+};
+
+static const HangulCombination hangul_combination_3 = {
+    N_ELEMENTS(hangul_combination_table_3),
+    (HangulCombinationItem*)hangul_combination_table_3
+};
+
+static const HangulCombination hangul_combination_390 = {
+    N_ELEMENTS(hangul_combination_table_390),
+    (HangulCombinationItem*)hangul_combination_table_390
+};
+
+static const HangulCombination hangul_combination_3sun = {
+    N_ELEMENTS(hangul_combination_table_3sun),
+    (HangulCombinationItem*)hangul_combination_table_3sun
 };
 
 static const HangulCombination hangul_combination_romaja = {
@@ -262,7 +277,7 @@ static const HangulKeyboard hangul_keyboard_2 = {
     "2", 
     N_("Dubeolsik"), 
     (ucschar*)hangul_keyboard_table_2,
-    &hangul_combination_default
+    &hangul_combination_2
 };
 
 static const HangulKeyboard hangul_keyboard_2y = {
@@ -278,7 +293,7 @@ static const HangulKeyboard hangul_keyboard_32 = {
     "32",
     N_("Sebeolsik Dubeol Layout"),
     (ucschar*)hangul_keyboard_table_32,
-    &hangul_combination_default
+    &hangul_combination_2
 };
 
 static const HangulKeyboard hangul_keyboard_390 = {
@@ -286,7 +301,7 @@ static const HangulKeyboard hangul_keyboard_390 = {
     "39",
     N_("Sebeolsik 390"),
     (ucschar*)hangul_keyboard_table_390,
-    &hangul_combination_default
+    &hangul_combination_390
 };
 
 static const HangulKeyboard hangul_keyboard_3final = {
@@ -294,7 +309,7 @@ static const HangulKeyboard hangul_keyboard_3final = {
     "3f",
     N_("Sebeolsik Final"),
     (ucschar*)hangul_keyboard_table_3final,
-    &hangul_combination_default
+    &hangul_combination_3
 };
 
 static const HangulKeyboard hangul_keyboard_3sun = {
@@ -302,7 +317,7 @@ static const HangulKeyboard hangul_keyboard_3sun = {
     "3s",
     N_("Sebeolsik Noshift"),
     (ucschar*)hangul_keyboard_table_3sun,
-    &hangul_combination_default
+    &hangul_combination_3sun,
 };
 
 static const HangulKeyboard hangul_keyboard_3yet = {
