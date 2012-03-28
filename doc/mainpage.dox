@@ -17,6 +17,7 @@ libhangul에서 제공하는 기능들은 다음 레퍼런스에서 찾아볼 �
 입력에 따른 한글 조합 기능을 손쉽게 구현할 수 있다.
 @li @ref hanjadictionaryusage : 한자 사전 파일 관련 기능을 제공한다.
 이 함수들을 이용하여 libhangul에서 제공하는 한자 사전 파일을 찾아볼 수 있다.
+@li @ref hangulkeyboards : libhangul에서 제공하는 한글 자판에 대한 설명이다.
 
 @section download 다운로드
 최근 릴리스들은 libhangul의 프로젝트 페이지에서 받을 수 있다.

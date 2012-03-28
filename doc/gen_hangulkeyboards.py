@@ -287,7 +287,7 @@ print '''/**
 @defgroup hangulkeyboards 한글 자판
 
 libhangul에서 builtin으로 지원하는 자판은 @ref layout_2, @ref layout_2y,
-@ref layout_3f, @ref layout_390, @ref layout_3s, @ref layout_2y,
+@ref layout_3f, @ref layout_390, @ref layout_3s,
 @ref layout_3y, @ref layout_ahn, @ref layout_ro 자판 이다.
 
 아래의 자판 배열은 libhangul에서 지원하는 자판을 알아보기 쉽게 그림형태로
