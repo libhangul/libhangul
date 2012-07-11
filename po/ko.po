@@ -51,3 +51,11 @@ msgstr "로마자"
 #: hangul/hangulinputcontext.c:327
 msgid "Ahnmatae"
 msgstr "안마태"
+
+#: hangul/hangulinputcontext.c:335
+msgid "Sebeolsik 3-2011"
+msgstr "세벌식 3-2011"
+
+#: hangul/hangulinputcontext.c:343
+msgid "Sebeolsik 3-2012"
+msgstr "세벌식 3-2012"
