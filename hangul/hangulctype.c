@@ -1344,7 +1344,7 @@ hangul_syllable_to_jaso(ucschar syllable,
 			ucschar* jungseong,
 			ucschar* jongseong)
 {
-    return hangul_syllable_to_jamo(syllable, choseong, jungseong, jongseong);
+    hangul_syllable_to_jamo(syllable, choseong, jungseong, jongseong);
 }
 
 static inline bool 
