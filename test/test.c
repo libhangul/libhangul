@@ -395,6 +395,20 @@ START_TEST(test_hangul_keyboard)
 }
 END_TEST
 
+START_TEST(test_hangul_jamo_to_cjamo)
+{
+    fail_unless(
+	0x3183 == hangul_jamo_to_cjamo(0x11f2)
+    );
+    fail_unless(
+	0x316f == hangul_jamo_to_cjamo(0xa971)
+    );
+    fail_unless(
+	0x3149 == hangul_jamo_to_cjamo(0xd7f9)
+    );
+}
+END_TEST
+
 Suite* libhangul_suite()
 {
     Suite* s = suite_create("libhangul");
@@ -406,6 +420,7 @@ Suite* libhangul_suite()
     tcase_add_test(hangul, test_hangul_ic_process_romaja);
     tcase_add_test(hangul, test_syllable_iterator);
     tcase_add_test(hangul, test_hangul_keyboard);
+    tcase_add_test(hangul, test_hangul_jamo_to_cjamo);
     suite_add_tcase(s, hangul);
 
     return s;
