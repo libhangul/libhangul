@@ -446,6 +446,64 @@ hanja_table_match(const HanjaTable* table,
     }
 }
 
+static void
+hanja_table_prefix_match(const HanjaTable* table,
+                         const char* key, HanjaList** list)
+{
+    int low, high, mid;
+    int res = -1;
+
+    low = 0;
+    high = table->nkeys - 1;
+
+    while (low < high) {
+	mid = (low + high) / 2;
+	res = strncmp(table->keytable[mid].key, key, table->key_size);
+	if (res < 0) {
+	    low = mid + 1;
+	} else if (res > 0) {
+	    high = mid - 1;
+	} else {
+	    break;
+	}
+    }
+
+    if (res != 0) {
+	mid = low;
+	res = strncmp(table->keytable[mid].key, key, table->key_size);
+    }
+
+    if (res == 0) {
+        size_t key_len;
+	unsigned offset;
+	char buf[512];
+
+	offset = table->keytable[mid].offset;
+	fseek(table->file, offset, SEEK_SET);
+
+        key_len = strlen(key);
+	while (fgets(buf, sizeof(buf), table->file) != NULL) {
+	    char* save = NULL;
+	    char* p = strtok_r(buf, ":", &save);
+	    res = strncmp(p, key, key_len);
+	    if (res == 0) {
+		char* value   = strtok_r(NULL, ":", &save);
+		char* comment = strtok_r(NULL, "\r\n", &save);
+
+		Hanja* hanja = hanja_new(p, value, comment);
+
+		if (*list == NULL) {
+		    *list = hanja_list_new(key);
+		}
+
+		hanja_list_append_n(*list, hanja, 1);
+	    } else if (res > 0) {
+		break;
+	    }
+	}
+    }
+}
+
 /**
  * @ingroup hanjadictionary
  * @brief 한자 사전 파일을 로딩하는 함수
@@ -630,12 +688,12 @@ hanja_table_match_prefix(const HanjaTable* table, const char *key)
  * @brief 한자 사전에서 뒷부분이 매치되는 키를 가진 엔트리를 찾는 함수
  * @param table 한자 사전 object
  * @param key 찾을 키, UTF-8 인코딩
- * @return 찾은 결과를 HanjaList object로 리턴한다. 찾은 것이 없거나 에러가 
+ * @return 찾은 결과를 HanjaList object로 리턴한다. 찾은 것이 없거나 에러가
  *         있으면 NULL을 리턴한다.
  *
  * @a key 값과 같거나 뒷부분이 같은 키를 가진 엔트리를 검색한다.
  * 그리고 key를 앞에서부터 한자씩 줄여가면서 검색을 계속한다.
- * 예로 들면 "삼국사기"를 검색하면 "삼국사기", "국사기", "사기", "기"를 
+ * 예로 들면 "삼국사기"를 검색하면 "삼국사기", "국사기", "사기", "기"를
  * 각각 모두 검색한다.
  * 리턴된 결과는 다 사용하고 나면 반드시 hanja_list_delete() 함수로 free해야
  * 한다.
@@ -654,6 +712,33 @@ hanja_table_match_suffix(const HanjaTable* table, const char *key)
 	hanja_table_match(table, p, &ret);
 	p = utf8_next(p);
     }
+
+    return ret;
+}
+
+/**
+ * @ingroup hanjadictionary
+ * @brief 한자 사전에서 검색 키로 시작하는 키 가진 엔트리를 찾는 함수
+ * @param table 한자 사전 object
+ * @param key 찾을 키, UTF-8 인코딩
+ * @return 찾은 결과를 HanjaList object로 리턴한다. 찾은 것이 없거나 에러가
+ *         있으면 NULL을 리턴한다.
+ *
+ * @a key 값으로 시작하는 키를 가진 엔트리를 검색한다.
+ * 예를 들면 '삼국'을 검색하면 '삼국', '삼국사기'를 포함해 앞이 '삼국'으로
+ * 시작하는 모든 단어를 찾는다.
+ * 리턴된 결과는 다 사용하고 나면 반드시 hanja_list_delete() 함수로 free해야
+ * 한다.
+ */
+HanjaList*
+hanja_table_search_prefix(const HanjaTable* table, const char *key)
+{
+    HanjaList* ret = NULL;
+
+    if (key == NULL || key[0] == '\0' || table == NULL)
+	return NULL;
+
+    hanja_table_prefix_match(table, key, &ret);
 
     return ret;
 }
