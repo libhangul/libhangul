@@ -388,7 +388,7 @@ void
 hangul_keyboard_set_value(HangulKeyboard *keyboard, int key, ucschar value)
 {
     if (keyboard != NULL) {
-	if (key >= 0 && key < N_ELEMENTS(keyboard->table)) {
+	if (key >= 0 && key < HANGUL_KEYBOARD_TABLE_SIZE) {
 	    ucschar* table = (ucschar*)keyboard->table;
 	    table[key] = value;
 	}
