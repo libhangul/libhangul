@@ -1306,6 +1306,10 @@ hangul_ic_process(HangulInputContext *hic, int ascii)
     if (hic->on_translate != NULL)
 	hic->on_translate(hic, ascii, &c, hic->on_translate_data);
 
+    if (ascii == '\b') {
+	return hangul_ic_backspace(hic);
+    }
+
     if (hangul_keyboard_get_type(hic->keyboard) == HANGUL_KEYBOARD_TYPE_JAMO)
 	return hangul_ic_process_jamo(hic, c);
     else if (hangul_keyboard_get_type(hic->keyboard) == HANGUL_KEYBOARD_TYPE_JASO)
