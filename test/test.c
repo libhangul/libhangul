@@ -72,6 +72,11 @@ START_TEST(test_hangul_ic_process_2)
     fail_unless(check_preedit("2", "akfr", L"맑"));
     fail_unless(check_commit("2", "akfrh", L"말"));
     fail_unless(check_preedit("2", "akfrh", L"고"));
+
+    /* ㄱㅅㅏ*/
+    fail_unless(check_preedit("2", "rt", L"ㄳ"));
+    fail_unless(check_commit("2", "rtk", L"ㄱ"));
+    fail_unless(check_preedit("2", "rtk", L"사"));
 }
 END_TEST
 

@@ -954,6 +954,16 @@ hangul_ic_process_jamo(HangulInputContext *hic, ucschar ch)
 	if (hangul_is_choseong(ch)) {
 	    combined = hangul_combination_combine(hic->keyboard->combination,
 						  hic->buffer.choseong, ch);
+	    /* 초성을 입력한 combine 함수에서 종성이 나오게 된다면
+	     * 이전 초성도 종성으로 바꿔 주는 편이 나머지 처리에 편리하다.
+	     * 이 기능은 MS IME 호환기능으로 ㄳ을 입력하는데 사용한다. */
+	    if (hangul_is_jongseong(combined)) {
+		hic->buffer.choseong = 0;
+		ucschar pop = hangul_ic_pop(hic);
+		ucschar jong = hangul_choseong_to_jongseong(pop);
+		hangul_ic_push(hic, jong);
+	    }
+
 	    if (!hangul_ic_push(hic, combined)) {
 		if (!hangul_ic_push(hic, ch)) {
 		    return false;
