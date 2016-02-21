@@ -234,6 +234,7 @@ struct _HangulInputContext {
     void*               on_transition_data;
 
     unsigned int use_jamo_mode_only : 1;
+    unsigned int option_auto_reorder : 1;
 };
 
 #include "hangulkeyboard.h"
@@ -928,7 +929,15 @@ hangul_ic_process_jamo(HangulInputContext *hic, ucschar ch)
 		    }
 		}
 	    } else {
-		if (!hangul_ic_push(hic, ch)) {
+		if (hic->option_auto_reorder) {
+		    /* kr 처럼 자모가 역순인 경우 처리 */
+		    if (!hangul_ic_push(hic, ch)) {
+			if (!hangul_ic_push(hic, ch)) {
+			    return false;
+			}
+		    }
+		} else {
+		    hangul_ic_save_commit_string(hic);
 		    if (!hangul_ic_push(hic, ch)) {
 			return false;
 		    }
@@ -995,9 +1004,24 @@ hangul_ic_process_jaso(HangulInputContext *hic, ucschar ch)
 {
     if (hangul_is_choseong(ch)) {
 	if (hic->buffer.choseong == 0) {
-	    if (!hangul_ic_push(hic, ch)) {
+	    if (hic->option_auto_reorder) {
 		if (!hangul_ic_push(hic, ch)) {
-		    return false;
+		    if (!hangul_ic_push(hic, ch)) {
+			return false;
+		    }
+		}
+	    } else {
+		if (hangul_ic_has_jungseong(hic) || hangul_ic_has_jongseong(hic)) {
+		    hangul_ic_save_commit_string(hic);
+		    if (!hangul_ic_push(hic, ch)) {
+			return false;
+		    }
+		} else {
+		    if (!hangul_ic_push(hic, ch)) {
+			if (!hangul_ic_push(hic, ch)) {
+			    return false;
+			}
+		    }
 		}
 	    }
 	} else {
@@ -1021,9 +1045,24 @@ hangul_ic_process_jaso(HangulInputContext *hic, ucschar ch)
 	}
     } else if (hangul_is_jungseong(ch)) {
 	if (hic->buffer.jungseong == 0) {
-	    if (!hangul_ic_push(hic, ch)) {
+	    if (hic->option_auto_reorder) {
 		if (!hangul_ic_push(hic, ch)) {
-		    return false;
+		    if (!hangul_ic_push(hic, ch)) {
+			return false;
+		    }
+		}
+	    } else {
+		if (hangul_ic_has_jongseong(hic)) {
+		    hangul_ic_save_commit_string(hic);
+		    if (!hangul_ic_push(hic, ch)) {
+			return false;
+		    }
+		} else {
+		    if (!hangul_ic_push(hic, ch)) {
+			if (!hangul_ic_push(hic, ch)) {
+			    return false;
+			}
+		    }
 		}
 	    }
 	} else {
@@ -1529,6 +1568,27 @@ hangul_ic_has_jongseong(HangulInputContext *hic)
     return hangul_buffer_has_jongseong(&hic->buffer);
 }
 
+bool
+hangul_ic_get_option(HangulInputContext* hic, int option)
+{
+    switch (option) {
+    case HANGUL_IC_OPTION_AUTO_REORDER:
+	return hic->option_auto_reorder;
+    }
+
+    return false;
+}
+
+void
+hangul_ic_set_option(HangulInputContext* hic, int option, bool value)
+{
+    switch (option) {
+    case HANGUL_IC_OPTION_AUTO_REORDER:
+	hic->option_auto_reorder = value;
+	break;
+    }
+}
+
 void
 hangul_ic_set_output_mode(HangulInputContext *hic, int mode)
 {
@@ -1684,6 +1744,8 @@ hangul_ic_new(const char* keyboard)
     hic->on_transition_data = NULL;
 
     hic->use_jamo_mode_only = FALSE;
+
+    hic->option_auto_reorder = false;
 
     hangul_ic_set_output_mode(hic, HANGUL_OUTPUT_SYLLABLE);
     hangul_ic_select_keyboard(hic, keyboard);

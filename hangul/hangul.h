@@ -86,6 +86,10 @@ enum {
     HANGUL_KEYBOARD_TYPE_ROMAJA
 };
 
+enum {
+    HANGUL_IC_OPTION_AUTO_REORDER,
+};
+
 /* keyboard */
 HangulKeyboard* hangul_keyboard_new(void);
 void    hangul_keyboard_delete(HangulKeyboard *keyboard);
@@ -112,6 +116,8 @@ bool hangul_ic_has_jungseong(HangulInputContext *hic);
 bool hangul_ic_has_jongseong(HangulInputContext *hic);
 bool hangul_ic_is_transliteration(HangulInputContext *hic);
 
+bool hangul_ic_get_option(HangulInputContext *hic, int option);
+void hangul_ic_set_option(HangulInputContext *hic, int option, bool value);
 void hangul_ic_set_output_mode(HangulInputContext *hic, int mode);
 void hangul_ic_set_keyboard(HangulInputContext *hic,
 			    const HangulKeyboard *keyboard);

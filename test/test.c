@@ -8,14 +8,11 @@
 #define countof(x)  ((sizeof(x)) / (sizeof(x[0])))
 
 static bool
-check_preedit(const char* keyboard, const char* input, const wchar_t* output)
+check_preedit_with_ic(HangulInputContext* ic, const char* input, const wchar_t* output)
 {
-    HangulInputContext* ic;
     const char* p;
     const ucschar* preedit;
     int res;
-
-    ic = hangul_ic_new(keyboard);
 
     p = input;
     while (*p != '\0') {
@@ -27,20 +24,30 @@ check_preedit(const char* keyboard, const char* input, const wchar_t* output)
 
     res = wcscmp((const wchar_t*)preedit, output);
 
-    hangul_ic_delete(ic);
-
     return res == 0;
 }
 
 static bool
-check_commit(const char* keyboard, const char* input, const wchar_t* output)
+check_preedit(const char* keyboard, const char* input, const wchar_t* output)
 {
     HangulInputContext* ic;
-    const char* p;
-    const ucschar* commit;
     int res;
 
     ic = hangul_ic_new(keyboard);
+
+    res = check_preedit_with_ic(ic, input, output);;
+
+    hangul_ic_delete(ic);
+
+    return res;
+}
+
+static bool
+check_commit_with_ic(HangulInputContext* ic, const char* input, const wchar_t* output)
+{
+    const char* p;
+    const ucschar* commit;
+    int res;
 
     p = input;
     while (*p != '\0') {
@@ -52,9 +59,22 @@ check_commit(const char* keyboard, const char* input, const wchar_t* output)
 
     res = wcscmp((const wchar_t*)commit, output);
 
+    return res == 0;
+}
+
+static bool
+check_commit(const char* keyboard, const char* input, const wchar_t* output)
+{
+    HangulInputContext* ic;
+    int res;
+
+    ic = hangul_ic_new(keyboard);
+
+    res = check_commit_with_ic(ic, input, output);
+
     hangul_ic_delete(ic);
 
-    return res == 0;
+    return res;
 }
 
 START_TEST(test_hangul_ic_process_2)
@@ -271,6 +291,44 @@ START_TEST(test_hangul_ic_process_romaja)
 }
 END_TEST
 
+START_TEST(test_hangul_ic_auto_reorder)
+{
+    HangulInputContext* ic = hangul_ic_new("2");
+
+    hangul_ic_set_option(ic, HANGUL_IC_OPTION_AUTO_REORDER, true);
+    hangul_ic_reset(ic);
+    fail_unless(check_preedit_with_ic(ic, "rk", L"가"));
+    hangul_ic_reset(ic);
+    fail_unless(check_preedit_with_ic(ic, "kr", L"가"));
+
+    hangul_ic_set_option(ic, HANGUL_IC_OPTION_AUTO_REORDER, false);
+    hangul_ic_reset(ic);
+    fail_unless(check_preedit_with_ic(ic, "rk", L"가"));
+    hangul_ic_reset(ic);
+    fail_unless(check_commit_with_ic(ic, "kr", L"ㅏ"));
+    hangul_ic_reset(ic);
+    fail_unless(check_preedit_with_ic(ic, "kr", L"ㄱ"));
+
+    hangul_ic_select_keyboard(ic, "3f");
+
+    hangul_ic_set_option(ic, HANGUL_IC_OPTION_AUTO_REORDER, true);
+    hangul_ic_reset(ic);
+    fail_unless(check_preedit_with_ic(ic, "kf", L"가"));
+    hangul_ic_reset(ic);
+    fail_unless(check_preedit_with_ic(ic, "fk", L"가"));
+
+    hangul_ic_set_option(ic, HANGUL_IC_OPTION_AUTO_REORDER, false);
+    hangul_ic_reset(ic);
+    fail_unless(check_preedit_with_ic(ic, "kf", L"가"));
+    hangul_ic_reset(ic);
+    fail_unless(check_commit_with_ic(ic, "fk", L"ㅏ"));
+    hangul_ic_reset(ic);
+    fail_unless(check_preedit_with_ic(ic, "fk", L"ㄱ"));
+
+    hangul_ic_delete(ic);
+}
+END_TEST
+
 START_TEST(test_syllable_iterator)
 {
     ucschar str[] = {
@@ -432,6 +490,7 @@ Suite* libhangul_suite()
     tcase_add_test(hangul, test_hangul_ic_process_2y);
     tcase_add_test(hangul, test_hangul_ic_process_3f);
     tcase_add_test(hangul, test_hangul_ic_process_romaja);
+    tcase_add_test(hangul, test_hangul_ic_auto_reorder);
     tcase_add_test(hangul, test_syllable_iterator);
     tcase_add_test(hangul, test_hangul_keyboard);
     tcase_add_test(hangul, test_hangul_jamo_to_cjamo);
