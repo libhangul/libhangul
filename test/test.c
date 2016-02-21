@@ -77,6 +77,15 @@ START_TEST(test_hangul_ic_process_2)
     fail_unless(check_preedit("2", "rt", L"ㄳ"));
     fail_unless(check_commit("2", "rtk", L"ㄱ"));
     fail_unless(check_preedit("2", "rtk", L"사"));
+
+    /* backspace */
+    fail_unless(check_preedit("2", "rkT\b", L"가"));
+    fail_unless(check_preedit("2", "rktt\b", L"갓"));
+    fail_unless(check_preedit("2", "rt\bk", L"가"));
+    fail_unless(check_preedit("2", "akfr\b", L"말"));
+    fail_unless(check_preedit("2", "dnp\b", L"우"));
+    fail_unless(check_preedit("2", "qqnpfr\b\b\b\b\b\b", L""));
+    fail_unless(check_preedit("2", "Qnpfr\b\b\b\b\b", L""));
 }
 END_TEST
 
