@@ -7,6 +7,39 @@
 
 #define countof(x)  ((sizeof(x)) / (sizeof(x[0])))
 
+static HangulInputContext* global_ic = NULL;
+
+/* ic option을 바꾸면서 테스트하는걸 손쉽게 하기 위해서
+ * static ic를 하나 두고 이것으로 테스트를 진행하게 코드를
+ * 바꾼다. */
+static HangulInputContext*
+get_ic(const char* keyboard)
+{
+    if (global_ic == NULL) {
+	global_ic = hangul_ic_new("2");
+    }
+
+    hangul_ic_select_keyboard(global_ic, keyboard);
+    hangul_ic_reset(global_ic);
+
+    return global_ic;
+}
+
+static void
+set_ic_option(int option, bool value)
+{
+    HangulInputContext* ic = get_ic("2");
+    hangul_ic_set_option(ic, option, value);
+}
+
+static bool
+get_ic_option(int option)
+{
+    HangulInputContext* ic = get_ic("2");
+    bool value = hangul_ic_get_option(ic, option);
+    return value;
+}
+
 static bool
 check_preedit_with_ic(HangulInputContext* ic, const char* input, const wchar_t* output)
 {
@@ -33,11 +66,9 @@ check_preedit(const char* keyboard, const char* input, const wchar_t* output)
     HangulInputContext* ic;
     int res;
 
-    ic = hangul_ic_new(keyboard);
+    ic = get_ic(keyboard);
 
     res = check_preedit_with_ic(ic, input, output);;
-
-    hangul_ic_delete(ic);
 
     return res;
 }
@@ -68,11 +99,9 @@ check_commit(const char* keyboard, const char* input, const wchar_t* output)
     HangulInputContext* ic;
     int res;
 
-    ic = hangul_ic_new(keyboard);
+    ic = get_ic(keyboard);
 
     res = check_commit_with_ic(ic, input, output);
-
-    hangul_ic_delete(ic);
 
     return res;
 }
@@ -82,9 +111,6 @@ START_TEST(test_hangul_ic_process_2)
     /* ㄱㅏㅉ */
     fail_unless(check_commit("2", "rkW", L"가"));
     fail_unless(check_preedit("2", "rkW", L"ㅉ"));
-    /* ㅂㅓㅅㅅㅡ */
-    fail_unless(check_commit("2", "qjttm", L"벗"));
-    fail_unless(check_preedit("2", "qjttm", L"스"));
     /* ㅂㅓㅆㅡ */
     fail_unless(check_commit("2", "qjTm", L"버"));
     fail_unless(check_preedit("2", "qjTm", L"쓰"));
@@ -100,7 +126,6 @@ START_TEST(test_hangul_ic_process_2)
 
     /* backspace */
     fail_unless(check_preedit("2", "rkT\b", L"가"));
-    fail_unless(check_preedit("2", "rktt\b", L"갓"));
     fail_unless(check_preedit("2", "rt\bk", L"가"));
     fail_unless(check_preedit("2", "akfr\b", L"말"));
     fail_unless(check_preedit("2", "dnp\b", L"우"));
@@ -132,25 +157,42 @@ START_TEST(test_hangul_ic_process_2y)
     fail_unless(check_preedit("2y", "fo", L"래"));
     /* ㅎ. ㄴ */
     fail_unless(check_preedit("2y", "gKs", L"\x1112\x119e\x11ab"));
-    /* ㅂㅂㅇㅏㅁㅅㅅ */ 
-    fail_unless(check_preedit("2y", "qqdhatt", L"\x112c\x1169\x11de"));
-    /* ㅂㅂㅇㅏㅁㅅㅅㅛ */ 
-    fail_unless(check_commit("2y", "qqdhatty", L"\x112c\x1169\x11dd"));
-    fail_unless(check_preedit("2y", "qqdhatty", L"쇼"));
-    /* ㅂㅂㅇㅏㅁㅆㅛ */ 
-    fail_unless(check_commit("2y", "qqdhaTy", L"\x112c\x1169\x11b7"));
-    fail_unless(check_preedit("2y", "qqdhaTy", L"쑈"));
+    /* ㅃㅇㅏㅁㅆ */
+    fail_unless(check_preedit("2y", "QdhaT", L"\x112c\x1169\x11de"));
+    /* ㅃㅇㅏㅁㅅㅅㅛ */
+    fail_unless(check_commit("2y", "Qdhatty", L"\x112c\x1169\x11dd"));
+    fail_unless(check_preedit("2y", "Qdhatty", L"쇼"));
+    /* ㅃㅇㅏㅁㅆㅛ */
+    fail_unless(check_commit("2y", "QdhaTy", L"\x112c\x1169\x11b7"));
+    fail_unless(check_preedit("2y", "QdhaTy", L"쑈"));
     /* 옛이응 처리 */
-    /* ㅇㅇㅏㅇㅇㅏ */
-    fail_unless(check_commit("2y", "ddkdd", L"\x1147\x1161\x11bc"));
-    fail_unless(check_preedit("2y", "ddkdd", L"ㅇ"));
     /* ㄱㅏㆁㆁ */
     fail_unless(check_preedit("2y", "rkDD", L"\x1100\x1161\x11ee"));
     /* ㄱㅏㆁㆁㅏ */
     fail_unless(check_commit("2y", "rkDDk", L"\x1100\x1161\x11f0"));
     fail_unless(check_preedit("2y", "rkDDk", L"\x114c\x1161"));
+
+
+    bool val = get_ic_option(HANGUL_IC_OPTION_COMBI_ON_DOUBLE_STROKE);
+    set_ic_option(HANGUL_IC_OPTION_COMBI_ON_DOUBLE_STROKE, true);
+
+    /* ㅂㅂㅇㅏㅁㅅㅅ */
+    fail_unless(check_preedit("2y", "qqdhatt", L"\x112c\x1169\x11de"));
+    /* ㅂㅂㅇㅏㅁㅅㅅㅛ */
+    fail_unless(check_commit("2y", "qqdhatty", L"\x112c\x1169\x11dd"));
+    fail_unless(check_preedit("2y", "qqdhatty", L"쇼"));
+    /* ㅂㅂㅇㅏㅁㅆㅛ */
+    fail_unless(check_commit("2y", "qqdhaTy", L"\x112c\x1169\x11b7"));
+    fail_unless(check_preedit("2y", "qqdhaTy", L"쑈"));
+
+    /* ㅇㅇㅏㅇㅇㅏ */
+    fail_unless(check_commit("2y", "ddkdd", L"\x1147\x1161\x11bc"));
+    fail_unless(check_preedit("2y", "ddkdd", L"ㅇ"));
+
     /* ㅏㅏㅏㅏ */
     fail_unless(check_preedit("2y", "kkkk", L"\x115f\x11a2"));
+
+    set_ic_option(HANGUL_IC_OPTION_COMBI_ON_DOUBLE_STROKE, val);
 }
 END_TEST
 
@@ -293,39 +335,60 @@ END_TEST
 
 START_TEST(test_hangul_ic_auto_reorder)
 {
-    HangulInputContext* ic = hangul_ic_new("2");
+    bool val = get_ic_option(HANGUL_IC_OPTION_AUTO_REORDER);
 
-    hangul_ic_set_option(ic, HANGUL_IC_OPTION_AUTO_REORDER, true);
-    hangul_ic_reset(ic);
-    fail_unless(check_preedit_with_ic(ic, "rk", L"가"));
-    hangul_ic_reset(ic);
-    fail_unless(check_preedit_with_ic(ic, "kr", L"가"));
+    set_ic_option(HANGUL_IC_OPTION_AUTO_REORDER, true);
+    fail_unless(check_preedit("2", "rk", L"가"));
+    fail_unless(check_preedit("2", "kr", L"가"));
 
-    hangul_ic_set_option(ic, HANGUL_IC_OPTION_AUTO_REORDER, false);
-    hangul_ic_reset(ic);
-    fail_unless(check_preedit_with_ic(ic, "rk", L"가"));
-    hangul_ic_reset(ic);
-    fail_unless(check_commit_with_ic(ic, "kr", L"ㅏ"));
-    hangul_ic_reset(ic);
-    fail_unless(check_preedit_with_ic(ic, "kr", L"ㄱ"));
+    set_ic_option(HANGUL_IC_OPTION_AUTO_REORDER, false);
+    fail_unless(check_preedit("2", "rk", L"가"));
+    fail_unless(check_commit("2", "kr", L"ㅏ"));
+    fail_unless(check_preedit("2", "kr", L"ㄱ"));
 
-    hangul_ic_select_keyboard(ic, "3f");
+    set_ic_option(HANGUL_IC_OPTION_AUTO_REORDER, true);
+    fail_unless(check_preedit("3f", "kf", L"가"));
+    fail_unless(check_preedit("3f", "fk", L"가"));
 
-    hangul_ic_set_option(ic, HANGUL_IC_OPTION_AUTO_REORDER, true);
-    hangul_ic_reset(ic);
-    fail_unless(check_preedit_with_ic(ic, "kf", L"가"));
-    hangul_ic_reset(ic);
-    fail_unless(check_preedit_with_ic(ic, "fk", L"가"));
+    set_ic_option(HANGUL_IC_OPTION_AUTO_REORDER, false);
+    fail_unless(check_preedit("3f", "kf", L"가"));
+    fail_unless(check_commit("3f", "fk", L"ㅏ"));
+    fail_unless(check_preedit("3f", "fk", L"ㄱ"));
 
-    hangul_ic_set_option(ic, HANGUL_IC_OPTION_AUTO_REORDER, false);
-    hangul_ic_reset(ic);
-    fail_unless(check_preedit_with_ic(ic, "kf", L"가"));
-    hangul_ic_reset(ic);
-    fail_unless(check_commit_with_ic(ic, "fk", L"ㅏ"));
-    hangul_ic_reset(ic);
-    fail_unless(check_preedit_with_ic(ic, "fk", L"ㄱ"));
+    set_ic_option(HANGUL_IC_OPTION_AUTO_REORDER, val);
+}
+END_TEST
 
-    hangul_ic_delete(ic);
+START_TEST(test_hangul_ic_combi_on_double_stroke)
+{
+    bool val = get_ic_option(HANGUL_IC_OPTION_COMBI_ON_DOUBLE_STROKE);
+
+    set_ic_option(HANGUL_IC_OPTION_COMBI_ON_DOUBLE_STROKE, true);
+    fail_unless(check_preedit("2", "rrkrr", L"깎"));
+    fail_unless(check_preedit("2", "rrkrrk", L"가"));
+
+    /* ㅂㅓㅅㅅ */
+    fail_unless(check_preedit("2", "qjtt", L"벘"));
+    fail_unless(check_commit("2", "qjttm", L"벗"));
+    fail_unless(check_preedit("2", "qjttm", L"스"));
+
+    fail_unless(check_preedit("2", "rktt", L"갔"));
+    fail_unless(check_preedit("2", "rktt\b", L"갓"));
+
+    set_ic_option(HANGUL_IC_OPTION_COMBI_ON_DOUBLE_STROKE, false);
+    fail_unless(check_commit("2", "rr", L"ㄱ"));
+    fail_unless(check_preedit("2", "rr", L"ㄱ"));
+    fail_unless(check_preedit("2", "rrk", L"가"));
+    fail_unless(check_preedit("2", "rrkr", L"각"));
+    fail_unless(check_commit("2", "rrkrr", L"각"));
+    fail_unless(check_preedit("2", "rrkrr", L"ㄱ"));
+    fail_unless(check_preedit("2", "rrkrrk", L"가"));
+
+    /* ㅂㅓㅅㅅ */
+    fail_unless(check_commit("2", "qjtt", L"벗"));
+    fail_unless(check_preedit("2", "qjtt", L"ㅅ"));
+
+    set_ic_option(HANGUL_IC_OPTION_COMBI_ON_DOUBLE_STROKE, val);
 }
 END_TEST
 
@@ -491,6 +554,7 @@ Suite* libhangul_suite()
     tcase_add_test(hangul, test_hangul_ic_process_3f);
     tcase_add_test(hangul, test_hangul_ic_process_romaja);
     tcase_add_test(hangul, test_hangul_ic_auto_reorder);
+    tcase_add_test(hangul, test_hangul_ic_combi_on_double_stroke);
     tcase_add_test(hangul, test_syllable_iterator);
     tcase_add_test(hangul, test_hangul_keyboard);
     tcase_add_test(hangul, test_hangul_jamo_to_cjamo);
@@ -510,6 +574,8 @@ int main()
 
     number_failed = srunner_ntests_failed(sr);
     srunner_free(sr);
+
+    hangul_ic_delete(global_ic);
 
     return (number_failed == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
 }

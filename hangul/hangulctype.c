@@ -146,6 +146,18 @@ hangul_is_jongseong_conjoinable(ucschar c)
 
 /**
  * @ingroup hangulctype
+ * @brief 자모가 조합 가능한지 확인
+ */
+bool
+hangul_is_jamo_conjoinable(ucschar c)
+{
+    return hangul_is_choseong_conjoinable(c) ||
+	hangul_is_jungseong_conjoinable(c) ||
+	hangul_is_jongseong_conjoinable(c);
+}
+
+/**
+ * @ingroup hangulctype
  * @brief 한글 음절 인지 확
  * @param c UCS4 코드 값
  * @return @a c가 한글 음절 코드이면 true, 그 외에는 false

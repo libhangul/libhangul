@@ -46,6 +46,7 @@ bool hangul_is_jongseong(ucschar c);
 bool hangul_is_choseong_conjoinable(ucschar c);
 bool hangul_is_jungseong_conjoinable(ucschar c);
 bool hangul_is_jongseong_conjoinable(ucschar c);
+bool hangul_is_jamo_conjoinable(ucschar c);
 bool hangul_is_syllable(ucschar c);
 bool hangul_is_jamo(ucschar c);
 bool hangul_is_cjamo(ucschar c);
@@ -88,6 +89,7 @@ enum {
 
 enum {
     HANGUL_IC_OPTION_AUTO_REORDER,
+    HANGUL_IC_OPTION_COMBI_ON_DOUBLE_STROKE,
 };
 
 /* keyboard */

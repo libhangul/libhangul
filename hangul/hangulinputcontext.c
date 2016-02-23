@@ -235,6 +235,7 @@ struct _HangulInputContext {
 
     unsigned int use_jamo_mode_only : 1;
     unsigned int option_auto_reorder : 1;
+    unsigned int option_combi_on_double_stroke : 1;
 };
 
 #include "hangulkeyboard.h"
@@ -851,6 +852,27 @@ hangul_ic_choseong_to_jongseong(HangulInputContext* hic, ucschar cho)
     return 0;
 }
 
+static ucschar
+hangul_ic_combine(HangulInputContext* hic, ucschar first, ucschar second)
+{
+    if (!hic->option_combi_on_double_stroke) {
+	if (hangul_keyboard_get_type(hic->keyboard) == HANGUL_KEYBOARD_TYPE_JAMO) {
+	    /* 옛한글은 아래 규칙을 적용하지 않아야 입력가능한 글자가 있으므로
+	     * 적용하지 않는다. */
+	    if (first == second &&
+		hangul_is_jamo_conjoinable(first)) {
+		return 0;
+	    }
+	}
+    }
+
+    ucschar combined = 0;
+    combined = hangul_combination_combine(hic->keyboard->combination,
+	    first, second);
+
+    return combined;
+}
+
 static bool
 hangul_ic_process_jamo(HangulInputContext *hic, ucschar ch)
 {
@@ -866,8 +888,7 @@ hangul_ic_process_jamo(HangulInputContext *hic, ucschar ch)
     if (hic->buffer.jongseong) {
 	if (hangul_is_choseong(ch)) {
 	    jong = hangul_ic_choseong_to_jongseong(hic, ch);
-	    combined = hangul_combination_combine(hic->keyboard->combination,
-					      hic->buffer.jongseong, jong);
+	    combined = hangul_ic_combine(hic, hic->buffer.jongseong, jong);
 	    if (hangul_is_jongseong(combined)) {
 		if (!hangul_ic_push(hic, combined)) {
 		    if (!hangul_ic_push(hic, ch)) {
@@ -944,8 +965,7 @@ hangul_ic_process_jamo(HangulInputContext *hic, ucschar ch)
 		}
 	    }
 	} else if (hangul_is_jungseong(ch)) {
-	    combined = hangul_combination_combine(hic->keyboard->combination,
-						  hic->buffer.jungseong, ch);
+	    combined = hangul_ic_combine(hic, hic->buffer.jungseong, ch);
 	    if (hangul_is_jungseong(combined)) {
 		if (!hangul_ic_push(hic, combined)) {
 		    return false;
@@ -961,8 +981,7 @@ hangul_ic_process_jamo(HangulInputContext *hic, ucschar ch)
 	}
     } else if (hic->buffer.choseong) {
 	if (hangul_is_choseong(ch)) {
-	    combined = hangul_combination_combine(hic->keyboard->combination,
-						  hic->buffer.choseong, ch);
+	    combined = hangul_ic_combine(hic, hic->buffer.choseong, ch);
 	    /* 초성을 입력한 combine 함수에서 종성이 나오게 된다면
 	     * 이전 초성도 종성으로 바꿔 주는 편이 나머지 처리에 편리하다.
 	     * 이 기능은 MS IME 호환기능으로 ㄳ을 입력하는데 사용한다. */
@@ -1027,8 +1046,7 @@ hangul_ic_process_jaso(HangulInputContext *hic, ucschar ch)
 	} else {
 	    ucschar choseong = 0;
 	    if (hangul_is_choseong(hangul_ic_peek(hic))) {
-		choseong = hangul_combination_combine(hic->keyboard->combination,
-						  hic->buffer.choseong, ch);
+		choseong = hangul_ic_combine(hic, hic->buffer.choseong, ch);
 	    }
 	    if (choseong) {
 		if (!hangul_ic_push(hic, choseong)) {
@@ -1068,8 +1086,7 @@ hangul_ic_process_jaso(HangulInputContext *hic, ucschar ch)
 	} else {
 	    ucschar jungseong = 0;
 	    if (hangul_is_jungseong(hangul_ic_peek(hic))) {
-		jungseong = hangul_combination_combine(hic->keyboard->combination,
-						 hic->buffer.jungseong, ch);
+		jungseong = hangul_ic_combine(hic, hic->buffer.jungseong, ch);
 	    }
 	    if (jungseong) {
 		if (!hangul_ic_push(hic, jungseong)) {
@@ -1096,8 +1113,7 @@ hangul_ic_process_jaso(HangulInputContext *hic, ucschar ch)
 	} else {
 	    ucschar jongseong = 0;
 	    if (hangul_is_jongseong(hangul_ic_peek(hic))) {
-		jongseong = hangul_combination_combine(hic->keyboard->combination,
-						   hic->buffer.jongseong, ch);
+		jongseong = hangul_ic_combine(hic, hic->buffer.jongseong, ch);
 	    }
 	    if (jongseong) {
 		if (!hangul_ic_push(hic, jongseong)) {
@@ -1154,8 +1170,7 @@ hangul_ic_process_romaja(HangulInputContext *hic, int ascii, ucschar ch)
 		jong = ch;
 	    else
 		jong = hangul_ic_choseong_to_jongseong(hic, ch);
-	    combined = hangul_combination_combine(hic->keyboard->combination,
-					      hic->buffer.jongseong, jong);
+	    combined = hangul_ic_combine(hic, hic->buffer.jongseong, jong);
 	    if (hangul_is_jongseong(combined)) {
 		if (!hangul_ic_push(hic, combined)) {
 		    if (!hangul_ic_push(hic, ch)) {
@@ -1229,8 +1244,7 @@ hangul_ic_process_romaja(HangulInputContext *hic, int ascii, ucschar ch)
 		}
 	    }
 	} else if (hangul_is_jungseong(ch)) {
-	    combined = hangul_combination_combine(hic->keyboard->combination,
-						  hic->buffer.jungseong, ch);
+	    combined = hangul_ic_combine(hic, hic->buffer.jungseong, ch);
 	    if (hangul_is_jungseong(combined)) {
 		if (!hangul_ic_push(hic, combined)) {
 		    return false;
@@ -1253,8 +1267,7 @@ hangul_ic_process_romaja(HangulInputContext *hic, int ascii, ucschar ch)
 	}
     } else if (hic->buffer.choseong) {
 	if (hangul_is_choseong(ch)) {
-	    combined = hangul_combination_combine(hic->keyboard->combination,
-						  hic->buffer.choseong, ch);
+	    combined = hangul_ic_combine(hic, hic->buffer.choseong, ch);
 	    if (combined == 0) {
 		hic->buffer.jungseong = 0x1173;
 		hangul_ic_flush_internal(hic);
@@ -1574,6 +1587,8 @@ hangul_ic_get_option(HangulInputContext* hic, int option)
     switch (option) {
     case HANGUL_IC_OPTION_AUTO_REORDER:
 	return hic->option_auto_reorder;
+    case HANGUL_IC_OPTION_COMBI_ON_DOUBLE_STROKE:
+	return hic->option_combi_on_double_stroke;
     }
 
     return false;
@@ -1585,6 +1600,9 @@ hangul_ic_set_option(HangulInputContext* hic, int option, bool value)
     switch (option) {
     case HANGUL_IC_OPTION_AUTO_REORDER:
 	hic->option_auto_reorder = value;
+	break;
+    case HANGUL_IC_OPTION_COMBI_ON_DOUBLE_STROKE:
+	hic->option_combi_on_double_stroke = value;
 	break;
     }
 }
@@ -1746,6 +1764,7 @@ hangul_ic_new(const char* keyboard)
     hic->use_jamo_mode_only = FALSE;
 
     hic->option_auto_reorder = false;
+    hic->option_combi_on_double_stroke = false;
 
     hangul_ic_set_output_mode(hic, HANGUL_OUTPUT_SYLLABLE);
     hangul_ic_select_keyboard(hic, keyboard);
