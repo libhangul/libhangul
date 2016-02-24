@@ -392,6 +392,22 @@ START_TEST(test_hangul_ic_combi_on_double_stroke)
 }
 END_TEST
 
+START_TEST(test_hangul_ic_non_choseong_combi)
+{
+    bool val = get_ic_option(HANGUL_IC_OPTION_NON_CHOSEONG_COMBI);
+    set_ic_option(HANGUL_IC_OPTION_NON_CHOSEONG_COMBI, true);
+    fail_unless(check_preedit("2", "rt", L"ㄳ"));
+    fail_unless(check_commit("2", "rtk", L"ㄱ"));
+    fail_unless(check_preedit("2", "rtk", L"사"));
+
+    set_ic_option(HANGUL_IC_OPTION_NON_CHOSEONG_COMBI, false);
+    fail_unless(check_commit("2", "rt", L"ㄱ"));
+    fail_unless(check_preedit("2", "rt", L"ㅅ"));
+
+    set_ic_option(HANGUL_IC_OPTION_NON_CHOSEONG_COMBI, val);
+END_TEST
+}
+
 START_TEST(test_syllable_iterator)
 {
     ucschar str[] = {
@@ -555,6 +571,7 @@ Suite* libhangul_suite()
     tcase_add_test(hangul, test_hangul_ic_process_romaja);
     tcase_add_test(hangul, test_hangul_ic_auto_reorder);
     tcase_add_test(hangul, test_hangul_ic_combi_on_double_stroke);
+    tcase_add_test(hangul, test_hangul_ic_non_choseong_combi);
     tcase_add_test(hangul, test_syllable_iterator);
     tcase_add_test(hangul, test_hangul_keyboard);
     tcase_add_test(hangul, test_hangul_jamo_to_cjamo);

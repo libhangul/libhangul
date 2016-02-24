@@ -236,6 +236,7 @@ struct _HangulInputContext {
     unsigned int use_jamo_mode_only : 1;
     unsigned int option_auto_reorder : 1;
     unsigned int option_combi_on_double_stroke : 1;
+    unsigned int option_non_choseong_combi : 1;
 };
 
 #include "hangulkeyboard.h"
@@ -869,6 +870,13 @@ hangul_ic_combine(HangulInputContext* hic, ucschar first, ucschar second)
     ucschar combined = 0;
     combined = hangul_combination_combine(hic->keyboard->combination,
 	    first, second);
+
+    if (!hic->option_non_choseong_combi) {
+	if (hangul_is_choseong(first) && hangul_is_choseong(second) &&
+	    hangul_is_jongseong(combined)) {
+	    return 0;
+	}
+    }
 
     return combined;
 }
@@ -1589,6 +1597,8 @@ hangul_ic_get_option(HangulInputContext* hic, int option)
 	return hic->option_auto_reorder;
     case HANGUL_IC_OPTION_COMBI_ON_DOUBLE_STROKE:
 	return hic->option_combi_on_double_stroke;
+    case HANGUL_IC_OPTION_NON_CHOSEONG_COMBI:
+	return hic->option_non_choseong_combi;
     }
 
     return false;
@@ -1603,6 +1613,9 @@ hangul_ic_set_option(HangulInputContext* hic, int option, bool value)
 	break;
     case HANGUL_IC_OPTION_COMBI_ON_DOUBLE_STROKE:
 	hic->option_combi_on_double_stroke = value;
+	break;
+    case HANGUL_IC_OPTION_NON_CHOSEONG_COMBI:
+	hic->option_non_choseong_combi = value;
 	break;
     }
 }
@@ -1765,6 +1778,7 @@ hangul_ic_new(const char* keyboard)
 
     hic->option_auto_reorder = false;
     hic->option_combi_on_double_stroke = false;
+    hic->option_non_choseong_combi = true;
 
     hangul_ic_set_output_mode(hic, HANGUL_OUTPUT_SYLLABLE);
     hangul_ic_select_keyboard(hic, keyboard);
