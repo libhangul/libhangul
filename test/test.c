@@ -528,18 +528,18 @@ START_TEST(test_hangul_keyboard)
     unsigned int n;
     unsigned int i;
 
-    n = hangul_ic_get_n_keyboards();
+    n = hangul_keyboard_list_get_count();
     fail_unless(n != 0,
-		"error: there is no builtin hangul keyboard");
+		"error: there is no hangul keyboard");
 
     for (i = 0; i < n; ++i) {
-	id = hangul_ic_get_keyboard_id(i);
+	id = hangul_keyboard_list_get_keyboard_id(i);
 	fail_unless(id != NULL,
 		    "error: keyboard id == NULL");
     }
 
     for (i = 0; i < n; ++i) {
-	name = hangul_ic_get_keyboard_name(i);
+	name = hangul_keyboard_list_get_keyboard_name(i);
 	fail_unless(name != NULL,
 		    "error: keyboard id == NULL");
     }
@@ -582,6 +582,8 @@ Suite* libhangul_suite()
 
 int main()
 {
+    hangul_init();
+
     int number_failed;
     Suite* s = libhangul_suite();
     SRunner* sr = srunner_create(s);
@@ -593,6 +595,8 @@ int main()
     srunner_free(sr);
 
     hangul_ic_delete(global_ic);
+
+    hangul_fini();
 
     return (number_failed == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
 }

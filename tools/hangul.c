@@ -1,5 +1,5 @@
 /* libhangul
- * Copyright (C) 2011 Choe Hwanjin
+ * Copyright (C) 2011 - 2016 Choe Hwanjin
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -124,7 +124,7 @@ list_keyboards()
     unsigned i;
     unsigned n;
 
-    n = hangul_ic_get_n_keyboards();
+    n = hangul_keyboard_list_get_count();
 
 #if defined(ENABLE_NLS) && defined(HAVE_NL_LANGINFO)
     if (n > 0) {
@@ -147,8 +147,8 @@ list_keyboards()
 	const char* id;
 	const char* name;
 
-	id = hangul_ic_get_keyboard_id(i);
-	name = hangul_ic_get_keyboard_name(i);
+	id = hangul_keyboard_list_get_keyboard_id(i);
+	name = hangul_keyboard_list_get_keyboard_name(i);
 
 	printf("%-12s %s\n", id, name);
     }
@@ -310,6 +310,8 @@ main(int argc, char *argv[])
 
     setlocale(LC_ALL, "");
 
+    hangul_init();
+
     res = EXIT_SUCCESS;
     keyboard = "2";
     input_string = NULL;
@@ -405,6 +407,8 @@ main(int argc, char *argv[])
     }
 
     hangul_ic_delete(ic);
+
+    hangul_fini();
 
     iconv_close(cd_ucs4_to_utf8);
 

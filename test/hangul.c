@@ -67,6 +67,8 @@ main(int argc, char *argv[])
 	keyboard = argv[1];
     }
 
+    hangul_init();
+
     hic = hangul_ic_new(keyboard);
     if (hic == NULL) {
 	printf("hic is null\n");
@@ -92,6 +94,8 @@ main(int argc, char *argv[])
     }
 
     hangul_ic_delete(hic);
+
+    hangul_fini();
 
     return 0;
 }

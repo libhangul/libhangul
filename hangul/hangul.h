@@ -84,7 +84,9 @@ enum {
 enum {
     HANGUL_KEYBOARD_TYPE_JAMO,
     HANGUL_KEYBOARD_TYPE_JASO,
-    HANGUL_KEYBOARD_TYPE_ROMAJA
+    HANGUL_KEYBOARD_TYPE_ROMAJA,
+    HANGUL_KEYBOARD_TYPE_JAMO_YET,
+    HANGUL_KEYBOARD_TYPE_JASO_YET,
 };
 
 enum {
@@ -93,12 +95,18 @@ enum {
     HANGUL_IC_OPTION_NON_CHOSEONG_COMBI,
 };
 
+/* library */
+int hangul_init();
+int hangul_fini();
+
 /* keyboard */
 HangulKeyboard* hangul_keyboard_new(void);
 void    hangul_keyboard_delete(HangulKeyboard *keyboard);
-void    hangul_keyboard_set_value(HangulKeyboard *keyboard,
-				  int key, ucschar value);
 void    hangul_keyboard_set_type(HangulKeyboard *keyboard, int type);
+
+unsigned int hangul_keyboard_list_get_count();
+const char* hangul_keyboard_list_get_keyboard_id(unsigned index_);
+const char* hangul_keyboard_list_get_keyboard_name(unsigned index_);
 
 /* combination */
 HangulCombination* hangul_combination_new(void);
@@ -126,14 +134,8 @@ void hangul_ic_set_keyboard(HangulInputContext *hic,
 			    const HangulKeyboard *keyboard);
 void hangul_ic_select_keyboard(HangulInputContext *hic,
 			       const char* id);
-void hangul_ic_set_combination(HangulInputContext *hic,
-			       const HangulCombination *combination);
 void hangul_ic_connect_callback(HangulInputContext* hic, const char* event,
 				void* callback, void* user_data);
-
-unsigned    hangul_ic_get_n_keyboards();
-const char* hangul_ic_get_keyboard_id(unsigned index_);
-const char* hangul_ic_get_keyboard_name(unsigned index_);
 
 const ucschar* hangul_ic_get_preedit_string(HangulInputContext *hic);
 const ucschar* hangul_ic_get_commit_string(HangulInputContext *hic);
@@ -165,6 +167,15 @@ const char*  hanja_get_comment(const Hanja* hanja);
 #ifdef __cplusplus
 }
 #endif
+
+void    hangul_keyboard_set_value(HangulKeyboard *keyboard,
+	int key, ucschar value) LIBHANGUL_DEPRECATED;
+void hangul_ic_set_combination(HangulInputContext *hic,
+	const HangulCombination *combination) LIBHANGUL_DEPRECATED;
+
+unsigned    hangul_ic_get_n_keyboards() LIBHANGUL_DEPRECATED;
+const char* hangul_ic_get_keyboard_id(unsigned index_) LIBHANGUL_DEPRECATED;
+const char* hangul_ic_get_keyboard_name(unsigned index_) LIBHANGUL_DEPRECATED;
 
 #undef LIBHANGUL_DEPRECATED
 

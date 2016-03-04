@@ -16,6 +16,7 @@ config.sub
 configure
 data/hanja/Makefile
 data/hanja/Makefile.in
+data/keyboards/hangul-keyboard-*.xml
 depcomp
 doc/Doxyfile
 doc/hangulkeyboards.dox

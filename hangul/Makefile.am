@@ -12,11 +12,16 @@ noinst_HEADERS = \
 libhangul_la_SOURCES = \
 	hangulctype.c \
 	hangulinputcontext.c \
+	hangulkeyboard.c \
 	hanja.c
 
 libhangul_la_CFLAGS = \
-    -DLOCALEDIR=\"$(localedir)\" \
-    -DLIBHANGUL_DEFAULT_HANJA_DIC=\"$(datadir)/libhangul/hanja/hanja.txt\"
+	-DLOCALEDIR=\"$(localedir)\" \
+	-DLIBHANGUL_DEFAULT_HANJA_DIC=\"$(pkgdatadir)/hanja/hanja.txt\" \
+	-DLIBHANGUL_DATA_DIR=\"$(pkgdatadir)\" \
+	-DTOP_SRCDIR=\"$(abs_top_srcdir)\" \
+	$(EXPAT_CFLAGS) \
+	$(NULL)
 
 libhangul_la_LDFLAGS = -version-info $(LIBHANGUL_CURRENT):$(LIBHANGUL_REVISION):$(LIBHANGUL_AGE)
-libhangul_la_LIBADD =
+libhangul_la_LIBADD = $(EXPAT_LIBS)
