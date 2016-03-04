@@ -156,21 +156,6 @@ list_keyboards()
     exit(EXIT_SUCCESS);
 }
 
-static bool
-on_hic_transition(HangulInputContext* ic,
-	 ucschar c, const ucschar* preedit, void * data)
-{
-    if (hangul_is_choseong(c)) {
-	if (hangul_ic_has_jungseong(ic) || hangul_ic_has_jongseong(ic))
-	    return false;
-    } else if (hangul_is_jungseong(c)) {
-	if (hangul_ic_has_jongseong(ic))
-	    return false;
-    }
-
-    return true;
-}
-
 size_t ucschar_strlen(const ucschar* str)
 {
     const ucschar* p = str;
@@ -379,7 +364,9 @@ main(int argc, char *argv[])
     ic = hangul_ic_new(keyboard);
 
     if (strict_order) {
-	hangul_ic_connect_callback(ic, "transition", on_hic_transition, NULL);
+	hangul_ic_set_option(ic, HANGUL_IC_OPTION_AUTO_REORDER, false);
+    } else {
+	hangul_ic_set_option(ic, HANGUL_IC_OPTION_AUTO_REORDER, true);
     }
 
     if (input_string != NULL) {
