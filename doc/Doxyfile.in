@@ -453,6 +453,7 @@ WARN_LOGFILE           =
 INPUT                  = ../hangul/hangul.h \
 			 ../hangul/hangulctype.c \
 			 ../hangul/hangulinputcontext.c \
+			 ../hangul/hangulkeyboard.c \
 			 ../hangul/hanja.c \
 			 mainpage.dox \
 			 hangulkeyboards.dox

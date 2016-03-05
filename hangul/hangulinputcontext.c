@@ -1310,6 +1310,15 @@ hangul_ic_has_jongseong(HangulInputContext *hic)
     return hangul_buffer_has_jongseong(&hic->buffer);
 }
 
+/**
+ * @ingroup hangulic
+ * @brief @ref HangulInputContext 의 조합 옵션을 확인하는 함수
+ * @param hic @ref HangulInputContext 를 가리키는 포인터
+ * @param option @ref HangulInputContext 의 조합 처리 옵션.
+ *        @ref hangul_ic_set_option 에서 사용 가능한 옵션을 확인하라.
+ *
+ * @return @ref HangulInputContext 에 설정된 옵션값을 리턴한다.
+ */
 bool
 hangul_ic_get_option(HangulInputContext* hic, int option)
 {
@@ -1325,6 +1334,28 @@ hangul_ic_get_option(HangulInputContext* hic, int option)
     return false;
 }
 
+/**
+ * @ingroup hangulic
+ * @brief @ref HangulInputContext 의 조합 옵션을 설정하는 함수
+ * @param hic @ref HangulInputContext 를 가리키는 포인터
+ * @param option @ref HangulInputContext 의 조합 처리 옵션.
+ *               아래와 같은 옵션이 선택 가능하다.
+ *    - HANGUL_IC_OPTION_AUTO_REORDER
+ *      - 자동 순서 교정 옵션. 모아치기를 위해서는 켜야 한다.
+ *        예) true면 ㅏ+ㄱ -> 가 로 완성시켜 줌.
+ *    - HANGUL_IC_OPTION_COMBI_ON_DOUBLE_STROKE
+ *      - 두벌식 자판에서 자음 연타로 된소리로 조합하는 옵션.
+ *        원래 자판이 자음 연타로 동작하는 세벌식이나 옛한글
+ *        자판에서는 옵션이 동작하지 않는다.
+ *        MS IME와 호환을 위해서 사용.
+ *        예) true면 ㄱ+ㄱ -> ㄲ 으로 조합시켜 줌.
+ *    - HANGUL_IC_OPTION_NON_CHOSEONG_COMBI
+ *      - 두벌식 자판에서 초성에 없는 겹자음을 조합허용하는 옵션.
+ *        두벌식 자판 이외에는 옵션이 동작하지 않는다.
+ *        MS IME와 호환을 위해서 사용.
+ *        예) true면 ㄱ+ㅅ -> ㄳ 으로 조합시켜 줌.
+ * @param value 설정하고자 하는 값, true 또는 false
+ */
 void
 hangul_ic_set_option(HangulInputContext* hic, int option, bool value)
 {
@@ -1506,18 +1537,21 @@ hangul_ic_delete(HangulInputContext *hic)
     free(hic);
 }
 
+/** @deprecated 이 함수 대신 @ref hangul_keyboard_list_get_count 를 사용하라 */
 unsigned int
 hangul_ic_get_n_keyboards()
 {
     return hangul_keyboard_list_get_count();
 }
 
+/** @deprecated 이 함수 대신 @ref hangul_keyboard_list_get_keyboard_id 를 사용하라 */
 const char*
 hangul_ic_get_keyboard_id(unsigned index_)
 {
     return hangul_keyboard_list_get_keyboard_id(index_);
 }
 
+/** @deprecated 이 함수 대신 @ref hangul_keyboard_list_get_keyboard_name 을 사용하라 */
 const char*
 hangul_ic_get_keyboard_name(unsigned index_)
 {
@@ -1551,6 +1585,12 @@ hangul_ic_is_transliteration(HangulInputContext *hic)
     return false;
 }
 
+/**
+ * @ingroup hangulic
+ * @breif libhangul을 초기화 하는 함수.
+ *
+ * libhangul의 함수를 사용하기 전에 호출해야 한다.
+ */
 int
 hangul_init()
 {
@@ -1559,6 +1599,12 @@ hangul_init()
     return res;
 }
 
+/**
+ * @ingroup hangulic
+ * @breif libhangul에서 사용한 리소스를 해제하는 함수.
+ *
+ * libhangul의 함수의 사용이 끝나면 호출해야 한다.
+ */
 int
 hangul_fini()
 {

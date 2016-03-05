@@ -33,6 +33,27 @@
 #include "hangul.h"
 #include "hangulinternals.h"
 
+/**
+ * @file hangulkeyboard.c
+ */
+
+/**
+ * @addtogroup hangulkeyboards
+ *
+ * @section addinghangulkeyboards 한글 키보드 추가 방법
+ * libhangul이 한글 키보드 파일을 읽는 위치는 두 곳이다.
+ *  - @$(pkgdatadir)/keyboards 디렉토리에 설치된 파일은 전역 시스템에서
+ *    인식한다.
+ *  - @$HOME/.local/share/libhangul/keyboards 또는 @$XDG_DATA_HOME/libhangul/keyboards
+ *    디렉토리에 설치된 파일은 개별 사용자만 인식한다.
+ *
+ * 키보드 파일의 로딩 순서는 시스템 파일을 먼저 로딩하고 사용자 파일을
+ * 로딩한다. 따라서 한글 키보드 목록을 이터레이션하면 사용자 추가 자판은
+ * 마지막에 나오게 된다. 사용자 자판 선택 알고리듬이 처음 나온 자판을
+ * 인식하는 방식이므로 동일한 id를 가진 자판을 등록하면 먼저 등록된 자판만
+ * 인식되므로 주의가 필요하다. 다시 말해서 시스템 자판과 같은 id를 가진
+ * 자판은 등록하여 사용할 수 없다.
+ */
 
 #define LIBHANGUL_KEYBOARD_DIR LIBHANGUL_DATA_DIR "/keyboards"
 //#define LIBHANGUL_KEYBOARD_DIR TOP_SRCDIR "/data/keyboards"
@@ -206,7 +227,6 @@ typedef struct _HangulKeyboardLoadContext {
 
 static void    hangul_keyboard_parse_file(const char* path, void* user_data);
 static bool    hangul_keyboard_list_append(HangulKeyboard* keyboard);
-
 
 HangulCombination*
 hangul_combination_new()
@@ -865,6 +885,14 @@ hangul_builtin_keyboard_list_get_keyboard(const char* id)
     return NULL;
 }
 
+/**
+ * @ingroup hangulkeyboards
+ * @brief libhangul에서 제공하는 자판 개수를 구하는 함수
+ *
+ * 이 함수의 리턴값을 이용해서 자판을 iteration할 수 있다.
+ * 한글 자판의 설치 위치에 대한 정보는 @ref addinghangulkeyboards 를 참고하라.
+ * @return @ref HangulInputContext 에서 선택 가능한 자판 개수
+ */
 unsigned int
 hangul_keyboard_list_get_count()
 {
@@ -874,6 +902,15 @@ hangul_keyboard_list_get_count()
     return hangul_keyboards.n;
 }
 
+/**
+ * @ingroup hangulkeyboards
+ * @brief libhangul에서 제공하는 자판의 id를 구하는 함수
+ *
+ * @a index_ 로 지정된 자판의 id 값을 리턴한다. 이 id는 @ref
+ * hangul_ic_select_keyboard() 함수의 인자로 사용하는 문자열이다.
+ * @return 지정된 자판의 id. 이 문자열은 libhangul 내부에서 관리하는 것으로
+ *         free해서는 안된다.
+ */
 const char*
 hangul_keyboard_list_get_keyboard_id(unsigned index_)
 {
@@ -891,6 +928,15 @@ hangul_keyboard_list_get_keyboard_id(unsigned index_)
     return keyboard->id;
 }
 
+/**
+ * @ingroup hangulkeyboards
+ * @brief libhangul에서 제공하는 자판의 이름을 구하는 함수
+ *
+ * @a index_ 로 지정된 자판의 이름을 리턴한다. 이 문자열은 사용자에게 보여주기
+ * 위한 것으로, 번역되어 사람이 읽을 수 있는 형태의 문자열이다.
+ * @return 지정된 자판의 이름. 이 문자열은 libhangul 내부에서 관리하는 것으로
+ *         free해서는 안된다.
+ */
 const char*
 hangul_keyboard_list_get_keyboard_name(unsigned index_)
 {
@@ -915,6 +961,8 @@ hangul_keyboard_list_get_keyboard(const char* id)
 	return hangul_builtin_keyboard_list_get_keyboard(id);
     }
 
+    /* 키보드 목록에서 순차 검색을 하여 찾으므로 같은 id로 서로다른
+     * 자판이 등록되어 있다고 하면 먼저 로딩된 자판만 인식된다. */
     size_t i;
     for (i = 0; i < hangul_keyboards.n; ++i) {
 	HangulKeyboard* keyboard = hangul_keyboards.keyboards[i];
