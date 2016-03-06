@@ -801,6 +801,12 @@ hangul_keyboard_list_clear()
 int
 hangul_keyboard_list_init()
 {
+    /* 이 함수를 중복 호출할 경우에 대한 처리
+     * 이미 등록된 자판이 있다면 중복 호출된 것으로 보고
+     * 함수를 종료한다. */
+    if (hangul_keyboards.n > 0)
+	return 2;
+
     /* hangul_init을 호출하면 builtin keyboard는 disable되도록 처리한다.
      * 기본 자판은 외부 파일로 부터 로딩하는 것이 기본 동작이고
      * builtin 키보드는 하위 호환을 위해 남겨둔다. */
