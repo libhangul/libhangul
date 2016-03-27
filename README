@@ -3,9 +3,16 @@ A library to support hangul input method logic, hanja dictionary and small
 hangul character classification.
 
 How to build
- $ ./autogen.sh
- $ ./configure
- # make
+ From tarball
+  $ ./configure
+  $ make
+  # make install
+
+ From source repository
+  $ ./autogen.sh
+  $ ./configure
+  $ make
+  # make install
 
 Download:
  * https://github.com/choehwanjin/libhangul/releases
