@@ -6,5 +6,5 @@ includedir=@includedir@/hangul-1.0
 Name: libhangul
 Description: Hangul hanja input support
 Version: @PACKAGE_VERSION@
-Libs: -L${libdir} -lhangul @LIBINTL@
+Libs: -L${libdir} -lhangul
 Cflags: -I${includedir}
