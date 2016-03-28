@@ -24,10 +24,12 @@
 #include <string.h>
 #include <limits.h>
 
+#if ENABLE_EXTERNAL_KEYBOARDS
 #include <locale.h>
 #include <glob.h>
 #include <libgen.h>
 #include <expat.h>
+#endif /* ENABLE_EXTERNAL_KEYBOARDS */
 
 #include "hangul-gettext.h"
 #include "hangul.h"
@@ -538,6 +540,7 @@ hangul_keyboard_combine(const HangulKeyboard* keyboard,
     return res;
 }
 
+#if ENABLE_EXTERNAL_KEYBOARDS
 static const char*
 attr_lookup(const char** attr, const char* name)
 {
@@ -782,6 +785,7 @@ hangul_keyboard_list_load_dir(const char* path)
 
     return hangul_keyboards.n;
 }
+#endif /* ENABLE_EXTERNAL_KEYBOARDS */
 
 static void
 hangul_keyboard_list_clear()
@@ -801,6 +805,7 @@ hangul_keyboard_list_clear()
 int
 hangul_keyboard_list_init()
 {
+#if ENABLE_EXTERNAL_KEYBOARDS
     /* 이 함수를 중복 호출할 경우에 대한 처리
      * 이미 등록된 자판이 있다면 중복 호출된 것으로 보고
      * 함수를 종료한다. */
@@ -832,6 +837,7 @@ hangul_keyboard_list_init()
     if (n == 0)
 	return 1;
 
+#endif /* ENABLE_EXTERNAL_KEYBOARDS */
     return 0;
 }
 

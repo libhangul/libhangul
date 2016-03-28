@@ -7,6 +7,14 @@ AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([hangul/hangul.h])
 AC_CONFIG_HEADER([config.h])
 
+# Configure options
+AC_ARG_ENABLE(external-keyboards,
+    AS_HELP_STRING([--enable-external-keyboards],
+                   [enable external keyboard xml file loading feature]),
+    [enable_external_keyboards=$enableval],
+    [enable_external_keyboards=yes]
+)
+
 # library version
 LIBHANGUL_CURRENT=1
 LIBHANGUL_REVISION=0
@@ -52,9 +60,14 @@ AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE", gettext package name)
 AM_ICONV
 
-# Checks for expat
+# Checks for pkgconfig
 PKG_PROG_PKG_CONFIG
-PKG_CHECK_MODULES(EXPAT, [expat])
+
+# Checks for expat
+if test x$enable_external_keyboards = xyes; then
+    PKG_CHECK_MODULES(EXPAT, [expat])
+    AC_DEFINE(ENABLE_EXTERNAL_KEYBOARDS, 1, [Define to 1 if you enabled to load external keyboards])
+fi
 
 # Checks for unit test framework
 if test -n "$PKG_CONFIG"; then
@@ -75,3 +88,5 @@ tools/Makefile
 ])
 
 AC_OUTPUT
+
+# vim: et
