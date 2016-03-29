@@ -59,6 +59,9 @@ GETTEXT_PACKAGE="$PACKAGE"
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE", gettext package name)
 AM_ICONV
+if test x$USE_NLS = xyes; then
+    AC_DEFINE(ENABLE_NLS, 1, [Define to 1 if translation of program messages is requested.])
+fi
 
 # Checks for pkgconfig
 PKG_PROG_PKG_CONFIG

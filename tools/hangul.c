@@ -137,7 +137,7 @@ list_keyboards()
 	// bind_textdomain_codeset() 함수가 불린후 다시 설정하도록 한다.
 	const char* codeset = nl_langinfo(CODESET);
 	if (codeset != NULL) {
-	    hangul_ic_get_keyboard_name(0);
+	    hangul_keyboard_list_get_keyboard_name(0);
 	    bind_textdomain_codeset(GETTEXT_PACKAGE, codeset);
 	}
     }

@@ -881,7 +881,7 @@ hangul_builtin_keyboard_list_get_keyboard_name(unsigned index_)
     if (keyboard == NULL)
 	return NULL;
 
-    return keyboard->name;
+    return _(keyboard->name);
 }
 
 static const HangulKeyboard*
