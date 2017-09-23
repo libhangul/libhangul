@@ -11,5 +11,4 @@ while true do
         text = text .. commitString
         print(text)
     end
-    --print(hangul.ucs4_to_utf8(hangul_ic:get_preedit_string()))
 end
