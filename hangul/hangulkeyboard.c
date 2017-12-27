@@ -26,7 +26,7 @@
 
 #if ENABLE_EXTERNAL_KEYBOARDS
 #include <locale.h>
-#include <glob.h>
+#include <dirent.h>
 #include <libgen.h>
 #include <expat.h>
 #endif /* ENABLE_EXTERNAL_KEYBOARDS */
@@ -765,23 +765,26 @@ hangul_keyboard_new_from_file(const char* path)
 static unsigned
 hangul_keyboard_list_load_dir(const char* path)
 {
-    char pattern[PATH_MAX];
-    snprintf(pattern, sizeof(pattern), "%s/*.xml", path);
+    DIR* dir;
+    struct dirent* ent;
+    const char* ext = ".xml";
+    HangulKeyboard* keyboard;
+    int d_name_len, ext_len;
 
-    glob_t result;
-    int res = glob(pattern, GLOB_ERR, NULL, &result);
-    if (res != 0)
-	return 0;
+    ext_len = strlen(".xml");
 
-    size_t i;
-    for (i = 0; i < result.gl_pathc; ++i) {
-	HangulKeyboard* keyboard = hangul_keyboard_new_from_file(result.gl_pathv[i]);
-	if (keyboard == NULL)
-	    continue;
-	hangul_keyboard_list_append(keyboard);
+    if ((dir = opendir(path))) {
+        while ((ent = readdir(dir))) {
+            d_name_len = strlen(ent->d_name);
+            if ((d_name_len > ext_len) &&
+                !strncmp(ent->d_name + d_name_len - ext_len, ext, ext_len) &&
+                (keyboard = hangul_keyboard_new_from_file(ent->d_name))) {
+                hangul_keyboard_list_append(keyboard);
+            }
+        }
+
+        closedir(dir);
     }
-
-    globfree(&result);
 
     return hangul_keyboards.n;
 }
@@ -822,20 +825,25 @@ hangul_keyboard_list_init()
     n += hangul_keyboard_list_load_dir(LIBHANGUL_KEYBOARD_DIR);
 
     /* 유저의 개별 키보드 파일 로딩 */
-    char user_data_dir[PATH_MAX];
+    char* user_data_dir;
+    const char* dir1 = "/.local/share/libhangul/keyboards";
+    const char* dir2 = "/libhangul/keyboards";
+
     char* xdg_data_home = getenv("XDG_DATA_HOME");
+
     if (xdg_data_home == NULL) {
-	char* home_dir = getenv("HOME");
-	snprintf(user_data_dir, sizeof(user_data_dir),
-		"%s/.local/share/libhangul/keyboards", home_dir);
+        char* home_dir = getenv("HOME");
+        user_data_dir = malloc(strlen(home_dir) + strlen(dir1) + 1);
+        sprintf(user_data_dir, "%s%s", home_dir, dir1);
     } else {
-	snprintf(user_data_dir, sizeof(user_data_dir),
-		"%s/libhangul/keyboards", xdg_data_home);
+        user_data_dir = malloc(strlen(xdg_data_home) + strlen(dir2) + 1);
+        sprintf(user_data_dir, "%s%s", xdg_data_home, dir2);
     }
     n += hangul_keyboard_list_load_dir(user_data_dir);
+    free(user_data_dir);
 
     if (n == 0)
-	return 1;
+        return 1;
 
 #endif /* ENABLE_EXTERNAL_KEYBOARDS */
     return 0;
