@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<hangul-keyboard id="recursive" type="jamo">
+
+    <name>Recursive</name>
+
+    <map id="0">
+        <item key="0x20" value="0x0020"/>
+    </map>
+
+    <include file="recursive.xml"/>
+
+</hangul-keyboard>

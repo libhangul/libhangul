@@ -767,7 +767,7 @@ done:
     context->path_stack_top--;
 }
 
-static HangulKeyboard*
+HangulKeyboard*
 hangul_keyboard_new_from_file(const char* path)
 {
     HangulKeyboardLoadContext context;

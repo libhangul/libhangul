@@ -101,6 +101,7 @@ int hangul_fini();
 
 /* keyboard */
 HangulKeyboard* hangul_keyboard_new(void);
+HangulKeyboard* hangul_keyboard_new_from_file(const char* path);
 void    hangul_keyboard_delete(HangulKeyboard *keyboard);
 void    hangul_keyboard_set_type(HangulKeyboard *keyboard, int type);
 

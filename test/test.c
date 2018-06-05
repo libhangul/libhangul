@@ -543,6 +543,12 @@ START_TEST(test_hangul_keyboard)
 	fail_unless(name != NULL,
 		    "error: keyboard id == NULL");
     }
+
+    HangulKeyboard* keyboard;
+    fail_unless(
+        (keyboard = hangul_keyboard_new_from_file(TEST_SOURCE_DIR "/recursive.xml")) != NULL
+    );
+    hangul_keyboard_delete(keyboard);
 }
 END_TEST
 
