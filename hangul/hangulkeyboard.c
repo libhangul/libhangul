@@ -782,13 +782,25 @@ hangul_keyboard_new_from_file(const char* path)
 static unsigned
 hangul_keyboard_list_load_dir(const char* path)
 {
-    char pattern[PATH_MAX];
-    snprintf(pattern, sizeof(pattern), "%s/*.xml", path);
+    if (path == NULL) {
+        return 0;
+    }
+
+    const char* subpattern = "/*.xml";
+    size_t len = strlen(path) + strlen(subpattern) + 1;
+    char* pattern = (char*)malloc(len);
+    if (pattern == NULL) {
+        return 0;
+    }
+
+    snprintf(pattern, len, "%s%s", path, subpattern);
 
     glob_t result;
     int res = glob(pattern, GLOB_ERR, NULL, &result);
-    if (res != 0)
+    if (res != 0) {
+        free(pattern);
 	return 0;
+    }
 
     size_t i;
     for (i = 0; i < result.gl_pathc; ++i) {
@@ -799,6 +811,7 @@ hangul_keyboard_list_load_dir(const char* path)
     }
 
     globfree(&result);
+    free(pattern);
 
     return hangul_keyboards.n;
 }
@@ -839,17 +852,30 @@ hangul_keyboard_list_init()
     n += hangul_keyboard_list_load_dir(LIBHANGUL_KEYBOARD_DIR);
 
     /* 유저의 개별 키보드 파일 로딩 */
-    char user_data_dir[PATH_MAX];
+    char* user_data_dir = NULL;
     char* xdg_data_home = getenv("XDG_DATA_HOME");
     if (xdg_data_home == NULL) {
-	char* home_dir = getenv("HOME");
-	snprintf(user_data_dir, sizeof(user_data_dir),
-		"%s/.local/share/libhangul/keyboards", home_dir);
+        char* home_dir = getenv("HOME");
+        if (home_dir != NULL) {
+            const char* subdir = "/.local/share/libhangul/keyboards";
+            size_t len = strlen(home_dir) + strlen(subdir) + 1;
+            user_data_dir = (char*)malloc(len);
+            if (user_data_dir != NULL) {
+                snprintf(user_data_dir, len, "%s%s", home_dir, subdir);
+            }
+        }
     } else {
-	snprintf(user_data_dir, sizeof(user_data_dir),
-		"%s/libhangul/keyboards", xdg_data_home);
+        const char* subdir = "/libhangul/keyboards";
+        size_t len = strlen(xdg_data_home) + strlen(subdir) + 1;
+        user_data_dir = (char*)malloc(len);
+        if (user_data_dir != NULL) {
+            snprintf(user_data_dir, len, "%s%s", xdg_data_home, subdir);
+        }
     }
-    n += hangul_keyboard_list_load_dir(user_data_dir);
+    if (user_data_dir != NULL) {
+        n += hangul_keyboard_list_load_dir(user_data_dir);
+        free(user_data_dir);
+    }
 
     if (n == 0)
 	return 1;
