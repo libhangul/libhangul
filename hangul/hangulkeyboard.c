@@ -275,7 +275,7 @@ hangul_combination_set_data(HangulCombination* combination,
     if (combination == NULL)
 	return false;
 
-    if (n == 0 || n > ULONG_MAX / sizeof(HangulCombinationItem))
+    if (n == 0 || n > SIZE_MAX / sizeof(HangulCombinationItem))
 	return false;
 
     combination->table = malloc(sizeof(HangulCombinationItem) * n);
