@@ -49,38 +49,38 @@ static const ucschar hangul_keyboard_table_2[] = {
     0x0000,     /* 0x1E information separator two                    */
     0x0000,     /* 0x1F information separator one                    */
     0x0000,     /* 0x20 space                                        */
-    0x0021,     /* 0x21 exclam:       exclamation mark               */
-    0x0022,     /* 0x22 quotedbl:     quotation mark                 */
-    0x0023,     /* 0x23 numbersign:   number sign                    */
-    0x0024,     /* 0x24 dollar:       dollar sign                    */
-    0x0025,     /* 0x25 percent:      percent sign                   */
-    0x0026,     /* 0x26 ampersand:    ampersand                      */
-    0x0027,     /* 0x27 apostrophe:   apostrophe                     */
-    0x0028,     /* 0x28 parenleft:    left parenthesis               */
-    0x0029,     /* 0x29 parenright:   right parenthesis              */
-    0x002a,     /* 0x2A asterisk:     asterisk                       */
-    0x002b,     /* 0x2B plus:         plus sign                      */
-    0x002c,     /* 0x2C comma:        comma                          */
-    0x002d,     /* 0x2D minus:        minus sign                     */
-    0x002e,     /* 0x2E period:       period                         */
-    0x002f,     /* 0x2F slash:        slash                          */
-    0x0030,     /* 0x30 0:            0                              */
-    0x0031,     /* 0x31 1:            1                              */
-    0x0032,     /* 0x32 2:            2                              */
-    0x0033,     /* 0x33 3:            3                              */
-    0x0034,     /* 0x34 4:            4                              */
-    0x0035,     /* 0x35 5:            5                              */
-    0x0036,     /* 0x36 6:            6                              */
-    0x0037,     /* 0x37 7:            7                              */
-    0x0038,     /* 0x38 8:            8                              */
-    0x0039,     /* 0x39 9:            9                              */
-    0x003a,     /* 0x3A colon:        colon                          */
-    0x003b,     /* 0x3B semicolon:    semicolon                      */
-    0x003c,     /* 0x3C less:         less-than sign                 */
-    0x003d,     /* 0x3D equal:        equals sign                    */
-    0x003e,     /* 0x3E greater:      greater-than sign              */
-    0x003f,     /* 0x3F question:     question mark                  */
-    0x0040,     /* 0x40 at:           commercial at                  */
+    0x0000,     /* 0x21 exclam:       exclamation mark               */
+    0x0000,     /* 0x22 quotedbl:     quotation mark                 */
+    0x0000,     /* 0x23 numbersign:   number sign                    */
+    0x0000,     /* 0x24 dollar:       dollar sign                    */
+    0x0000,     /* 0x25 percent:      percent sign                   */
+    0x0000,     /* 0x26 ampersand:    ampersand                      */
+    0x0000,     /* 0x27 apostrophe:   apostrophe                     */
+    0x0000,     /* 0x28 parenleft:    left parenthesis               */
+    0x0000,     /* 0x29 parenright:   right parenthesis              */
+    0x0000,     /* 0x2A asterisk:     asterisk                       */
+    0x0000,     /* 0x2B plus:         plus sign                      */
+    0x0000,     /* 0x2C comma:        comma                          */
+    0x0000,     /* 0x2D minus:        minus sign                     */
+    0x0000,     /* 0x2E period:       period                         */
+    0x0000,     /* 0x2F slash:        slash                          */
+    0x0000,     /* 0x30 0:            0                              */
+    0x0000,     /* 0x31 1:            1                              */
+    0x0000,     /* 0x32 2:            2                              */
+    0x0000,     /* 0x33 3:            3                              */
+    0x0000,     /* 0x34 4:            4                              */
+    0x0000,     /* 0x35 5:            5                              */
+    0x0000,     /* 0x36 6:            6                              */
+    0x0000,     /* 0x37 7:            7                              */
+    0x0000,     /* 0x38 8:            8                              */
+    0x0000,     /* 0x39 9:            9                              */
+    0x0000,     /* 0x3A colon:        colon                          */
+    0x0000,     /* 0x3B semicolon:    semicolon                      */
+    0x0000,     /* 0x3C less:         less-than sign                 */
+    0x0000,     /* 0x3D equal:        equals sign                    */
+    0x0000,     /* 0x3E greater:      greater-than sign              */
+    0x0000,     /* 0x3F question:     question mark                  */
+    0x0000,     /* 0x40 at:           commercial at                  */
     0x1106,     /* 0x41 A:            choseong mieum                 */
     0x1172,     /* 0x42 B:            jungseong yu                   */
     0x110e,     /* 0x43 C:            choseong chieuch               */
@@ -107,12 +107,12 @@ static const ucschar hangul_keyboard_table_2[] = {
     0x1110,     /* 0x58 X:            choseong thieuth               */
     0x116d,     /* 0x59 Y:            jungseong yo                   */
     0x110f,     /* 0x5A Z:            choseong khieukh               */
-    0x005b,     /* 0x5B bracketleft:  left bracket                   */
-    0x005c,     /* 0x5C backslash:    backslash                      */
-    0x005d,     /* 0x5D bracketright: right bracket                  */
-    0x005e,     /* 0x5E asciicircum:  circumflex accent              */
-    0x005f,     /* 0x5F underscore:   underscore                     */
-    0x0060,     /* 0x60 quoteleft:    grave accent                   */
+    0x0000,     /* 0x5B bracketleft:  left bracket                   */
+    0x0000,     /* 0x5C backslash:    backslash                      */
+    0x0000,     /* 0x5D bracketright: right bracket                  */
+    0x0000,     /* 0x5E asciicircum:  circumflex accent              */
+    0x0000,     /* 0x5F underscore:   underscore                     */
+    0x0000,     /* 0x60 quoteleft:    grave accent                   */
     0x1106,     /* 0x61 a:            choseong  mieum                */
     0x1172,     /* 0x62 b:            jungseong yu                   */
     0x110e,     /* 0x63 c:            choseong  chieuch              */
@@ -139,10 +139,10 @@ static const ucschar hangul_keyboard_table_2[] = {
     0x1110,     /* 0x78 x:            choseong  thieuth              */
     0x116d,     /* 0x79 y:            jungseong yo                   */
     0x110f,     /* 0x7A z:            choseong  khieukh              */
-    0x007b,     /* 0x7B braceleft:    left brace                     */
-    0x007c,     /* 0x7C bar:          vertical bar                   */
-    0x007d,     /* 0x7D braceright:   right brace                    */
-    0x007e,     /* 0x7E asciitilde:   tilde                          */
+    0x0000,     /* 0x7B braceleft:    left brace                     */
+    0x0000,     /* 0x7C bar:          vertical bar                   */
+    0x0000,     /* 0x7D braceright:   right brace                    */
+    0x0000,     /* 0x7E asciitilde:   tilde                          */
     0x0000      /* 0x7F delete                                       */
 };
 
@@ -180,38 +180,38 @@ static const ucschar hangul_keyboard_table_2y[] = {
     0x0000,     /* 0x1E information separator two                    */
     0x0000,     /* 0x1F information separator one                    */
     0x0000,     /* 0x20 space                                        */
-    0x0021,     /* 0x21 exclam:       exclamation mark               */
-    0x0022,     /* 0x22 quotedbl:     quotation mark                 */
-    0x0023,     /* 0x23 numbersign:   number sign                    */
-    0x0024,     /* 0x24 dollar:       dollar sign                    */
-    0x0025,     /* 0x25 percent:      percent sign                   */
-    0x0026,     /* 0x26 ampersand:    ampersand                      */
-    0x0027,     /* 0x27 apostrophe:   apostrophe                     */
-    0x0028,     /* 0x28 parenleft:    left parenthesis               */
-    0x0029,     /* 0x29 parenright:   right parenthesis              */
-    0x002a,     /* 0x2A asterisk:     asterisk                       */
-    0x002b,     /* 0x2B plus:         plus sign                      */
-    0x002c,     /* 0x2C comma:        comma                          */
-    0x002d,     /* 0x2D minus:        minus sign                     */
-    0x002e,     /* 0x2E period:       period                         */
-    0x002f,     /* 0x2F slash:        slash                          */
-    0x0030,     /* 0x30 0:            0                              */
-    0x0031,     /* 0x31 1:            1                              */
-    0x0032,     /* 0x32 2:            2                              */
-    0x0033,     /* 0x33 3:            3                              */
-    0x0034,     /* 0x34 4:            4                              */
-    0x0035,     /* 0x35 5:            5                              */
-    0x0036,     /* 0x36 6:            6                              */
-    0x0037,     /* 0x37 7:            7                              */
-    0x0038,     /* 0x38 8:            8                              */
-    0x0039,     /* 0x39 9:            9                              */
-    0x003a,     /* 0x3A colon:        colon                          */
-    0x003b,     /* 0x3B semicolon:    semicolon                      */
-    0x003c,     /* 0x3C less:         less-than sign                 */
-    0x003d,     /* 0x3D equal:        equals sign                    */
-    0x003e,     /* 0x3E greater:      greater-than sign              */
-    0x003f,     /* 0x3F question:     question mark                  */
-    0x0040,     /* 0x40 at:           commercial at                  */
+    0x0000,     /* 0x21 exclam:       exclamation mark               */
+    0x0000,     /* 0x22 quotedbl:     quotation mark                 */
+    0x0000,     /* 0x23 numbersign:   number sign                    */
+    0x0000,     /* 0x24 dollar:       dollar sign                    */
+    0x0000,     /* 0x25 percent:      percent sign                   */
+    0x0000,     /* 0x26 ampersand:    ampersand                      */
+    0x0000,     /* 0x27 apostrophe:   apostrophe                     */
+    0x0000,     /* 0x28 parenleft:    left parenthesis               */
+    0x0000,     /* 0x29 parenright:   right parenthesis              */
+    0x0000,     /* 0x2A asterisk:     asterisk                       */
+    0x0000,     /* 0x2B plus:         plus sign                      */
+    0x0000,     /* 0x2C comma:        comma                          */
+    0x0000,     /* 0x2D minus:        minus sign                     */
+    0x0000,     /* 0x2E period:       period                         */
+    0x0000,     /* 0x2F slash:        slash                          */
+    0x0000,     /* 0x30 0:            0                              */
+    0x0000,     /* 0x31 1:            1                              */
+    0x0000,     /* 0x32 2:            2                              */
+    0x0000,     /* 0x33 3:            3                              */
+    0x0000,     /* 0x34 4:            4                              */
+    0x0000,     /* 0x35 5:            5                              */
+    0x0000,     /* 0x36 6:            6                              */
+    0x0000,     /* 0x37 7:            7                              */
+    0x0000,     /* 0x38 8:            8                              */
+    0x0000,     /* 0x39 9:            9                              */
+    0x0000,     /* 0x3A colon:        colon                          */
+    0x0000,     /* 0x3B semicolon:    semicolon                      */
+    0x0000,     /* 0x3C less:         less-than sign                 */
+    0x0000,     /* 0x3D equal:        equals sign                    */
+    0x0000,     /* 0x3E greater:      greater-than sign              */
+    0x0000,     /* 0x3F question:     question mark                  */
+    0x0000,     /* 0x40 at:           commercial at                  */
     0x1140,     /* 0x41 A:            choseong pansios               */
     0x1154,     /* 0x42 B:            choseong chitueumchieuch       */
     0x114e,     /* 0x43 C:            choseong chitueumcieuc         */
@@ -238,12 +238,12 @@ static const ucschar hangul_keyboard_table_2y[] = {
     0x113e,     /* 0x58 X:            choseong ceongchieumsios       */
     0x116d,     /* 0x59 Y:            jungseong yo                   */
     0x113c,     /* 0x5A Z:            choseong chitueumsios          */
-    0x005b,     /* 0x5B bracketleft:  left bracket                   */
-    0x005c,     /* 0x5C backslash:    backslash                      */
-    0x005d,     /* 0x5D bracketright: right bracket                  */
-    0x005e,     /* 0x5E asciicircum:  circumflex accent              */
-    0x005f,     /* 0x5F underscore:   underscore                     */
-    0x0060,     /* 0x60 quoteleft:    grave accent                   */
+    0x0000,     /* 0x5B bracketleft:  left bracket                   */
+    0x0000,     /* 0x5C backslash:    backslash                      */
+    0x0000,     /* 0x5D bracketright: right bracket                  */
+    0x0000,     /* 0x5E asciicircum:  circumflex accent              */
+    0x0000,     /* 0x5F underscore:   underscore                     */
+    0x0000,     /* 0x60 quoteleft:    grave accent                   */
     0x1106,     /* 0x61 a:            choseong  mieum                */
     0x1172,     /* 0x62 b:            jungseong yu                   */
     0x110e,     /* 0x63 c:            choseong  chieuch              */
@@ -270,10 +270,10 @@ static const ucschar hangul_keyboard_table_2y[] = {
     0x1110,     /* 0x78 x:            choseong  thieuth              */
     0x116d,     /* 0x79 y:            jungseong yo                   */
     0x110f,     /* 0x7A z:            choseong  khieukh              */
-    0x007b,     /* 0x7B braceleft:    left brace                     */
-    0x007c,     /* 0x7C bar:          vertical bar                   */
-    0x007d,     /* 0x7D braceright:   right brace                    */
-    0x007e,     /* 0x7E asciitilde:   tilde                          */
+    0x0000,     /* 0x7B braceleft:    left brace                     */
+    0x0000,     /* 0x7C bar:          vertical bar                   */
+    0x0000,     /* 0x7D braceright:   right brace                    */
+    0x0000,     /* 0x7E asciitilde:   tilde                          */
     0x0000      /* 0x7F delete                                       */
 };
 
