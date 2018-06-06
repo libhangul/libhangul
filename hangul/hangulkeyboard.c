@@ -1009,6 +1009,12 @@ hangul_keyboard_list_get_keyboard_name(unsigned index_)
     return keyboard->name;
 }
 
+/**
+ * @ingroup hangulkeyboards
+ * @brief libhangul에서 제공하는 자판의 HangulKeyboard 포인터를 구하는 함수
+ * @return id로 찾아진 자판의 HangulKeyboard 포인터, 못찾으면 NULL.
+ *         이 스트럭처는 libhangul 내부에서 관리하는 것으로 free해서는 안된다.
+ */
 const HangulKeyboard*
 hangul_keyboard_list_get_keyboard(const char* id)
 {
@@ -1050,4 +1056,62 @@ hangul_keyboard_list_append(HangulKeyboard* keyboard)
     hangul_keyboards.n = i + 1;
 
     return true;
+}
+
+/**
+ * @ingroup hangulkeyboards
+ * @brief keyboard 를 글로벌 키보드 리스트에 등록함
+ * @param keyboard 등록할 키보드
+ * @return keyboard 의 id, 키보드를 선택하거나 unregister할때 사용하는 id다.
+ *
+ * 여기에 등록된 키보드는 hangul_ic_select()를 통해서 선택될 수 있게 된다.
+ * 이후 @a keyboard 는 libhangul이 관리하므로 사용자가 임의로 삭제해서는 안된다.
+ * hangul_fini() 함수 안에서 삭제될 것이다.
+ */
+const char*
+hangul_keyboard_list_register_keyboard(HangulKeyboard* keyboard)
+{
+    if (keyboard == NULL)
+        return NULL;
+
+    bool res = hangul_keyboard_list_append(keyboard);
+    if (!res) {
+        return NULL;
+    }
+
+    return keyboard->id;
+}
+
+/**
+ * @ingroup hangulkeyboards
+ * @brief id로 지정된 키보드를 글로벌 키보드 리스트에 삭제함
+ * @param id 삭제할 키보드 id
+ * @return 리스트에서 삭제된 HangulKeyboard 의 포인터, 이 포인터는 더이상 libhangul에서
+ *         관리하지 않으므로 사용자가 hangul_keyboard_delete() 함수로 삭제해야 한다.
+ */
+HangulKeyboard*
+hangul_keyboard_list_unregister_keyboard(const char* id)
+{
+    HangulKeyboard* keyboard = NULL;
+
+    size_t i;
+    for (i = 0; i < hangul_keyboards.n; ++i) {
+        keyboard = hangul_keyboards.keyboards[i];
+        if (strcmp(id, keyboard->id) == 0) {
+            break;
+        }
+    }
+
+    if (keyboard == NULL) {
+        return NULL;
+    }
+
+    for (++i; i < hangul_keyboards.n; ++i) {
+        hangul_keyboards.keyboards[i - 1] = hangul_keyboards.keyboards[i];
+    }
+
+    hangul_keyboards.keyboards[i - 1] = NULL;
+    hangul_keyboards.n--;
+
+    return keyboard;
 }

@@ -555,6 +555,23 @@ START_TEST(test_hangul_keyboard)
     fail_unless(
         (keyboard = hangul_keyboard_new_from_file(TEST_SOURCE_DIR "/recursive.xml")) != NULL
     );
+
+    fail_unless(
+        (id = hangul_keyboard_list_register_keyboard(keyboard)) != NULL
+    );
+    fail_unless(
+        strcmp(id, "recursive") == 0
+    );
+    fail_unless(
+        hangul_keyboard_list_get_count() == n + 1
+    );
+    fail_unless(
+        hangul_keyboard_list_get_keyboard(id) == keyboard
+    );
+    fail_unless(
+        hangul_keyboard_list_unregister_keyboard(id) == keyboard
+    );
+
     hangul_keyboard_delete(keyboard);
 }
 END_TEST
