@@ -177,6 +177,10 @@ def print_cell_with_table(table, upper_index, lower_index, span = 4):
 	upper = table[upper_index];
 	lower = table[lower_index];	
 
+	if upper == 0 and lower == 0:
+		print '<td class="graykeycell" colspan="%d">%s<br/>%s</td>' % (span, to_html_entity(upper_index), to_html_entity(lower_index))
+		return
+
 	if upper == lower:
 		upper = ord(' ')
 
