@@ -22,13 +22,13 @@ libhangul에서 제공하는 기능들은 다음 레퍼런스에서 찾아볼 �
 @section download 다운로드
 최근 릴리스들은 libhangul의 프로젝트 페이지에서 받을 수 있다.
 
-https://github.com/choehwanjin/libhangul/releases
+https://github.com/libhangul/libhangul/releases
 
 개발버젼의 소스는 <a href="http://github.com/">github</a>의 
 repository에서 받을 수 있다.
 
 @code
-git clone git://github.com/choehwanjin/libhangul.git
+git clone git://github.com/libhangul/libhangul.git
 @endcode
 
 @section compile libhangul 어플리케이션 컴파일
@@ -57,12 +57,12 @@ http://www.freedesktop.org/wiki/Software/pkg-config
 libhangul의 버그는 <a href="https://github.com/">GitHub</a>의
 이슈트래커로 관리하고 있다.
 
-이슈트래커: https://github.com/choehwanjin/libhangul/issues
+이슈트래커: https://github.com/libhangul/libhangul/issues
 
 @section website 웹주소
 libhangul은 <a href="https://github.com/">GitHub</a>에서 호스팅되고
 있다.
 
-Project page: https://github.com/choehwanjin/libhangul
+Project page: https://github.com/libhangul/libhangul
 
  */
