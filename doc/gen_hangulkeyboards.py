@@ -8,7 +8,7 @@ table = {}
 current_name = ''
 current_table = []
 
-src = open('../hangul/hangulkeyboard.h', 'r')
+src = open(sys.argv[1], 'r')
 for i in src.readlines():
 	pos = i.find('hangul_keyboard_table_')
 	if pos >= 0:
@@ -27,6 +27,7 @@ for i in src.readlines():
 	if len(current_name) > 0:
 		code = int(i.split()[0].replace(',', ''), 16)
 		current_table.append(code)
+src.close()
 
 def jamo_to_compat_jamo(code):
 	table = [

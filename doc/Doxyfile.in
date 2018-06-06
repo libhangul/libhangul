@@ -450,13 +450,13 @@ WARN_LOGFILE           =
 # directories like "/usr/src/myproject". Separate the files or directories 
 # with spaces.
 
-INPUT                  = ../hangul/hangul.h \
-			 ../hangul/hangulctype.c \
-			 ../hangul/hangulinputcontext.c \
-			 ../hangul/hangulkeyboard.c \
-			 ../hangul/hanja.c \
-			 mainpage.dox \
-			 hangulkeyboards.dox
+INPUT                  = @top_srcdir@/hangul/hangul.h \
+                         @top_srcdir@/hangul/hangulctype.c \
+                         @top_srcdir@/hangul/hangulinputcontext.c \
+                         @top_srcdir@/hangul/hangulkeyboard.c \
+                         @top_srcdir@/hangul/hanja.c \
+                         @srcdir@/mainpage.dox \
+                         @builddir@/hangulkeyboards.dox
 
 # If the value of the INPUT tag contains directories, you can use the 
 # FILE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp 

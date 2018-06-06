@@ -1,5 +1,5 @@
 SUBDIRS = hangul data tools po
-DIST_SUBDIRS = hangul data tools po test
+DIST_SUBDIRS = hangul data tools po test doc
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = libhangul.pc

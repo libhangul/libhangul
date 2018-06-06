@@ -83,6 +83,7 @@ data/Makefile
 data/hanja/Makefile
 data/keyboards/Makefile
 doc/Doxyfile
+doc/Makefile
 hangul/Makefile
 libhangul.pc
 po/Makefile.in
