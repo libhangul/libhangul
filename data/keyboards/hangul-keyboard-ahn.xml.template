@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <hangul-keyboard id="ahn" type="jaso">
 
-    <_name>Ahnmatae</_name>
+    <name>Ahnmatae</name>
 
     <map id="0">
         <item key="0x21" value="0x0021"/>  <!-- ! → !  -->

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <hangul-keyboard id="2" type="jamo">
 
-    <_name>Dubeolsik</_name>
+    <name>Dubeolsik</name>
 
     <map id="0">
         <item key="0x41" value="0x1106"/>  <!-- A → ᄆᅠ -->

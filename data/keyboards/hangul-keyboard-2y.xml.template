@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <hangul-keyboard id="2y" type="jamo-yet">
 
-    <_name>Dubeolsik Yetgeul</_name>
+    <name>Dubeolsik Yetgeul</name>
 
     <map id="0">
         <item key="0x41" value="0x1140"/>  <!-- A → ᅀᅠ -->
