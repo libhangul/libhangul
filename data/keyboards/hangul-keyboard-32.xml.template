@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <hangul-keyboard id="32" type="jaso">
 
-    <_name>Sebeolsik Dubeol Layout</_name>
+    <name>Sebeolsik Dubeol Layout</name>
 
     <map id="0">
         <item key="0x21" value="0x0021"/>  <!-- ! → !  -->

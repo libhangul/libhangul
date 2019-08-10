@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <hangul-keyboard id="3f" type="jaso">
 
-    <_name>Sebeolsik Final</_name>
+    <name>Sebeolsik Final</name>
 
     <map id="0">
         <item key="0x21" value="0x11a9"/>  <!-- ! → ᅟᅠᆩ -->

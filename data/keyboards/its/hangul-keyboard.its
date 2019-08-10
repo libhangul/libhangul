@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<!--
+See the gettext manual for ITS/LOC file formats:
+http://www.gnu.org/software/gettext/manual/html_node/Preparing-ITS-Rules.html
+-->
+<its:rules xmlns:its="http://www.w3.org/2005/11/its" version="1.0">
+  <its:translateRule selector="/hangul-keyboard" translate="no"/>
+  <its:translateRule selector="//name" translate="yes"/>
+</its:rules>

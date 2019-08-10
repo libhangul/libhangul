@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<!--
+See the gettext manual for ITS/LOC file formats:
+http://www.gnu.org/software/gettext/manual/html_node/Preparing-ITS-Rules.html
+-->
+<locatingRules>
+  <locatingRule name="hangul-keyboard" pattern="*.xml">
+    <documentRule localName="hangul-keyboard" target="hangul-keyboard.its"/>
+  </locatingRule>
+</locatingRules>

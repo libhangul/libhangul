@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <hangul-keyboard id="ro" type="romaja">
 
-    <_name>Romaja</_name>
+    <name>Romaja</name>
 
     <map id="0">
         <item key="0x21" value="0x0021"/>  <!-- ! → !  -->
