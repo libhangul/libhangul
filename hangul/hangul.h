@@ -23,7 +23,7 @@
 #include <inttypes.h>
 
 #ifdef __GNUC__
-#define LIBHANGUL_DEPRECATED __attribute__((deprecated));
+#define LIBHANGUL_DEPRECATED __attribute__((deprecated))
 #else
 #define LIBHANGUL_DEPRECATED
 #endif

@@ -46,6 +46,7 @@ void ucs4_to_utf8(char *buf, const ucschar *ucs4, size_t bufsize)
     outbuf = buf;
     outbytesleft = bufsize;
     ret = iconv(cd, &inbuf, &inbytesleft, &outbuf, &outbytesleft);
+    (void)ret;
 
     iconv_close(cd);
 
