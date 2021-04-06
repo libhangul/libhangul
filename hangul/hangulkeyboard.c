@@ -57,8 +57,13 @@
  * 자판은 등록하여 사용할 수 없다.
  */
 
-#define LIBHANGUL_KEYBOARD_DIR LIBHANGUL_DATA_DIR "/keyboards"
-//#define LIBHANGUL_KEYBOARD_DIR TOP_SRCDIR "/data/keyboards"
+#ifdef LIBHANGUL_DYNAMIC_DATA_DIR
+const char *libhangul_data_dir();
+#else
+const char *libhangul_data_dir() {
+    return LIBHANGUL_DATA_DIR;
+}
+#endif
 
 #define HANGUL_KEYBOARD_TABLE_SIZE 0x80
 
@@ -849,7 +854,9 @@ hangul_keyboard_list_init()
 
     unsigned n = 0;
     /* libhangul data dir에서 keyboard 로딩 */
-    n += hangul_keyboard_list_load_dir(LIBHANGUL_KEYBOARD_DIR);
+    char data_dir[PATH_MAX];
+    snprintf(data_dir, sizeof(data_dir), "%s/keyboards", libhangul_data_dir());
+    n += hangul_keyboard_list_load_dir(data_dir);
 
     /* 유저의 개별 키보드 파일 로딩 */
     char* user_data_dir = NULL;
