@@ -92,6 +92,11 @@ test/Makefile
 tools/Makefile
 ])
 
+AC_CONFIG_LINKS([
+data/keyboards/hangul-combination-default.xml:data/keyboards/hangul-combination-default.xml
+data/keyboards/hangul-combination-full.xml:data/keyboards/hangul-combination-full.xml
+])
+
 AC_OUTPUT
 
 # vim: et

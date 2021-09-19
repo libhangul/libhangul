@@ -58,7 +58,6 @@
  */
 
 #define LIBHANGUL_KEYBOARD_DIR LIBHANGUL_DATA_DIR "/keyboards"
-//#define LIBHANGUL_KEYBOARD_DIR TOP_SRCDIR "/data/keyboards"
 
 #define HANGUL_KEYBOARD_TABLE_SIZE 0x80
 
@@ -832,6 +831,62 @@ hangul_keyboard_list_clear()
     hangul_keyboards.keyboards = NULL;
 }
 
+static char*
+hangul_keyboard_get_default_keyboard_path()
+{
+    char* keyboard_path = NULL;
+    size_t keyboard_path_len = 1;
+
+    /* default LIBHANGUL_KEYBOARD_PATH is
+     * SYSTEM_KEYBOARD_DIR:USER_KEYBOARD_DIR */
+
+    /* system default dir */
+    const char* system_dir = LIBHANGUL_KEYBOARD_DIR;
+    keyboard_path_len += strlen(system_dir);
+
+    /* user default dir */
+    char* xdg_data_home = getenv("XDG_DATA_HOME");
+    if (xdg_data_home == NULL) {
+        char* home_dir = getenv("HOME");
+        if (home_dir == NULL) {
+            /* no user data dir */
+            keyboard_path = (char*)malloc(keyboard_path_len);
+            if (keyboard_path != NULL) {
+                snprintf(keyboard_path, keyboard_path_len, "%s", system_dir);
+            }
+        } else {
+            const char* subdir = "/.local/share/libhangul/keyboards";
+            keyboard_path_len += 1 + strlen(home_dir) + strlen(subdir);
+            keyboard_path = (char*)malloc(keyboard_path_len);
+            if (keyboard_path != NULL) {
+                snprintf(keyboard_path, keyboard_path_len, "%s:%s%s", system_dir, home_dir, subdir);
+            }
+        }
+    } else {
+        const char* subdir = "/libhangul/keyboards";
+        keyboard_path_len += 1 + strlen(xdg_data_home) + strlen(subdir);
+        keyboard_path = (char*)malloc(keyboard_path_len);
+        if (keyboard_path != NULL) {
+            snprintf(keyboard_path, keyboard_path_len, "%s:%s%s", system_dir, xdg_data_home, subdir);
+        }
+    }
+
+    return keyboard_path;
+}
+
+static char*
+hangul_keyboard_get_keyboard_path()
+{
+    char* keyboard_path = getenv("LIBHANGUL_KEYBOARD_PATH");
+    if (keyboard_path == NULL) {
+        keyboard_path = hangul_keyboard_get_default_keyboard_path();
+    } else {
+        keyboard_path = strdup(keyboard_path);
+    }
+
+    return keyboard_path;
+}
+
 int
 hangul_keyboard_list_init()
 {
@@ -847,35 +902,24 @@ hangul_keyboard_list_init()
      * builtin 키보드는 하위 호환을 위해 남겨둔다. */
     hangul_builtin_keyboard_count = 0;
 
-    unsigned n = 0;
     /* libhangul data dir에서 keyboard 로딩 */
-    n += hangul_keyboard_list_load_dir(LIBHANGUL_KEYBOARD_DIR);
+    char* libhangul_keyboard_path = hangul_keyboard_get_keyboard_path();
 
-    /* 유저의 개별 키보드 파일 로딩 */
-    char* user_data_dir = NULL;
-    char* xdg_data_home = getenv("XDG_DATA_HOME");
-    if (xdg_data_home == NULL) {
-        char* home_dir = getenv("HOME");
-        if (home_dir != NULL) {
-            const char* subdir = "/.local/share/libhangul/keyboards";
-            size_t len = strlen(home_dir) + strlen(subdir) + 1;
-            user_data_dir = (char*)malloc(len);
-            if (user_data_dir != NULL) {
-                snprintf(user_data_dir, len, "%s%s", home_dir, subdir);
-            }
+    unsigned n = 0;
+
+    char* dir = libhangul_keyboard_path;
+    while (dir != NULL && dir[0] != '\0') {
+        char* next = strchr(dir, ':');
+        if (next != NULL) {
+            next[0] = '\0';
+            ++next;
         }
-    } else {
-        const char* subdir = "/libhangul/keyboards";
-        size_t len = strlen(xdg_data_home) + strlen(subdir) + 1;
-        user_data_dir = (char*)malloc(len);
-        if (user_data_dir != NULL) {
-            snprintf(user_data_dir, len, "%s%s", xdg_data_home, subdir);
-        }
+
+        n += hangul_keyboard_list_load_dir(dir);
+        dir = next;
     }
-    if (user_data_dir != NULL) {
-        n += hangul_keyboard_list_load_dir(user_data_dir);
-        free(user_data_dir);
-    }
+
+    free(libhangul_keyboard_path);
 
     if (n == 0)
 	return 1;
