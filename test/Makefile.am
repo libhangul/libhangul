@@ -5,7 +5,7 @@ hangul_CFLAGS = -DTEST_LIBHANGUL_KEYBOARD_PATH=\"${abs_top_builddir}/data/keyboa
 hangul_SOURCES = hangul.c
 hangul_LDADD = ../hangul/libhangul.la $(LTLIBINTL) $(LTLIBICONV)
 
-hanja_CFLAGS =
+hanja_CFLAGS = -DTEST_HANJA_TXT=\"${abs_top_srcdir}/data/hanja/hanja.txt\"
 hanja_SOURCES = hanja.c
 hanja_LDADD = ../hangul/libhangul.la $(LTLIBINTL)
 

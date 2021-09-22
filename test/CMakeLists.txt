@@ -30,7 +30,9 @@ target_link_libraries(test-hangul LINK_PRIVATE hangul)
 add_executable(test-hanja
     hanja.c
 )
-
+target_compile_definitions(test-hanja PRIVATE
+    TEST_HANJA_TXT=\"${CMAKE_SOURCE_DIR}/data/hanja/hanja.txt\"
+)
 target_link_libraries(test-hanja LINK_PRIVATE hangul)
 
 # unit test

@@ -3,6 +3,10 @@
 
 #include "../hangul/hangul.h"
 
+#ifndef TEST_HANJA_TXT
+#define NULL
+#endif
+
 int
 main(int argc, char *argv[])
 {
@@ -11,6 +15,8 @@ main(int argc, char *argv[])
 
     if (argc > 1)
 	hanja_table_file = argv[1];
+    else
+        hanja_table_file = TEST_HANJA_TXT;
 
     HanjaTable *table;
     table = hanja_table_load(hanja_table_file);
