@@ -39,6 +39,7 @@ set(LIBHANGUL_LIBRARY_DIR "${CMAKE_INSTALL_LIBDIR}")
 add_subdirectory(hangul)
 add_subdirectory(data/hanja)
 add_subdirectory(data/keyboards)
+add_subdirectory(tools)
 add_subdirectory(po)
 
 if(BUILD_TESTING)
