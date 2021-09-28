@@ -50,7 +50,7 @@ include(CMakePackageConfigHelpers)
 configure_package_config_file(hangul-config.cmake.in
     "${CMAKE_CURRENT_BINARY_DIR}/hangul-config.cmake"
     INSTALL_DESTINATION
-        "${CMAKE_INSTALL_LIBDIR}/cmake/hangul"
+        "${CMAKE_INSTALL_LIBDIR}/cmake/${CMAKE_PROJECT_NAME}"
     PATH_VARS
         LIBHANGUL_INCLUDE_DIR
         LIBHANGUL_LIBRARY_DIR
@@ -67,7 +67,7 @@ install(
         "${CMAKE_CURRENT_BINARY_DIR}/hangul-config.cmake"
         "${CMAKE_CURRENT_BINARY_DIR}/hangul-config-version.cmake"
     DESTINATION
-        "${CMAKE_INSTALL_LIBDIR}/cmake/hangul"
+        "${CMAKE_INSTALL_LIBDIR}/cmake/${CMAKE_PROJECT_NAME}"
     COMPONENT
         dev
 )
