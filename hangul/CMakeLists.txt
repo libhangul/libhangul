@@ -17,14 +17,11 @@
 
 cmake_minimum_required(VERSION 3.0)
 
-include(FindPkgConfig)
-include(FindEXPAT)
 include(GNUInstallDirs)
 
-option(ENABLE_EXTERNAL_KEYBOARDS
-    "enable external keyboard xml file loading feature"
-    ON
-)
+if(ENABLE_EXTERNAL_KEYBOARDS)
+    find_package(EXPAT)
+endif()
 
 set(hangul_PUBLIC_HEADERS
     hangul.h
@@ -37,7 +34,7 @@ set(hangul_PRIVATE_HEADERS
     hanjacompatible.h
 )
 
-add_library(hangul SHARED
+add_library(hangul
     ${hangul_PUBLIC_HEADERS}
     ${hangul_PRIVATE_HEADERS}
     hangulctype.c
@@ -53,7 +50,7 @@ target_compile_definitions(hangul
     PRIVATE -DTOP_SRCDIR=\"${CMAKE_SOURCE_DIR}\"
 )
 
-if (ENABLE_EXTERNAL_KEYBOARDS)
+if(ENABLE_EXTERNAL_KEYBOARDS)
     target_compile_definitions(hangul
         PRIVATE -DENABLE_EXTERNAL_KEYBOARDS=1
     )

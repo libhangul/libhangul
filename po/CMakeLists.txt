@@ -17,7 +17,7 @@
 
 cmake_minimum_required(VERSION 3.0)
 
-include(FindGettext)
+find_package(Gettext)
 include(GNUInstallDirs)
 
 file(READ LINGUAS LINGUAS)

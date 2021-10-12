@@ -18,7 +18,7 @@
 cmake_minimum_required(VERSION 3.0)
 
 #include(GNUInstallDirs)
-include(FindGettext)
+find_package(Gettext)
 
 set(keyboard_file_list
     hangul-keyboard-2.xml

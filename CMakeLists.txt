@@ -25,8 +25,13 @@ set(LIBHANGUL_SOVERSION_MAJOR 1)
 set(LIBHANGUL_SOVERSION_MINOR 0)
 set(LIBHANGUL_SOVERSION_PATCH 1)
 
+option(BUILD_SHARED_LIBS
+    "Enable/Disable shared library build."
+    ON
+)
+
 option(ENABLE_EXTERNAL_KEYBOARDS
-    "enable external keyboard xml file loading feature"
+    "Enable/Disable external keyboard xml file loading feature."
     ON
 )
 
