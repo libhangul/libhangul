@@ -36,6 +36,8 @@ target_compile_definitions(test-hanja PRIVATE
 target_link_libraries(test-hanja LINK_PRIVATE hangul)
 
 # unit test
+if(ENABLE_UNIT_TEST)
+
 pkg_check_modules(CHECK REQUIRED check)
 
 add_executable(unittest
@@ -52,3 +54,5 @@ target_link_libraries(unittest PRIVATE hangul ${CHECK_LDFLAGS})
 add_test(NAME unittest
     COMMAND ./unittest
 )
+
+endif() # ENABLE_UNIT_TEST)

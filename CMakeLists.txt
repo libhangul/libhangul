@@ -35,6 +35,11 @@ option(ENABLE_EXTERNAL_KEYBOARDS
     ON
 )
 
+option(ENABLE_UNIT_TEST
+    "Enable/Disable unit test."
+    ON
+)
+
 include(CTest)
 
 include(GNUInstallDirs)
@@ -48,7 +53,7 @@ add_subdirectory(tools)
 add_subdirectory(po)
 
 if(BUILD_TESTING)
-    add_subdirectory(test)
+    add_subdirectory(test EXCLUDE_FROM_ALL)
 endif()
 
 include(CMakePackageConfigHelpers)
