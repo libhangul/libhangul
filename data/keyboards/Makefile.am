@@ -38,7 +38,7 @@ MSGFMT_COMMAND = env GETTEXTDATADIRS=$(srcdir) $(MSGFMT)
 # name.xml로 만들어 (msgfmt 입출력은 valid XML만 가능하므로 root node도 포함.)
 # 번역한후 template과 name.xml을 병합하여 키보드 xml 파일을 생성한다.
 hangul-keyboard-%.xml: hangul-keyboard-%.name.xml hangul-keyboard-%.xml.template
-	sed -i -e '1 D' \
+	sed -i.tmp -e '1 D' \
 		-e '/^<hangul-keyboard/D' \
 		-e '/^<\/hangul-keyboard/D' \
 		-e 's/^ *<name/    <name/'  $<
@@ -66,4 +66,13 @@ CLEANFILES = \
 	hangul-keyboard-3y.xml \
 	hangul-keyboard-ro.xml \
 	hangul-keyboard-ahn.xml \
+	hangul-keyboard-2.name.xml.tmp \
+	hangul-keyboard-2y.name.xml.tmp \
+	hangul-keyboard-39.name.xml.tmp \
+	hangul-keyboard-3f.name.xml.tmp \
+	hangul-keyboard-32.name.xml.tmp \
+	hangul-keyboard-3s.name.xml.tmp \
+	hangul-keyboard-3y.name.xml.tmp \
+	hangul-keyboard-ro.name.xml.tmp \
+	hangul-keyboard-ahn.name.xml.tmp \
 	$(NULL)
