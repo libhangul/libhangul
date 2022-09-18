@@ -613,11 +613,7 @@ Suite* libhangul_suite()
 
 int main()
 {
-    char* keyboard_path = getenv("LIBHANGUL_KEYBOARD_PATH");
-    if (keyboard_path == NULL)
-        setenv("LIBHANGUL_KEYBOARD_PATH", TEST_LIBHANGUL_KEYBOARD_PATH, 1);
-
-    hangul_init();
+    hangul_init(TEST_LIBHANGUL_KEYBOARD_PATH);
 
     int number_failed;
     Suite* s = libhangul_suite();

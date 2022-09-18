@@ -68,11 +68,7 @@ main(int argc, char *argv[])
 	keyboard = argv[1];
     }
 
-    char* keyboard_path = getenv("LIBHANGUL_KEYBOARD_PATH");
-    if (keyboard_path == NULL)
-        setenv("LIBHANGUL_KEYBOARD_PATH", TEST_LIBHANGUL_KEYBOARD_PATH, 1);
-
-    hangul_init();
+    hangul_init(TEST_LIBHANGUL_KEYBOARD_PATH);
 
     hic = hangul_ic_new(keyboard);
     if (hic == NULL) {
