@@ -427,18 +427,18 @@ hangul_keyboard_set_name(HangulKeyboard* keyboard, const char* name)
 }
 
 ucschar
-hangul_keyboard_get_mapping(const HangulKeyboard* keyboard, int tableid, unsigned key)
+hangul_keyboard_get_mapping(const HangulKeyboard* keyboard, int table_id, unsigned key)
 {
     if (keyboard == NULL)
 	return 0;
 
-    if (tableid >= countof(keyboard->table))
-	return 0;
+    if (table_id >= countof(keyboard->table))
+        return 0;
 
     if (key >= HANGUL_KEYBOARD_TABLE_SIZE)
 	return 0;
 
-    ucschar* table = keyboard->table[tableid];
+    ucschar* table = keyboard->table[table_id];
     if (table == NULL)
 	return 0;
 
@@ -446,18 +446,18 @@ hangul_keyboard_get_mapping(const HangulKeyboard* keyboard, int tableid, unsigne
 }
 
 static void
-hangul_keyboard_set_mapping(HangulKeyboard *keyboard, int tableid, unsigned key, ucschar value)
+hangul_keyboard_set_mapping(HangulKeyboard *keyboard, int table_id, unsigned key, ucschar value)
 {
     if (keyboard == NULL)
 	return;
 
-    if (tableid >= countof(keyboard->table))
-	return;
+    if (table_id >= countof(keyboard->table))
+        return;
 
     if (key >= HANGUL_KEYBOARD_TABLE_SIZE)
 	return;
 
-    if (keyboard->table[tableid] == NULL) {
+    if (keyboard->table[table_id] == NULL) {
 	ucschar* new_table = malloc(sizeof(ucschar) * HANGUL_KEYBOARD_TABLE_SIZE);
 	if (new_table == NULL)
 	    return;
@@ -466,10 +466,10 @@ hangul_keyboard_set_mapping(HangulKeyboard *keyboard, int tableid, unsigned key,
 	for (i = 0; i < HANGUL_KEYBOARD_TABLE_SIZE; ++i) {
 	    new_table[i] = 0;
 	}
-	keyboard->table[tableid] = new_table;
+        keyboard->table[table_id] = new_table;
     }
 
-    ucschar* table = keyboard->table[tableid];
+    ucschar* table = keyboard->table[table_id];
     table[key] = value;
 }
 
