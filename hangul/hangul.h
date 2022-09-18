@@ -96,7 +96,7 @@ enum {
 };
 
 /* library */
-int hangul_init();
+int hangul_init(const char* user_defined_keyboard_path);
 int hangul_fini();
 
 /* keyboard */

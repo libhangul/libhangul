@@ -295,7 +295,7 @@ main(int argc, char *argv[])
 
     setlocale(LC_ALL, "");
 
-    hangul_init();
+    hangul_init(NULL);
 
     res = EXIT_SUCCESS;
     keyboard = "2";

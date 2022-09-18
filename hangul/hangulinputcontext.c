@@ -1587,21 +1587,24 @@ hangul_ic_is_transliteration(HangulInputContext *hic)
 
 /**
  * @ingroup hangulic
- * @breif libhangul을 초기화 하는 함수.
+ * @brief libhangul을 초기화 하는 함수.
+ * @param user_defined_keyboard_path 한글 키보드 파일을 읽을 디렉토리 패스.
+ *        PATH 환경 변수와 같이 :으로 구분하여 여러개를 지정할 수 있다.
+ *        NULL을 주면 내장 기본값을 사용한다.
  *
  * libhangul의 함수를 사용하기 전에 호출해야 한다.
  */
 int
-hangul_init()
+hangul_init(const char* user_defined_keyboard_path)
 {
     int res;
-    res = hangul_keyboard_list_init();
+    res = hangul_keyboard_list_init(user_defined_keyboard_path);
     return res;
 }
 
 /**
  * @ingroup hangulic
- * @breif libhangul에서 사용한 리소스를 해제하는 함수.
+ * @brief libhangul에서 사용한 리소스를 해제하는 함수.
  *
  * libhangul의 함수의 사용이 끝나면 호출해야 한다.
  */
