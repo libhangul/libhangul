@@ -810,7 +810,7 @@ hangul_ic_process_jaso(HangulInputContext *hic, ucschar ch)
 	    }
 	} else {
 	    ucschar jungseong = 0;
-	    if (hangul_is_jungseong(hangul_ic_peek(hic))) {
+	    if (hic->option_auto_reorder || hangul_is_jungseong(hangul_ic_peek(hic))) {
 		jungseong = hangul_ic_combine(hic, hic->buffer.jungseong, ch);
 	    }
 	    if (jungseong) {
