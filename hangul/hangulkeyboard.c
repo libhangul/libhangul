@@ -35,6 +35,10 @@
 #include "hangul.h"
 #include "hangulinternals.h"
 
+#ifdef _WIN32
+#define strdup _strdup
+#endif
+
 /**
  * @file hangulkeyboard.c
  */
@@ -831,6 +835,7 @@ hangul_keyboard_list_clear()
     hangul_keyboards.keyboards = NULL;
 }
 
+#if ENABLE_EXTERNAL_KEYBOARDS
 static char*
 hangul_keyboard_get_default_keyboard_path()
 {
@@ -886,6 +891,7 @@ hangul_keyboard_get_keyboard_path()
 
     return keyboard_path;
 }
+#endif /* ENABLE_EXTERNAL_KEYBOARDS */
 
 int
 hangul_keyboard_list_init()

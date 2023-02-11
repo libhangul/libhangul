@@ -1,5 +1,6 @@
 #include <stdarg.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <wchar.h>
 #include <check.h>
 
@@ -528,6 +529,7 @@ START_TEST(test_syllable_iterator)
 }
 END_TEST
 
+#if ENABLE_EXTERNAL_KEYBOARDS
 START_TEST(test_hangul_keyboard)
 {
     const char* id;
@@ -575,6 +577,7 @@ START_TEST(test_hangul_keyboard)
     hangul_keyboard_delete(keyboard);
 }
 END_TEST
+#endif /* ENABLE_EXTERNAL_KEYBOARDS */
 
 START_TEST(test_hangul_jamo_to_cjamo)
 {
@@ -604,7 +607,9 @@ Suite* libhangul_suite()
     tcase_add_test(hangul, test_hangul_ic_combi_on_double_stroke);
     tcase_add_test(hangul, test_hangul_ic_non_choseong_combi);
     tcase_add_test(hangul, test_syllable_iterator);
+#if ENABLE_EXTERNAL_KEYBOARDS
     tcase_add_test(hangul, test_hangul_keyboard);
+#endif /* ENABLE_EXTERNAL_KEYBOARDS */
     tcase_add_test(hangul, test_hangul_jamo_to_cjamo);
     suite_add_tcase(s, hangul);
 
@@ -615,7 +620,7 @@ int main()
 {
     char* keyboard_path = getenv("LIBHANGUL_KEYBOARD_PATH");
     if (keyboard_path == NULL)
-        setenv("LIBHANGUL_KEYBOARD_PATH", TEST_LIBHANGUL_KEYBOARD_PATH, 1);
+        putenv("LIBHANGUL_KEYBOARD_PATH=" TEST_LIBHANGUL_KEYBOARD_PATH);
 
     hangul_init();
 

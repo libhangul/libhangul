@@ -70,7 +70,7 @@ main(int argc, char *argv[])
 
     char* keyboard_path = getenv("LIBHANGUL_KEYBOARD_PATH");
     if (keyboard_path == NULL)
-        setenv("LIBHANGUL_KEYBOARD_PATH", TEST_LIBHANGUL_KEYBOARD_PATH, 1);
+        putenv("LIBHANGUL_KEYBOARD_PATH=" TEST_LIBHANGUL_KEYBOARD_PATH);
 
     hangul_init();
 

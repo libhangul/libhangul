@@ -22,7 +22,12 @@
 
 #include <sys/types.h>
 #include <sys/stat.h>
+#ifndef _WIN32
 #include <unistd.h>
+#else
+#include <io.h>
+#define strtok_r strtok_s
+#endif
 
 #ifdef HAVE_MMAP
 #include <sys/mman.h>
