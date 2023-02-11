@@ -1,0 +1,46 @@
+
+#undef APSTUDIO_READONLY_SYMBOLS
+#include <winver.h>
+#include "../hangul/hangul.h"
+#undef APSTUDIO_READONLY_SYMBOLS
+
+// English resources
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENG)
+
+VS_VERSION_INFO VERSIONINFO
+  FILEVERSION 1,0,0,0
+  PRODUCTVERSION 1,0,0,0
+  FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+  FILEFLAGS 0xbL
+#else
+  FILEFLAGS 0xaL
+#endif
+  FILEOS 0x4L
+  FILETYPE VFT_DLL
+  FILESUBTYPE 0xbL
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "040904E4"
+    BEGIN
+      VALUE "Comments", "libhangul hangul library https://github.com/libhangul/libhangul\0"
+      VALUE "CompanyName", "libhangul\0"
+      VALUE "FileDescription", "Libhangul v1.0.0\0"
+      VALUE "FileVersion", "1.0\0"
+      VALUE "InternalName", "Libhangul\0"
+      VALUE "LegalCopyright", "Copyright (C) 2004-2022 Choe Hwanjin\0"
+      VALUE "LegalTrademarks", "\0"
+      VALUE "OriginalFilename", "LIBHANGUL.DLL\0"
+      VALUE "ProductName", "Libhangul\0"
+      VALUE "ProductVersion", "1.0.0.0\0"
+    END
+  END
+
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x409, 1252
+  END
+END
+
+#endif // English resources

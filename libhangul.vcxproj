@@ -139,6 +139,9 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
+  <ItemGroup Condition="'$(ConfigurationType)'=='DynamicLibrary'">
+    <ResourceCompile Include="win32\libhangul.rc" />
+  </ItemGroup>
   <ItemGroup>
     <ClInclude Include="hangul\hangul.h" />
     <ClInclude Include="hangul\hangul-gettext.h" />
