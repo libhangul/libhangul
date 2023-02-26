@@ -29,7 +29,6 @@
 #ifdef HAVE_GLOB_H
 #include <glob.h>
 #endif /* HAVE_GLOB_H */
-#include <libgen.h>
 #include <expat.h>
 #endif /* ENABLE_EXTERNAL_KEYBOARDS */
 
@@ -679,8 +678,11 @@ on_element_start(void* data, const XML_Char* element, const XML_Char** attr)
 	    strncpy(path, file, n);
 	} else {
 	    char* orig_path = strdup(context->path_stack[top]);
-	    char* dir = dirname(orig_path);
-	    snprintf(path, n, "%s/%s", dir, file);
+	    char* last_slash = strrchr(orig_path, '/');
+	    if (last_slash)
+		last_slash[0] = '\0';
+
+	    snprintf(path, n, "%s/%s", orig_path, file);
 	    free(orig_path);
 	}
 
