@@ -43,6 +43,7 @@ option(ENABLE_UNIT_TEST
 include(CTest)
 
 include(GNUInstallDirs)
+include(CheckIncludeFiles)
 set(LIBHANGUL_INCLUDE_DIR "${CMAKE_INSTALL_INCLUDEDIR}/hangul-1.0")
 set(LIBHANGUL_LIBRARY_DIR "${CMAKE_INSTALL_LIBDIR}")
 
@@ -55,6 +56,12 @@ add_subdirectory(po)
 if(BUILD_TESTING)
     add_subdirectory(test EXCLUDE_FROM_ALL)
 endif()
+
+check_include_files(glob.h HAVE_GLOB_H)
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/config.h.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/config.h"
+)
 
 include(CMakePackageConfigHelpers)
 configure_package_config_file(hangul-config.cmake.in
