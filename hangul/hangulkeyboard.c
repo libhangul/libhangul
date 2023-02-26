@@ -899,6 +899,38 @@ hangul_keyboard_get_default_keyboard_path()
     /* default LIBHANGUL_KEYBOARD_PATH is
      * SYSTEM_KEYBOARD_DIR:USER_KEYBOARD_DIR */
 
+#ifdef _WIN32
+    /* system default dir */
+    char* system_dir = NULL;
+    const char* data_dir = getenv("APPDATA");
+    if (data_dir != NULL) {
+        const char* subdir = "/libhangul/keyboards";
+        size_t system_dir_len = strlen(data_dir) + strlen(subdir) + 1;
+        system_dir = (char*)malloc(system_dir_len);
+        if (system_dir != NULL) {
+            snprintf(system_dir, system_dir_len, "%s%s", data_dir, subdir);
+            keyboard_path_len += strlen(system_dir);
+        }
+    }
+    /* user default dir */
+    char* home_dir = getenv("USERPROFILE");
+    if (home_dir == NULL) {
+        /* no user data dir */
+        return system_dir;
+    } else {
+        const char* subdir = "/.libhangul/keyboards";
+        keyboard_path_len += strlen(home_dir) + strlen(subdir);
+        keyboard_path = (char*)malloc(keyboard_path_len);
+        if (keyboard_path != NULL) {
+            if (system_dir != NULL) {
+                keyboard_path_len++;
+                snprintf(keyboard_path, keyboard_path_len, "%s;%s%s", system_dir, home_dir, subdir);
+	    } else {
+                snprintf(keyboard_path, keyboard_path_len, "%s%s", home_dir, subdir);
+	    }
+        }
+    }
+#else
     /* system default dir */
     const char* system_dir = LIBHANGUL_KEYBOARD_DIR;
     keyboard_path_len += strlen(system_dir);
@@ -929,6 +961,7 @@ hangul_keyboard_get_default_keyboard_path()
             snprintf(keyboard_path, keyboard_path_len, "%s:%s%s", system_dir, xdg_data_home, subdir);
         }
     }
+#endif /* _WIN32 */
 
     return keyboard_path;
 }
@@ -968,8 +1001,13 @@ hangul_keyboard_list_init()
     unsigned n = 0;
 
     char* dir = libhangul_keyboard_path;
+#ifdef _WIN32
+    char sep = ';';
+#else
+    char sep = ':';
+#endif /* _WIN32 */
     while (dir != NULL && dir[0] != '\0') {
-        char* next = strchr(dir, ':');
+        char* next = strchr(dir, sep);
         if (next != NULL) {
             next[0] = '\0';
             ++next;
