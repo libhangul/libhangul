@@ -26,7 +26,9 @@
 
 #if ENABLE_EXTERNAL_KEYBOARDS
 #include <locale.h>
+#ifdef HAVE_GLOB_H
 #include <glob.h>
+#endif /* HAVE_GLOB_H */
 #include <libgen.h>
 #include <expat.h>
 #endif /* ENABLE_EXTERNAL_KEYBOARDS */
@@ -36,8 +38,11 @@
 #include "hangulinternals.h"
 
 #ifdef _WIN32
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <fileapi.h>
 #define strdup _strdup
-#endif
+#endif /* _WIN32 */
 
 /**
  * @file hangulkeyboard.c
@@ -798,6 +803,7 @@ hangul_keyboard_list_load_dir(const char* path)
 
     snprintf(pattern, len, "%s%s", path, subpattern);
 
+#ifdef HAVE_GLOB_H
     glob_t result;
     int res = glob(pattern, GLOB_ERR, NULL, &result);
     if (res != 0) {
@@ -815,6 +821,54 @@ hangul_keyboard_list_load_dir(const char* path)
 
     globfree(&result);
     free(pattern);
+#else /* _WIN32 */
+    WIN32_FIND_DATAW findFileData;
+    HANDLE hFind;
+    int n = (strlen(pattern) + 1) * sizeof(WCHAR);
+
+    LPWSTR wpattern = (LPWSTR)malloc(n);
+    if (wpattern == NULL) {
+	free(pattern);
+	return 0;
+    }
+
+    MultiByteToWideChar(CP_ACP, 0, pattern, -1, wpattern, n);
+
+    hFind = FindFirstFileW(wpattern, &findFileData);
+    if (hFind == INVALID_HANDLE_VALUE) {
+	free(wpattern);
+	free(pattern);
+	return 0;
+    }
+
+    do {
+	n = WideCharToMultiByte(CP_ACP, 0, findFileData.cFileName, -1, NULL, 0, NULL, NULL);
+	if (n == 0)
+	    continue;
+
+	int path_len = strlen(path);
+	len = path_len + n + 2;
+	char* file = (char*)malloc(len);
+	if (file == NULL)
+	    continue;
+
+	memcpy(file, path, path_len);
+	file[path_len] = '/';
+	char* pfile = &file[path_len + 1];
+	WideCharToMultiByte(CP_ACP, 0, findFileData.cFileName, -1, pfile, n, NULL, NULL);
+
+	HangulKeyboard* keyboard = hangul_keyboard_new_from_file(file);
+	free(file);
+
+	if (keyboard == NULL)
+	    continue;
+	hangul_keyboard_list_append(keyboard);
+    } while(FindNextFileW(hFind, &findFileData));
+
+    FindClose(hFind);
+    free(wpattern);
+    free(pattern);
+#endif /* HAVE_GLOB_H */
 
     return hangul_keyboards.n;
 }
