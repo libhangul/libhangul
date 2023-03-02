@@ -7,6 +7,16 @@ on:
     branches: [ "*" ]
 
 jobs:
+  check-formatting:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: check-format
+      run: |
+        echo "Checking format of sourcecode..."
+        find . -type f \( -name '*.c' -o -name '*.h' \) -print0 | xargs -r0 clang-format -i
+        git diff --color # --exit-code
+
   build:
 
     runs-on: ubuntu-latest
