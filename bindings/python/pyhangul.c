@@ -60,15 +60,64 @@ static PyMethodDef _pyhangul_methods[] = {
     { NULL,      NULL, 0, NULL } 
 };
 
-void inithangul(void)
+#if PY_MAJOR_VERSION >= 3
+static int _pyhangul_traverse(PyObject *m, visitproc visit, void *arg) {
+    Py_VISIT(_pyhangul_error);
+    return 0;
+}
+
+static int _pyhangul_clear(PyObject *m) {
+    Py_CLEAR(_pyhangul_error);
+    return 0;
+}
+
+static struct PyModuleDef moduledef = {
+    PyModuleDef_HEAD_INIT,
+    "hangul",
+    NULL,
+    sizeof(_pyhangul_error),
+    _pyhangul_methods,
+    NULL,
+    _pyhangul_traverse,
+    _pyhangul_clear,
+    NULL
+};
+
+#define INITERROR return NULL
+
+PyMODINIT_FUNC
+PyInit_hangul(void)
+
+#else
+
+#define INITERROR return
+
+PyMODINIT_FUNC
+inithangul(void)
+#endif /* PY_MAJOR_VERSION */
 {
     PyObject *m, *d;
 
+#if PY_MAJOR_VERSION >= 3
+    m = PyModule_Create(&moduledef);
+#else
     m = Py_InitModule("hangul", _pyhangul_methods);
+#endif /* PY_MAJOR_VERSION */
+    if (m == NULL)
+        INITERROR;
 
+    _pyhangul_error = PyErr_NewException("hangul.error", NULL, NULL);
+    if (_pyhangul_error == NULL) {
+        Py_DECREF(m);
+        INITERROR;
+    }
     d = PyModule_GetDict(m);
-    _pyhangul_error = PyErr_NewException("_pyhangul.error", NULL, NULL);
+
     PyDict_SetItemString(d, "error", _pyhangul_error);
+
+#if PY_MAJOR_VERSION >= 3
+    return m;
+#endif /* PY_MAJOR_VERSION */
 } 
 
 /* im's member function */
@@ -185,14 +234,29 @@ static void PY_HANGULIC_dealloc(PY_HANGULIC *self)
 {
     hangul_ic_delete(self->hic);
     self->hic = NULL;
-    PyMem_Free((char *) self);
 }
 
 /* PY_HANGULIC getattr */
 static PyObject * PY_HANGULIC_getattr(PY_HANGULIC *self, char *name)
 {
     PyObject *res;
+#if PY_MAJOR_VERSION >= 3
+    PyObject *nameobj = PyUnicode_FromString(name);
+    // try to find handler manually
+    for (int i = 0; PY_HANGULIC_methods[i].ml_name != NULL; ++i) {
+        if (strcmp(name, PY_HANGULIC_methods[i].ml_name) == 0) {
+            PyObject *result = PyCFunction_New(&PY_HANGULIC_methods[i], (PyObject *)self);
+            if (result == NULL)
+                result = Py_None;
+            Py_INCREF(result);
+            return result;
+        }
+    }
+
+    res = PyObject_GenericGetAttr((PyObject *)self, nameobj);
+#else
     res = Py_FindMethod(PY_HANGULIC_methods, (PyObject *)self, name);
+#endif /* PY_MAJOR_VERSION */
     if(res != NULL)
 	return res;
     PyErr_Clear();
@@ -205,18 +269,26 @@ static PyObject * PY_HANGULIC_repr(PY_HANGULIC *self)
 {
     char buf[300];
     sprintf(buf,"<Class pyhangul at %lx>",(long)self);
+#if PY_MAJOR_VERSION >= 3
+    return PyUnicode_FromString(buf);
+#else
     return PyString_FromString(buf);
+#endif /* PY_MAJOR_VERSION */
 }
 
 
 /* PY_HANGUL Type */
 PyTypeObject PY_HANGULIC_Type = {
+#if PY_MAJOR_VERSION >= 3
+    PyVarObject_HEAD_INIT(NULL, 0)
+#else
 #ifndef MS_WIN32
     PyObject_HEAD_INIT(&PyType_Type)
 #else
     PyObject_HEAD_INIT(NULL)
 #endif
-	0,
+    0,
+#endif /* PY_MAJOR_VERSION */
     "hangul.hangulic",
     sizeof(PY_HANGULIC),
     0,

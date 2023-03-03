@@ -9,7 +9,7 @@ import unittest
 
 class TestHangul(unittest.TestCase):
     def setUp(self):
-        self.ic = hangul.create_ic('hangul2')
+        self.ic = hangul.create_ic('2')
 
     def testSimpleString(self):
         input  = u"vkdlTjs gksrmf fkdlqmfjfl xptmxm"
