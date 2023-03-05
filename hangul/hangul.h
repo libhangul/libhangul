@@ -22,6 +22,36 @@
 #include <stdbool.h>
 #include <inttypes.h>
 
+#if defined(_WIN32)
+#    if _MSC_VER || __GNUC__
+#        define LIBHANGUL_EXPORT __declspec(dllexport)
+#        define LIBHANGUL_IMPORT __declspec(dllimport)
+#    else
+#        define LIBHANGUL_EXPORT
+#        define LIBHANGUL_IMPORT
+#    endif
+#else
+#    ifdef __GNUC__
+#        define LIBHANGUL_EXPORT __attribute__((visibility ("default")))
+#        define LIBHANGUL_IMPORT __attribute__((visibility ("default")))
+#    else
+#        define LIBHANGUL_EXPORT
+#        define LIBHANGUL_IMPORT
+#    endif
+#endif
+
+#if LIBHANGUL_ENABLE_STATIC
+#   define LIBHANGUL_EXTERN_SYMBOL
+#else
+#   if LIBHANGUL_ENABLE_DLL_EXPORT
+#       define LIBHANGUL_EXTERN_SYMBOL LIBHANGUL_EXPORT
+#   else
+#       define LIBHANGUL_EXTERN_SYMBOL LIBHANGUL_IMPORT
+#   endif
+#endif
+
+#define LIBHANGUL_API LIBHANGUL_EXTERN_SYMBOL
+
 #ifdef __GNUC__
 #define LIBHANGUL_DEPRECATED __attribute__((deprecated))
 #else
@@ -40,33 +70,50 @@ enum {
 
 typedef uint32_t ucschar;
 
+LIBHANGUL_API
 bool hangul_is_choseong(ucschar c);
+LIBHANGUL_API
 bool hangul_is_jungseong(ucschar c);
+LIBHANGUL_API
 bool hangul_is_jongseong(ucschar c);
+LIBHANGUL_API
 bool hangul_is_choseong_conjoinable(ucschar c);
+LIBHANGUL_API
 bool hangul_is_jungseong_conjoinable(ucschar c);
+LIBHANGUL_API
 bool hangul_is_jongseong_conjoinable(ucschar c);
+LIBHANGUL_API
 bool hangul_is_jamo_conjoinable(ucschar c);
+LIBHANGUL_API
 bool hangul_is_syllable(ucschar c);
+LIBHANGUL_API
 bool hangul_is_jamo(ucschar c);
+LIBHANGUL_API
 bool hangul_is_cjamo(ucschar c);
 
+LIBHANGUL_API
 ucschar hangul_jamo_to_cjamo(ucschar ch);
 
+LIBHANGUL_API
 const ucschar* hangul_syllable_iterator_prev(const ucschar* str,
 					     const ucschar* begin);
+LIBHANGUL_API
 const ucschar* hangul_syllable_iterator_next(const ucschar* str,
 					     const ucschar* end);
 
+LIBHANGUL_API
 int     hangul_syllable_len(const ucschar* str, int max_len);
 
+LIBHANGUL_API
 ucschar hangul_jamo_to_syllable(ucschar choseong,
 				ucschar jungseong,
 				ucschar jongseong);
+LIBHANGUL_API
 void    hangul_syllable_to_jamo(ucschar syllable,
 				ucschar* choseong,
 				ucschar* jungseong,
 				ucschar* jongseong);
+LIBHANGUL_API
 int     hangul_jamos_to_syllables(ucschar* dest, int destlen,
 				  const ucschar* src, int srclen);
 
@@ -96,53 +143,87 @@ enum {
 };
 
 /* library */
+LIBHANGUL_API
 int hangul_init();
+LIBHANGUL_API
 int hangul_fini();
 
 /* keyboard */
+LIBHANGUL_API
 HangulKeyboard* hangul_keyboard_new(void);
+LIBHANGUL_API
 HangulKeyboard* hangul_keyboard_new_from_file(const char* path);
+LIBHANGUL_API
 void    hangul_keyboard_delete(HangulKeyboard *keyboard);
+LIBHANGUL_API
 void    hangul_keyboard_set_type(HangulKeyboard *keyboard, int type);
 
+LIBHANGUL_API
 unsigned int hangul_keyboard_list_get_count();
+LIBHANGUL_API
 const char* hangul_keyboard_list_get_keyboard_id(unsigned index_);
+LIBHANGUL_API
 const char* hangul_keyboard_list_get_keyboard_name(unsigned index_);
+LIBHANGUL_API
 const HangulKeyboard* hangul_keyboard_list_get_keyboard(const char* id);
+LIBHANGUL_API
 const char* hangul_keyboard_list_register_keyboard(HangulKeyboard* keyboard);
+LIBHANGUL_API
 HangulKeyboard* hangul_keyboard_list_unregister_keyboard(const char* id);
 
 /* combination */
+LIBHANGUL_API
 HangulCombination* hangul_combination_new(void);
+LIBHANGUL_API
 void hangul_combination_delete(HangulCombination *combination);
+LIBHANGUL_API
 bool hangul_combination_set_data(HangulCombination* combination, 
 		     ucschar* first, ucschar* second, ucschar* result, unsigned int n);
 
 /* input context */
+LIBHANGUL_API
 HangulInputContext* hangul_ic_new(const char* keyboard);
+LIBHANGUL_API
 void hangul_ic_delete(HangulInputContext *hic);
+LIBHANGUL_API
 bool hangul_ic_process(HangulInputContext *hic, int ascii);
+LIBHANGUL_API
 void hangul_ic_reset(HangulInputContext *hic);
+LIBHANGUL_API
 bool hangul_ic_backspace(HangulInputContext *hic);
 
+LIBHANGUL_API
 bool hangul_ic_is_empty(HangulInputContext *hic);
+LIBHANGUL_API
 bool hangul_ic_has_choseong(HangulInputContext *hic);
+LIBHANGUL_API
 bool hangul_ic_has_jungseong(HangulInputContext *hic);
+LIBHANGUL_API
 bool hangul_ic_has_jongseong(HangulInputContext *hic);
+LIBHANGUL_API
 bool hangul_ic_is_transliteration(HangulInputContext *hic);
 
+LIBHANGUL_API
 bool hangul_ic_get_option(HangulInputContext *hic, int option);
+LIBHANGUL_API
 void hangul_ic_set_option(HangulInputContext *hic, int option, bool value);
+LIBHANGUL_API
 void hangul_ic_set_output_mode(HangulInputContext *hic, int mode);
+LIBHANGUL_API
 void hangul_ic_set_keyboard(HangulInputContext *hic,
 			    const HangulKeyboard *keyboard);
+LIBHANGUL_API
 void hangul_ic_select_keyboard(HangulInputContext *hic,
 			       const char* id);
+LIBHANGUL_API
 void hangul_ic_connect_callback(HangulInputContext* hic, const char* event,
 				void* callback, void* user_data);
 
+LIBHANGUL_API
 const ucschar* hangul_ic_get_preedit_string(HangulInputContext *hic);
+LIBHANGUL_API
 const ucschar* hangul_ic_get_commit_string(HangulInputContext *hic);
+LIBHANGUL_API
 const ucschar* hangul_ic_flush(HangulInputContext *hic);
 
 /* hanja.c */
@@ -150,22 +231,37 @@ typedef struct _Hanja Hanja;
 typedef struct _HanjaList HanjaList;
 typedef struct _HanjaTable HanjaTable;
 
+LIBHANGUL_API
 HanjaTable*  hanja_table_load(const char *filename);
+LIBHANGUL_API
 HanjaList*   hanja_table_match_exact(const HanjaTable* table, const char *key);
+LIBHANGUL_API
 HanjaList*   hanja_table_match_prefix(const HanjaTable* table, const char *key);
+LIBHANGUL_API
 HanjaList*   hanja_table_match_suffix(const HanjaTable* table, const char *key);
+LIBHANGUL_API
 void         hanja_table_delete(HanjaTable *table);
 
+LIBHANGUL_API
 int          hanja_list_get_size(const HanjaList *list);
+LIBHANGUL_API
 const char*  hanja_list_get_key(const HanjaList *list);
+LIBHANGUL_API
 const Hanja* hanja_list_get_nth(const HanjaList *list, unsigned int n);
+LIBHANGUL_API
 const char*  hanja_list_get_nth_key(const HanjaList *list, unsigned int n);
+LIBHANGUL_API
 const char*  hanja_list_get_nth_value(const HanjaList *list, unsigned int n);
+LIBHANGUL_API
 const char*  hanja_list_get_nth_comment(const HanjaList *list, unsigned int n);
+LIBHANGUL_API
 void         hanja_list_delete(HanjaList *list);
 
+LIBHANGUL_API
 const char*  hanja_get_key(const Hanja* hanja);
+LIBHANGUL_API
 const char*  hanja_get_value(const Hanja* hanja);
+LIBHANGUL_API
 const char*  hanja_get_comment(const Hanja* hanja);
 
 #ifdef __cplusplus
@@ -181,6 +277,10 @@ unsigned    hangul_ic_get_n_keyboards() LIBHANGUL_DEPRECATED;
 const char* hangul_ic_get_keyboard_id(unsigned index_) LIBHANGUL_DEPRECATED;
 const char* hangul_ic_get_keyboard_name(unsigned index_) LIBHANGUL_DEPRECATED;
 
+#undef LIBHANGUL_EXPORT
+#undef LIBHANGUL_IMPORT
+#undef LIBHANGUL_EXTERN_SYMBOL
+#undef LIBHANGUL_API
 #undef LIBHANGUL_DEPRECATED
 
 #endif /* libhangul_hangul_h */

@@ -51,6 +51,19 @@ target_compile_definitions(hangul
     PRIVATE -DTOP_SRCDIR=\"${CMAKE_SOURCE_DIR}\"
 )
 
+if(WIN32)
+    get_target_property(target_type hangul TYPE)
+    if("${target_type}" STREQUAL "STATIC_LIBRARY")
+        target_compile_definitions(hangul
+            PRIVATE -DLIBHANGUL_ENABLE_STATIC=1
+        )
+    else()
+        target_compile_definitions(hangul
+            PRIVATE -DLIBHANGUL_ENABLE_DLL_EXPORT=1
+        )
+    endif()
+endif()
+
 target_include_directories(hangul
     PRIVATE "${CMAKE_BINARY_DIR}"
 )
