@@ -20,7 +20,7 @@ static VALUE
 rbhic_alloc(VALUE klass)
 {
     setlocale(LC_CTYPE, "");
-    HangulInputContext *hic = hangul_ic_new(HANGUL_KEYBOARD_2);
+    HangulInputContext *hic = hangul_ic_new("2");
     return Data_Wrap_Struct(klass, 0, rbhic_free, hic);
 }
 
@@ -32,20 +32,20 @@ rbhic_initialize(int argc, VALUE *argv, VALUE self)
     VALUE keyboard;
     rb_scan_args(argc, argv, "01", &keyboard);
     if (argc > 0) {
-        Check_Type(keyboard, T_FIXNUM);
-        hangul_ic_set_keyboard(hic, FIX2INT(keyboard));
+        Check_Type(keyboard, T_STRING);
+        hangul_ic_select_keyboard(hic, RSTRING_PTR(keyboard));
     }
     return self;
 }
 
 static VALUE
-rbhic_filter(VALUE self, VALUE ch)
+rbhic_process(VALUE self, VALUE ch)
 {
     Check_Type(ch, T_FIXNUM);
     HangulInputContext *hic;
     Data_Get_Struct(self, HangulInputContext, hic);
 
-    bool ret = hangul_ic_filter(hic, NUM2CHR(ch));
+    bool ret = hangul_ic_process(hic, NUM2CHR(ch));
     return ret ? Qtrue : Qfalse;
 }
 
@@ -60,7 +60,7 @@ rbhic_commit_string(VALUE self)
     HangulInputContext *hic;
     Data_Get_Struct(self, HangulInputContext, hic);
 
-    char cbuf[32] = { '\0', };
+    char cbuf[64] = { '\0', };
     wchar_t *wstr = (wchar_t *) hangul_ic_get_commit_string(hic);
     int len = wcstombs(cbuf, wstr, sizeof(cbuf));
     if (strlen(cbuf) > 0)
@@ -106,19 +106,11 @@ Init_hangul(void)
 
     /* Hangul::InputContext methods. */
     rb_define_method(rb_cInputContext, "initialize", rbhic_initialize, -1);
-    rb_define_method(rb_cInputContext, "filter", rbhic_filter, 1);
+    rb_define_method(rb_cInputContext, "process", rbhic_process, 1);
     rb_define_method(rb_cInputContext, "commit_string", rbhic_commit_string, 0);
     rb_define_method(rb_cInputContext, "preedit_string", rbhic_preedit_string, 0);
     rb_define_method(rb_cInputContext, "backspace", rbhic_backspace, 0);
     rb_define_method(rb_cInputContext, "flush", rbhic_flush, 0);
     rb_define_method(rb_cInputContext, "reset", rbhic_reset, 0);
-
-    /* Hangul::KEYBOARD_* constants. */
-    rb_define_const(rb_mHangul, "KEYBOARD_2", INT2FIX(HANGUL_KEYBOARD_2));
-    rb_define_const(rb_mHangul, "KEYBOARD_32", INT2FIX(HANGUL_KEYBOARD_32));
-    rb_define_const(rb_mHangul, "KEYBOARD_3FINAL", INT2FIX(HANGUL_KEYBOARD_3FINAL));
-    rb_define_const(rb_mHangul, "KEYBOARD_390", INT2FIX(HANGUL_KEYBOARD_390));
-    rb_define_const(rb_mHangul, "KEYBOARD_3NOSHIFT", INT2FIX(HANGUL_KEYBOARD_3NOSHIFT));
-    rb_define_const(rb_mHangul, "KEYBOARD_3YETGUL", INT2FIX(HANGUL_KEYBOARD_3YETGUL));
 }
 
