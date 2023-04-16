@@ -20,7 +20,7 @@
 #define libhangul_hangul_h
 
 #include <stdbool.h>
-#include <inttypes.h>
+#include <stdint.h>
 
 #ifdef __GNUC__
 #define LIBHANGUL_DEPRECATED __attribute__((deprecated))
@@ -96,8 +96,8 @@ enum {
 };
 
 /* library */
-int hangul_init();
-int hangul_fini();
+int hangul_init(void);
+int hangul_fini(void);
 
 /* keyboard */
 HangulKeyboard* hangul_keyboard_new(void);
@@ -105,7 +105,7 @@ HangulKeyboard* hangul_keyboard_new_from_file(const char* path);
 void    hangul_keyboard_delete(HangulKeyboard *keyboard);
 void    hangul_keyboard_set_type(HangulKeyboard *keyboard, int type);
 
-unsigned int hangul_keyboard_list_get_count();
+unsigned int hangul_keyboard_list_get_count(void);
 const char* hangul_keyboard_list_get_keyboard_id(unsigned index_);
 const char* hangul_keyboard_list_get_keyboard_name(unsigned index_);
 const HangulKeyboard* hangul_keyboard_list_get_keyboard(const char* id);
@@ -177,7 +177,7 @@ void    hangul_keyboard_set_value(HangulKeyboard *keyboard,
 void hangul_ic_set_combination(HangulInputContext *hic,
 	const HangulCombination *combination) LIBHANGUL_DEPRECATED;
 
-unsigned    hangul_ic_get_n_keyboards() LIBHANGUL_DEPRECATED;
+unsigned    hangul_ic_get_n_keyboards(void) LIBHANGUL_DEPRECATED;
 const char* hangul_ic_get_keyboard_id(unsigned index_) LIBHANGUL_DEPRECATED;
 const char* hangul_ic_get_keyboard_name(unsigned index_) LIBHANGUL_DEPRECATED;
 
