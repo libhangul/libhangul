@@ -69,7 +69,7 @@ check_preedit(const char* keyboard, const char* input, const wchar_t* output)
 
     ic = get_ic(keyboard);
 
-    res = check_preedit_with_ic(ic, input, output);;
+    res = check_preedit_with_ic(ic, input, output);
 
     return res;
 }
