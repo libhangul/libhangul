@@ -201,6 +201,7 @@ struct _HangulInputContext {
     int type;
 
     const HangulKeyboard*    keyboard;
+    int keyboard_table_id;
 
     HangulBuffer buffer;
     int output_mode;
@@ -1083,7 +1084,7 @@ hangul_ic_process(HangulInputContext *hic, int ascii)
     hic->preedit_string[0] = 0;
     hic->commit_string[0] = 0;
 
-    c = hangul_keyboard_get_mapping(hic->keyboard, 0, ascii);
+    c = hangul_keyboard_get_mapping(hic->keyboard, hic->keyboard_table_id, ascii);
     if (hic->on_translate != NULL)
 	hic->on_translate(hic, ascii, &c, hic->on_translate_data);
 
@@ -1468,6 +1469,16 @@ hangul_ic_select_keyboard(HangulInputContext *hic, const char* id)
 
     keyboard = hangul_keyboard_list_get_keyboard(id);
     hic->keyboard = keyboard;
+    hic->keyboard_table_id = 0;
+}
+
+void
+hangul_ic_switch_keyboard_table(HangulInputContext *hic, int table_id)
+{
+    if (hic == NULL)
+        return;
+
+    hic->keyboard_table_id = table_id;
 }
 
 void
@@ -1496,6 +1507,9 @@ hangul_ic_new(const char* keyboard)
     hic = malloc(sizeof(HangulInputContext));
     if (hic == NULL)
 	return NULL;
+
+    hic->keyboard = NULL;
+    hic->keyboard_table_id = 0;
 
     hic->preedit_string[0] = 0;
     hic->commit_string[0] = 0;
