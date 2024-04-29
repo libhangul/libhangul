@@ -232,11 +232,11 @@ static const ucschar hangul_keyboard_table_2y[] = {
     0x1101,     /* 0x52 R:            choseong ssangkiyeok           */
     0x115d,     /* 0x53 S:            choseong nieun-hieuh           */
     0x110a,     /* 0x54 T:            choseong ssangsios             */
-    0x1167,     /* 0x55 U:            jungseong yeo                  */
+    0x302f,     /* 0x55 U:            hangul double dot tone mark    */
     0x1150,     /* 0x56 V:            choseong ceongchieumcieuc      */
     0x110d,     /* 0x57 W:            choseong ssangcieuc            */
     0x113e,     /* 0x58 X:            choseong ceongchieumsios       */
-    0x116d,     /* 0x59 Y:            jungseong yo                   */
+    0x302e,     /* 0x59 Y:            hangul single dot tone mark    */
     0x113c,     /* 0x5A Z:            choseong chitueumsios          */
     0x0000,     /* 0x5B bracketleft:  left bracket                   */
     0x0000,     /* 0x5C backslash:    backslash                      */
