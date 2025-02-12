@@ -1511,7 +1511,7 @@ hangul_ic_new(const char* keyboard)
 
     hic->option_auto_reorder = false;
     hic->option_combi_on_double_stroke = false;
-    hic->option_non_choseong_combi = true;
+    hic->option_non_choseong_combi = false;
 
     hangul_ic_set_output_mode(hic, HANGUL_OUTPUT_SYLLABLE);
     hangul_ic_select_keyboard(hic, keyboard);
