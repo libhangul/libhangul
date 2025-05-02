@@ -31,8 +31,8 @@ option(BUILD_SHARED_LIBS
 )
 
 option(ENABLE_EXTERNAL_KEYBOARDS
-    "Enable/Disable external keyboard xml file loading feature."
-    ON
+    "Enable/Disable external keyboard xml file loading feature (experimental)."
+    OFF
 )
 
 option(ENABLE_UNIT_TEST
@@ -49,7 +49,9 @@ set(LIBHANGUL_LIBRARY_DIR "${CMAKE_INSTALL_LIBDIR}")
 
 add_subdirectory(hangul)
 add_subdirectory(data/hanja)
+if(ENABLE_EXTERNAL_KEYBOARDS)
 add_subdirectory(data/keyboards)
+endif()
 add_subdirectory(tools)
 add_subdirectory(po)
 

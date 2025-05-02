@@ -235,7 +235,9 @@ typedef struct _HangulKeyboardLoadContext {
     bool save_name;
 } HangulKeyboardLoadContext;
 
+#if ENABLE_EXTERNAL_KEYBOARDS
 static void    hangul_keyboard_parse_file(const char* path, HangulKeyboardLoadContext* context);
+#endif // ENABLE_EXTERNAL_KEYBOARDS
 static bool    hangul_keyboard_list_append(HangulKeyboard* keyboard);
 
 HangulCombination*
@@ -300,6 +302,7 @@ hangul_combination_set_data(HangulCombination* combination,
     return false;
 }
 
+#if ENABLE_EXTERNAL_KEYBOARDS
 static bool
 hangul_combination_add_item(HangulCombination* combination,
 	ucschar first, ucschar second, ucschar result)
@@ -333,6 +336,7 @@ hangul_combination_add_item(HangulCombination* combination,
     combination->size = i + 1;
     return true;
 }
+#endif // ENABLE_EXTERNAL_KEYBOARDS
 
 static int
 hangul_combination_cmp(const void* p1, const void* p2)
@@ -350,6 +354,7 @@ hangul_combination_cmp(const void* p1, const void* p2)
 	return 0;
 }
 
+#if ENABLE_EXTERNAL_KEYBOARDS
 static void
 hangul_combination_sort(HangulCombination* combination)
 {
@@ -362,6 +367,7 @@ hangul_combination_sort(HangulCombination* combination)
     qsort(combination->table, combination->size,
 	sizeof(combination->table[0]), hangul_combination_cmp);
 }
+#endif // ENABLE_EXTERNAL_KEYBOARDS
 
 static ucschar
 hangul_combination_combine(const HangulCombination* combination,
@@ -408,7 +414,7 @@ hangul_keyboard_new()
     return keyboard;
 }
 
-static void
+void
 hangul_keyboard_set_id(HangulKeyboard* keyboard, const char* id)
 {
     if (keyboard == NULL)
@@ -421,7 +427,7 @@ hangul_keyboard_set_id(HangulKeyboard* keyboard, const char* id)
     keyboard->id = strdup(id);
 }
 
-static void
+void
 hangul_keyboard_set_name(HangulKeyboard* keyboard, const char* name)
 {
     if (keyboard == NULL)

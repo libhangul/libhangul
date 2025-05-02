@@ -295,8 +295,6 @@ main(int argc, char *argv[])
 
     setlocale(LC_ALL, "");
 
-    hangul_init();
-
     res = EXIT_SUCCESS;
     keyboard = "2";
     input_string = NULL;
@@ -394,8 +392,6 @@ main(int argc, char *argv[])
     }
 
     hangul_ic_delete(ic);
-
-    hangul_fini();
 
     iconv_close(cd_ucs4_to_utf8);
 

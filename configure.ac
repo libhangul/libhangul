@@ -10,10 +10,11 @@ AC_CONFIG_HEADERS([config.h])
 # Configure options
 AC_ARG_ENABLE(external-keyboards,
     AS_HELP_STRING([--enable-external-keyboards],
-                   [enable external keyboard xml file loading feature]),
+                   [enable external keyboard xml file loading feature (experimental) [default=no]]),
     [enable_external_keyboards=$enableval],
-    [enable_external_keyboards=yes]
+    [enable_external_keyboards=no]
 )
+AM_CONDITIONAL([ENABLE_EXTERNAL_KEYBOARDS], [test "${enable_external_keyboards}" = yes])
 
 # library version
 LIBHANGUL_CURRENT=1

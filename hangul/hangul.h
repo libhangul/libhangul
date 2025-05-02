@@ -96,8 +96,10 @@ enum {
 };
 
 /* library */
+#if ENABLE_EXTERNAL_KEYBOARDS
 int hangul_init();
 int hangul_fini();
+#endif // ENABLE_EXTERNAL_KEYBOARDS
 
 /* keyboard */
 HangulKeyboard* hangul_keyboard_new(void);
