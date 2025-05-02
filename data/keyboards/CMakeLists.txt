@@ -73,14 +73,19 @@ foreach(i ${keyboard_file_list})
         OUTPUT
             "${keyboard_name}.xml"
         COMMAND
-            sed -i.tmp -e '1 D'
+            sed -i.tmp
+                    -e '1 D'
                     -e '/^<hangul-keyboard/D'
                     -e '/^<\\/hangul-keyboard/D'
-                    -e 's/^ *<name/${xml_indent}<name/' "${keyboard_name}.name.xml"
+                    -e 's/^ *<name/${xml_indent}<name/'
+                    "${keyboard_name}.name.xml"
+        COMMAND
+            sed -i.tmp
+                    -e '/<name>/D'
+                    "${keyboard_name}.name.xml"
         COMMAND
             sed
                     -e '/<name>/r ${keyboard_name}.name.xml'
-                    -e '/<name>/D'
                     "${CMAKE_CURRENT_SOURCE_DIR}/${keyboard_name}.xml.template" > "${keyboard_name}.xml"
         BYPRODUCTS
             "${keyboard_name}.name.xml.tmp"
