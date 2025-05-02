@@ -1,11 +1,11 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_PREREQ(2.57)
-AC_INIT(libhangul, 0.1.0, https://github.com/libhangul/libhangul)
+AC_PREREQ([2.71])
+AC_INIT([libhangul],[0.1.0],[https://github.com/libhangul/libhangul])
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([hangul/hangul.h])
-AC_CONFIG_HEADER([config.h])
+AC_CONFIG_HEADERS([config.h])
 
 # Configure options
 AC_ARG_ENABLE(external-keyboards,
@@ -26,19 +26,21 @@ AC_SUBST(LIBHANGUL_AGE)
 
 AM_MAINTAINER_MODE
 
-AM_GNU_GETTEXT_VERSION([0.19.8])
+AM_GNU_GETTEXT_VERSION([0.23.1])
 AM_GNU_GETTEXT([external])
 
 # Checks for programs.
 AC_PROG_CC
 AM_PROG_CC_C_O
-AC_PROG_LIBTOOL
+LT_INIT
 AC_PROG_INSTALL
 
 # Checks for libraries.
 
 # Checks for header files.
-AC_HEADER_STDC
+AC_CHECK_INCLUDES_DEFAULT
+AC_PROG_GREP
+
 AC_CHECK_HEADERS([stdlib.h string.h limits.h])
 AC_CHECK_HEADERS([langinfo.h])
 AC_CHECK_HEADERS([glob.h])
