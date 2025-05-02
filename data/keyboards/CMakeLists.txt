@@ -68,6 +68,7 @@ foreach(i ${keyboard_file_list})
             "${CMAKE_CURRENT_BINARY_DIR}/${keyboard_name}.name.xml.in"
     )
 
+    set(xml_indent "    ")
     add_custom_command(
         OUTPUT
             "${keyboard_name}.xml"
@@ -75,7 +76,7 @@ foreach(i ${keyboard_file_list})
             sed -i.tmp -e '1 D'
                     -e '/^<hangul-keyboard/D'
                     -e '/^<\\/hangul-keyboard/D'
-                    -e 's/^ *<name/    <name/' "${keyboard_name}.name.xml"
+                    -e 's/^ *<name/${xml_indent}<name/' "${keyboard_name}.name.xml"
         COMMAND
             sed
                     -e '/<name>/r ${keyboard_name}.name.xml'
