@@ -138,6 +138,7 @@ void hangul_ic_set_option(HangulInputContext *hic, int option, bool value);
 void hangul_ic_set_output_mode(HangulInputContext *hic, int mode);
 void hangul_ic_set_keyboard(HangulInputContext *hic,
 			    const HangulKeyboard *keyboard);
+void hangul_ic_switch_keyboard_table(HangulInputContext* hic, int tableid);
 void hangul_ic_select_keyboard(HangulInputContext *hic,
 			       const char* id);
 void hangul_ic_connect_callback(HangulInputContext* hic, const char* event,
