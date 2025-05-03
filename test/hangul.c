@@ -69,11 +69,7 @@ main(int argc, char *argv[])
     }
 
 #if ENABLE_EXTERNAL_KEYBOARDS
-    char* keyboard_path = getenv("LIBHANGUL_KEYBOARD_PATH");
-    if (keyboard_path == NULL)
-        putenv("LIBHANGUL_KEYBOARD_PATH=" TEST_LIBHANGUL_KEYBOARD_PATH);
-
-    hangul_init();
+    hangul_init(TEST_LIBHANGUL_KEYBOARD_PATH);
 #endif // ENABLE_EXTERNAL_KEYBOARDS
 
     hic = hangul_ic_new(keyboard);

@@ -97,7 +97,7 @@ enum {
 
 /* library */
 #if ENABLE_EXTERNAL_KEYBOARDS
-int hangul_init();
+int hangul_init(const char* user_defined_keyboard_path);
 int hangul_fini();
 #endif // ENABLE_EXTERNAL_KEYBOARDS
 

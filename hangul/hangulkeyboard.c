@@ -989,7 +989,7 @@ hangul_keyboard_get_keyboard_path()
 #endif /* ENABLE_EXTERNAL_KEYBOARDS */
 
 int
-hangul_keyboard_list_init()
+hangul_keyboard_list_init(const char* user_defined_keyboard_path)
 {
 #if ENABLE_EXTERNAL_KEYBOARDS
     /* 이 함수를 중복 호출할 경우에 대한 처리
@@ -1004,7 +1004,12 @@ hangul_keyboard_list_init()
     hangul_builtin_keyboard_count = 0;
 
     /* libhangul data dir에서 keyboard 로딩 */
-    char* libhangul_keyboard_path = hangul_keyboard_get_keyboard_path();
+    char* libhangul_keyboard_path = NULL;
+    if (user_defined_keyboard_path == NULL) {
+        libhangul_keyboard_path = hangul_keyboard_get_keyboard_path();
+    } else {
+        libhangul_keyboard_path = strdup(user_defined_keyboard_path);
+    }
 
     unsigned n = 0;
 
