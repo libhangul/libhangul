@@ -441,7 +441,7 @@ hangul_keyboard_set_name(HangulKeyboard* keyboard, const char* name)
 }
 
 ucschar
-hangul_keyboard_get_mapping(const HangulKeyboard* keyboard, int tableid, unsigned key)
+hangul_keyboard_map_to_char(const HangulKeyboard* keyboard, int tableid, unsigned key)
 {
     if (keyboard == NULL)
 	return 0;

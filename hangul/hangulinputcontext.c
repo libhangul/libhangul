@@ -1083,7 +1083,7 @@ hangul_ic_process(HangulInputContext *hic, int ascii)
     hic->preedit_string[0] = 0;
     hic->commit_string[0] = 0;
 
-    c = hangul_keyboard_get_mapping(hic->keyboard, 0, ascii);
+    c = hangul_keyboard_map_to_char(hic->keyboard, 0, ascii);
     if (hic->on_translate != NULL)
 	hic->on_translate(hic, ascii, &c, hic->on_translate_data);
 

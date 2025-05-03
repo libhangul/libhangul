@@ -32,7 +32,7 @@ void    hangul_jongseong_decompose(ucschar ch, ucschar* jong, ucschar* cho);
 int     hangul_keyboard_get_type(const HangulKeyboard *keyboard);
 ucschar hangul_keyboard_combine(const HangulKeyboard* keyboard,
 	    unsigned id, ucschar first, ucschar second);
-ucschar hangul_keyboard_get_mapping(const HangulKeyboard* keyboard,
+ucschar hangul_keyboard_map_to_char(const HangulKeyboard* keyboard,
 	    int tableid, unsigned key);
 
 int hangul_keyboard_list_init(const char* user_defined_keyboard_path);
