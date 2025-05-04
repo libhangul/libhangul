@@ -180,9 +180,9 @@ void    hangul_keyboard_set_value(HangulKeyboard *keyboard,
 void hangul_ic_set_combination(HangulInputContext *hic,
 	const HangulCombination *combination) LIBHANGUL_DEPRECATED;
 
-unsigned    hangul_ic_get_n_keyboards() LIBHANGUL_DEPRECATED;
-const char* hangul_ic_get_keyboard_id(unsigned index_) LIBHANGUL_DEPRECATED;
-const char* hangul_ic_get_keyboard_name(unsigned index_) LIBHANGUL_DEPRECATED;
+unsigned    hangul_ic_get_n_keyboards() /* LIBHANGUL_DEPRECATED */;
+const char* hangul_ic_get_keyboard_id(unsigned index_) /* LIBHANGUL_DEPRECATED */;
+const char* hangul_ic_get_keyboard_name(unsigned index_) /* LIBHANGUL_DEPRECATED */;
 
 #undef LIBHANGUL_DEPRECATED
 
