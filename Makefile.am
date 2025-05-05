@@ -28,6 +28,6 @@ EXTRA_DIST = \
 ACLOCAL_AMFLAGS = -I m4
 
 dist-hook:
-	if test -d .git; then \
+	if test -d $(top_srcdir)/.git; then \
 		git log --name-status --date=iso > $(distdir)/ChangeLog ; \
 	fi
