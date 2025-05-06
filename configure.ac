@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.71])
-AC_INIT([libhangul],[0.1.0],[https://github.com/libhangul/libhangul])
+AC_INIT([libhangul],[0.2.0],[https://github.com/libhangul/libhangul])
 AM_INIT_AUTOMAKE
 AC_CONFIG_SRCDIR([hangul/hangul.h])
 AC_CONFIG_HEADERS([config.h])
@@ -17,9 +17,9 @@ AC_ARG_ENABLE(external-keyboards,
 AM_CONDITIONAL([ENABLE_EXTERNAL_KEYBOARDS], [test "${enable_external_keyboards}" = yes])
 
 # library version
-LIBHANGUL_CURRENT=1
+LIBHANGUL_CURRENT=2
 LIBHANGUL_REVISION=0
-LIBHANGUL_AGE=0
+LIBHANGUL_AGE=1
 
 AC_SUBST(LIBHANGUL_CURRENT)
 AC_SUBST(LIBHANGUL_REVISION)

@@ -18,12 +18,12 @@
 cmake_minimum_required(VERSION 3.5)
 
 project(libhangul
-    VERSION 0.1.0
+    VERSION 0.2.0
 )
 
 set(LIBHANGUL_SOVERSION_MAJOR 1)
-set(LIBHANGUL_SOVERSION_MINOR 0)
-set(LIBHANGUL_SOVERSION_PATCH 1)
+set(LIBHANGUL_SOVERSION_MINOR 1)
+set(LIBHANGUL_SOVERSION_PATCH 0)
 
 option(BUILD_SHARED_LIBS
     "Enable/Disable shared library build."
