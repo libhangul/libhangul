@@ -65,11 +65,14 @@ configure_file(
     "${CMAKE_CURRENT_BINARY_DIR}/config.h"
 )
 
+# cmake subdirectory name need to be sync with the config filename
+# to allow find_package(hangul) works.
+# https://cmake.org/cmake/help/latest/command/find_package.html#search-procedure
 include(CMakePackageConfigHelpers)
 configure_package_config_file(hangul-config.cmake.in
     "${CMAKE_CURRENT_BINARY_DIR}/hangul-config.cmake"
     INSTALL_DESTINATION
-        "${CMAKE_INSTALL_LIBDIR}/cmake/${CMAKE_PROJECT_NAME}"
+        "${CMAKE_INSTALL_LIBDIR}/cmake/hangul"
     PATH_VARS
         LIBHANGUL_INCLUDE_DIR
         LIBHANGUL_LIBRARY_DIR
@@ -86,7 +89,31 @@ install(
         "${CMAKE_CURRENT_BINARY_DIR}/hangul-config.cmake"
         "${CMAKE_CURRENT_BINARY_DIR}/hangul-config-version.cmake"
     DESTINATION
-        "${CMAKE_INSTALL_LIBDIR}/cmake/${CMAKE_PROJECT_NAME}"
+        "${CMAKE_INSTALL_LIBDIR}/cmake/hangul"
+    COMPONENT
+        dev
+)
+
+function(generate_pkgconfig_file)
+    # Define a function to avoid pollute into global scope
+    set(prefix "${CMAKE_INSTALL_PREFIX}")
+    set(exec_prefix "${CMAKE_INSTALL_PREFIX}")
+    set(libdir "${CMAKE_INSTALL_FULL_LIBDIR}")
+    set(includedir "${CMAKE_INSTALL_FULL_INCLUDEDIR}")
+    set(PACKAGE_VERSION "${PROJECT_VERSION}")
+    configure_file(
+        libhangul.pc.in
+        "${CMAKE_CURRENT_BINARY_DIR}/libhangul.pc"
+        @ONLY
+    )
+endfunction()
+
+generate_pkgconfig_file()
+install(
+    FILES
+        "${CMAKE_CURRENT_BINARY_DIR}/libhangul.pc"
+    DESTINATION
+        "${CMAKE_INSTALL_LIBDIR}/pkgconfig/libhangul.pc"
     COMPONENT
         dev
 )
