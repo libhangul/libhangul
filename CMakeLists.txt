@@ -113,7 +113,7 @@ install(
     FILES
         "${CMAKE_CURRENT_BINARY_DIR}/libhangul.pc"
     DESTINATION
-        "${CMAKE_INSTALL_LIBDIR}/pkgconfig/libhangul.pc"
+        "${CMAKE_INSTALL_LIBDIR}/pkgconfig"
     COMPONENT
         dev
 )
