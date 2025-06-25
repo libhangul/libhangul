@@ -618,11 +618,9 @@ Suite* libhangul_suite()
 
 int main()
 {
-    char* keyboard_path = getenv("LIBHANGUL_KEYBOARD_PATH");
-    if (keyboard_path == NULL)
-        putenv("LIBHANGUL_KEYBOARD_PATH=" TEST_LIBHANGUL_KEYBOARD_PATH);
-
-    hangul_init();
+#if ENABLE_EXTERNAL_KEYBOARDS
+    hangul_init(TEST_LIBHANGUL_KEYBOARD_PATH);
+#endif // ENABLE_EXTERNAL_KEYBOARDS
 
     int number_failed;
     Suite* s = libhangul_suite();
@@ -636,7 +634,9 @@ int main()
 
     hangul_ic_delete(global_ic);
 
+#if ENABLE_EXTERNAL_KEYBOARDS
     hangul_fini();
+#endif // ENABLE_EXTERNAL_KEYBOARDS
 
     return (number_failed == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
 }

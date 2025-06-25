@@ -15,7 +15,7 @@
 # License along with this library; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 3.5)
 
 #include(GNUInstallDirs)
 find_package(Gettext)
@@ -68,18 +68,24 @@ foreach(i ${keyboard_file_list})
             "${CMAKE_CURRENT_BINARY_DIR}/${keyboard_name}.name.xml.in"
     )
 
+    set(xml_indent "    ")
     add_custom_command(
         OUTPUT
             "${keyboard_name}.xml"
         COMMAND
-            sed -i.tmp -e '1 D'
+            sed -i.tmp
+                    -e '1 D'
                     -e '/^<hangul-keyboard/D'
                     -e '/^<\\/hangul-keyboard/D'
-                    -e 's/^ *<name/    <name/' "${keyboard_name}.name.xml"
+                    -e 's/^ *<name/${xml_indent}<name/'
+                    "${keyboard_name}.name.xml"
+        COMMAND
+            sed -i.tmp
+                    -e '/<name>/D'
+                    "${keyboard_name}.name.xml"
         COMMAND
             sed
                     -e '/<name>/r ${keyboard_name}.name.xml'
-                    -e '/<name>/D'
                     "${CMAKE_CURRENT_SOURCE_DIR}/${keyboard_name}.xml.template" > "${keyboard_name}.xml"
         BYPRODUCTS
             "${keyboard_name}.name.xml.tmp"

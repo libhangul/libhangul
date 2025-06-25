@@ -239,7 +239,7 @@ static const HangulKeyboard* hangul_builtin_keyboards[] = {
     &hangul_keyboard_romaja,
     &hangul_keyboard_ahn,
 };
-static unsigned int hangul_builtin_keyboard_count = countof(hangul_builtin_keyboards);
+static const unsigned int hangul_builtin_keyboard_count = countof(hangul_builtin_keyboards);
 
 static HangulKeyboardList hangul_keyboards = { 0, 0, NULL };
 
@@ -252,7 +252,9 @@ typedef struct _HangulKeyboardLoadContext {
     bool save_name;
 } HangulKeyboardLoadContext;
 
+#if ENABLE_EXTERNAL_KEYBOARDS
 static void    hangul_keyboard_parse_file(const char* path, HangulKeyboardLoadContext* context);
+#endif // ENABLE_EXTERNAL_KEYBOARDS
 static bool    hangul_keyboard_list_append(HangulKeyboard* keyboard);
 
 HangulCombination*
@@ -317,6 +319,7 @@ hangul_combination_set_data(HangulCombination* combination,
     return false;
 }
 
+#if ENABLE_EXTERNAL_KEYBOARDS
 static bool
 hangul_combination_add_item(HangulCombination* combination,
 	ucschar first, ucschar second, ucschar result)
@@ -350,6 +353,7 @@ hangul_combination_add_item(HangulCombination* combination,
     combination->size = i + 1;
     return true;
 }
+#endif // ENABLE_EXTERNAL_KEYBOARDS
 
 static int
 hangul_combination_cmp(const void* p1, const void* p2)
@@ -367,6 +371,7 @@ hangul_combination_cmp(const void* p1, const void* p2)
 	return 0;
 }
 
+#if ENABLE_EXTERNAL_KEYBOARDS
 static void
 hangul_combination_sort(HangulCombination* combination)
 {
@@ -379,6 +384,7 @@ hangul_combination_sort(HangulCombination* combination)
     qsort(combination->table, combination->size,
 	sizeof(combination->table[0]), hangul_combination_cmp);
 }
+#endif // ENABLE_EXTERNAL_KEYBOARDS
 
 static ucschar
 hangul_combination_combine(const HangulCombination* combination,
@@ -425,7 +431,7 @@ hangul_keyboard_new()
     return keyboard;
 }
 
-static void
+void
 hangul_keyboard_set_id(HangulKeyboard* keyboard, const char* id)
 {
     if (keyboard == NULL)
@@ -438,7 +444,7 @@ hangul_keyboard_set_id(HangulKeyboard* keyboard, const char* id)
     keyboard->id = strdup(id);
 }
 
-static void
+void
 hangul_keyboard_set_name(HangulKeyboard* keyboard, const char* name)
 {
     if (keyboard == NULL)
@@ -452,7 +458,7 @@ hangul_keyboard_set_name(HangulKeyboard* keyboard, const char* name)
 }
 
 ucschar
-hangul_keyboard_get_mapping(const HangulKeyboard* keyboard, int tableid, unsigned key)
+hangul_keyboard_map_to_char(const HangulKeyboard* keyboard, int tableid, unsigned key)
 {
     if (keyboard == NULL)
 	return 0;
@@ -1000,7 +1006,7 @@ hangul_keyboard_get_keyboard_path()
 #endif /* ENABLE_EXTERNAL_KEYBOARDS */
 
 int
-hangul_keyboard_list_init()
+hangul_keyboard_list_init(const char* user_defined_keyboard_path)
 {
 #if ENABLE_EXTERNAL_KEYBOARDS
     /* 이 함수를 중복 호출할 경우에 대한 처리
@@ -1009,13 +1015,13 @@ hangul_keyboard_list_init()
     if (hangul_keyboards.n > 0)
 	return 2;
 
-    /* hangul_init을 호출하면 builtin keyboard는 disable되도록 처리한다.
-     * 기본 자판은 외부 파일로 부터 로딩하는 것이 기본 동작이고
-     * builtin 키보드는 하위 호환을 위해 남겨둔다. */
-    hangul_builtin_keyboard_count = 0;
-
     /* libhangul data dir에서 keyboard 로딩 */
-    char* libhangul_keyboard_path = hangul_keyboard_get_keyboard_path();
+    char* libhangul_keyboard_path = NULL;
+    if (user_defined_keyboard_path == NULL) {
+        libhangul_keyboard_path = hangul_keyboard_get_keyboard_path();
+    } else {
+        libhangul_keyboard_path = strdup(user_defined_keyboard_path);
+    }
 
     unsigned n = 0;
 
@@ -1049,7 +1055,6 @@ int
 hangul_keyboard_list_fini()
 {
     hangul_keyboard_list_clear();
-    hangul_builtin_keyboard_count = countof(hangul_builtin_keyboards);
     return 0;
 }
 
@@ -1092,11 +1097,11 @@ static const HangulKeyboard*
 hangul_builtin_keyboard_list_get_keyboard(const char* id)
 {
     size_t i;
-    for (i = 0; i < hangul_builtin_keyboard_count; ++i) {
-	const HangulKeyboard* keyboard = hangul_builtin_keyboards[i];
-	if (strcmp(id, keyboard->id) == 0) {
-	    return keyboard;
-	}
+    for (i = hangul_builtin_keyboard_count; i > 0; --i) {
+        const HangulKeyboard* keyboard = hangul_builtin_keyboards[i - 1];
+        if (strcmp(id, keyboard->id) == 0) {
+            return keyboard;
+        }
     }
     return NULL;
 }
@@ -1112,10 +1117,10 @@ hangul_builtin_keyboard_list_get_keyboard(const char* id)
 unsigned int
 hangul_keyboard_list_get_count()
 {
-    if (hangul_builtin_keyboard_count > 0)
-	return hangul_builtin_keyboard_count;
+    unsigned int n = hangul_builtin_keyboard_count;
+    n += hangul_keyboards.n;
 
-    return hangul_keyboards.n;
+    return n;
 }
 
 /**
@@ -1130,10 +1135,11 @@ hangul_keyboard_list_get_count()
 const char*
 hangul_keyboard_list_get_keyboard_id(unsigned index_)
 {
-    if (hangul_builtin_keyboard_count > 0) {
-	return hangul_builtin_keyboard_list_get_keyboard_id(index_);
+    if (index_ < hangul_builtin_keyboard_count) {
+        return hangul_builtin_keyboard_list_get_keyboard_id(index_);
     }
 
+    index_ -= hangul_builtin_keyboard_count;
     if (index_ >= hangul_keyboards.n)
 	return NULL;
 
@@ -1156,10 +1162,11 @@ hangul_keyboard_list_get_keyboard_id(unsigned index_)
 const char*
 hangul_keyboard_list_get_keyboard_name(unsigned index_)
 {
-    if (hangul_builtin_keyboard_count > 0) {
-	return hangul_builtin_keyboard_list_get_keyboard_name(index_);
+    if (index_ < hangul_builtin_keyboard_count) {
+        return hangul_builtin_keyboard_list_get_keyboard_name(index_);
     }
 
+    index_ -= hangul_builtin_keyboard_count;
     if (index_ >= hangul_keyboards.n)
 	return NULL;
 
@@ -1179,20 +1186,20 @@ hangul_keyboard_list_get_keyboard_name(unsigned index_)
 const HangulKeyboard*
 hangul_keyboard_list_get_keyboard(const char* id)
 {
-    if (hangul_builtin_keyboard_count > 0) {
-	return hangul_builtin_keyboard_list_get_keyboard(id);
+    const HangulKeyboard* keyboard = NULL;
+
+    /* 키보드 목록에서 역순으로 검색을 하여 마지막에 등록된 자판이
+     * 먼저 인식 된다. */
+    for (size_t i = hangul_keyboards.n; i > 0; --i) {
+        keyboard = hangul_keyboards.keyboards[i - 1];
+        if (strcmp(id, keyboard->id) == 0) {
+            return keyboard;
+        }
     }
 
-    /* 키보드 목록에서 순차 검색을 하여 찾으므로 같은 id로 서로다른
-     * 자판이 등록되어 있다고 하면 먼저 로딩된 자판만 인식된다. */
-    size_t i;
-    for (i = 0; i < hangul_keyboards.n; ++i) {
-	HangulKeyboard* keyboard = hangul_keyboards.keyboards[i];
-	if (strcmp(id, keyboard->id) == 0) {
-	    return keyboard;
-	}
-    }
-    return NULL;
+    /* 등록된 자판 중에 없으면 builtin 자판을 찾아본다. */
+    keyboard = hangul_builtin_keyboard_list_get_keyboard(id);
+    return keyboard;
 }
 
 static bool

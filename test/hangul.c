@@ -68,11 +68,9 @@ main(int argc, char *argv[])
 	keyboard = argv[1];
     }
 
-    char* keyboard_path = getenv("LIBHANGUL_KEYBOARD_PATH");
-    if (keyboard_path == NULL)
-        putenv("LIBHANGUL_KEYBOARD_PATH=" TEST_LIBHANGUL_KEYBOARD_PATH);
-
-    hangul_init();
+#if ENABLE_EXTERNAL_KEYBOARDS
+    hangul_init(TEST_LIBHANGUL_KEYBOARD_PATH);
+#endif // ENABLE_EXTERNAL_KEYBOARDS
 
     hic = hangul_ic_new(keyboard);
     if (hic == NULL) {
@@ -100,7 +98,9 @@ main(int argc, char *argv[])
 
     hangul_ic_delete(hic);
 
+#if ENABLE_EXTERNAL_KEYBOARDS
     hangul_fini();
+#endif // ENABLE_EXTERNAL_KEYBOARDS
 
     return 0;
 }

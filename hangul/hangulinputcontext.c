@@ -201,6 +201,7 @@ struct _HangulInputContext {
     int type;
 
     const HangulKeyboard*    keyboard;
+    int tableid;
 
     HangulBuffer buffer;
     int output_mode;
@@ -1098,7 +1099,7 @@ hangul_ic_process(HangulInputContext *hic, int ascii)
     hic->preedit_string[0] = 0;
     hic->commit_string[0] = 0;
 
-    c = hangul_keyboard_get_mapping(hic->keyboard, 0, ascii);
+    c = hangul_keyboard_map_to_char(hic->keyboard, hic->tableid, ascii);
     if (hic->on_translate != NULL)
 	hic->on_translate(hic, ascii, &c, hic->on_translate_data);
 
@@ -1441,10 +1442,20 @@ void hangul_ic_connect_callback(HangulInputContext* hic, const char* event,
 void
 hangul_ic_set_keyboard(HangulInputContext *hic, const HangulKeyboard* keyboard)
 {
-    if (hic == NULL || keyboard == NULL)
+    if (hic == NULL)
 	return;
 
     hic->keyboard = keyboard;
+    hic->tableid = 0;
+}
+
+void
+hangul_ic_switch_keyboard_table(HangulInputContext *hic, int tableid)
+{
+    if (hic == NULL)
+        return;
+
+    hic->tableid = tableid;
 }
 
 /**
@@ -1482,7 +1493,7 @@ hangul_ic_select_keyboard(HangulInputContext *hic, const char* id)
 	id = "2";
 
     keyboard = hangul_keyboard_list_get_keyboard(id);
-    hic->keyboard = keyboard;
+    hangul_ic_set_keyboard(hic, keyboard);
 }
 
 void
@@ -1511,6 +1522,9 @@ hangul_ic_new(const char* keyboard)
     hic = malloc(sizeof(HangulInputContext));
     if (hic == NULL)
 	return NULL;
+
+    hic->keyboard = NULL;
+    hic->tableid = 0;
 
     hic->preedit_string[0] = 0;
     hic->commit_string[0] = 0;
@@ -1606,21 +1620,24 @@ hangul_ic_is_transliteration(HangulInputContext *hic)
 
 /**
  * @ingroup hangulic
- * @breif libhangul을 초기화 하는 함수.
+ * @brief libhangul을 초기화 하는 함수.
+ * @param user_defined_keyboard_path 한글 키보드 파일을 읽을 디렉토리 패스.
+ *        PATH 환경 변수와 같이 :으로 구분하여 여러개를 지정할 수 있다.
+ *        NULL을 주면 내장 기본값을 사용한다.
  *
  * libhangul의 함수를 사용하기 전에 호출해야 한다.
  */
 int
-hangul_init()
+hangul_init(const char* user_defined_keyboard_path)
 {
     int res;
-    res = hangul_keyboard_list_init();
+    res = hangul_keyboard_list_init(user_defined_keyboard_path);
     return res;
 }
 
 /**
  * @ingroup hangulic
- * @breif libhangul에서 사용한 리소스를 해제하는 함수.
+ * @brief libhangul에서 사용한 리소스를 해제하는 함수.
  *
  * libhangul의 함수의 사용이 끝나면 호출해야 한다.
  */

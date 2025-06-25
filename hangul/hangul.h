@@ -97,8 +97,10 @@ enum {
 };
 
 /* library */
-int hangul_init();
+#if ENABLE_EXTERNAL_KEYBOARDS
+int hangul_init(const char* user_defined_keyboard_path);
 int hangul_fini();
+#endif // ENABLE_EXTERNAL_KEYBOARDS
 
 /* keyboard */
 HangulKeyboard* hangul_keyboard_new(void);
@@ -137,6 +139,7 @@ void hangul_ic_set_option(HangulInputContext *hic, int option, bool value);
 void hangul_ic_set_output_mode(HangulInputContext *hic, int mode);
 void hangul_ic_set_keyboard(HangulInputContext *hic,
 			    const HangulKeyboard *keyboard);
+void hangul_ic_switch_keyboard_table(HangulInputContext* hic, int tableid);
 void hangul_ic_select_keyboard(HangulInputContext *hic,
 			       const char* id);
 void hangul_ic_connect_callback(HangulInputContext* hic, const char* event,
@@ -178,9 +181,9 @@ void    hangul_keyboard_set_value(HangulKeyboard *keyboard,
 void hangul_ic_set_combination(HangulInputContext *hic,
 	const HangulCombination *combination) LIBHANGUL_DEPRECATED;
 
-unsigned    hangul_ic_get_n_keyboards() LIBHANGUL_DEPRECATED;
-const char* hangul_ic_get_keyboard_id(unsigned index_) LIBHANGUL_DEPRECATED;
-const char* hangul_ic_get_keyboard_name(unsigned index_) LIBHANGUL_DEPRECATED;
+unsigned    hangul_ic_get_n_keyboards() /* LIBHANGUL_DEPRECATED */;
+const char* hangul_ic_get_keyboard_id(unsigned index_) /* LIBHANGUL_DEPRECATED */;
+const char* hangul_ic_get_keyboard_name(unsigned index_) /* LIBHANGUL_DEPRECATED */;
 
 #undef LIBHANGUL_DEPRECATED
 
