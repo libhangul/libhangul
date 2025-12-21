@@ -40,6 +40,11 @@ option(ENABLE_UNIT_TEST
     ON
 )
 
+option(ENABLE_TOOLS
+    "Enable/Disable tools."
+    ON
+)
+
 include(CTest)
 
 include(GNUInstallDirs)
@@ -52,7 +57,9 @@ add_subdirectory(data/hanja)
 if(ENABLE_EXTERNAL_KEYBOARDS)
 add_subdirectory(data/keyboards)
 endif()
+if(ENABLE_TOOLS)
 add_subdirectory(tools)
+endif()
 add_subdirectory(po)
 
 if(BUILD_TESTING)
