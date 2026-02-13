@@ -109,6 +109,13 @@ static const HangulCombination hangul_combination_default = {
     true
 };
 
+static const HangulCombination hangul_combination_2_noshift = {
+    countof(hangul_replace_table_2_noshift),
+    countof(hangul_replace_table_2_noshift),
+    (HangulCombinationItem*)hangul_replace_table_2_noshift,
+    true
+};
+
 static const HangulCombination hangul_combination_romaja = {
     countof(hangul_combination_table_romaja),
     countof(hangul_combination_table_romaja),
@@ -136,6 +143,15 @@ static const HangulKeyboard hangul_keyboard_2 = {
     { (ucschar*)hangul_keyboard_table_2, NULL, NULL, NULL },
     { (HangulCombination*)&hangul_combination_default, NULL, NULL, NULL },
     HANGUL_KEYBOARD_TYPE_JAMO,
+    true
+};
+
+static const HangulKeyboard hangul_keyboard_2sun = {
+    (char*)"2noshift",
+    (char*)N_("Dubeolsik Noshift"),
+    { (ucschar*)hangul_keyboard_table_2, NULL, NULL, NULL },
+    { (HangulCombination*)&hangul_combination_2_noshift, NULL, NULL, NULL },
+    HANGUL_KEYBOARD_TYPE_JAMO_NOSHIFT,
     true
 };
 
@@ -213,6 +229,7 @@ static const HangulKeyboard hangul_keyboard_ahn = {
 
 static const HangulKeyboard* hangul_builtin_keyboards[] = {
     &hangul_keyboard_2,
+    &hangul_keyboard_2sun,
     &hangul_keyboard_2y,
     &hangul_keyboard_390,
     &hangul_keyboard_3final,

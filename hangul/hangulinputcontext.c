@@ -695,15 +695,30 @@ hangul_ic_process_jamo(HangulInputContext *hic, ucschar ch)
 		}
 	    }
 	} else if (hangul_is_jungseong(ch)) {
-	    combined = hangul_ic_combine(hic, hic->buffer.jungseong, ch);
-	    if (hangul_is_jungseong(combined)) {
-		if (!hangul_ic_push(hic, combined)) {
+	    ucschar compress = 0;
+	    // For 2beol noshift
+	    // chosung + jungseong + jungseong -> chosung + jungseong
+	    if (hic->buffer.choseong) {
+		if (ch == hangul_ic_peek(hic)) { // Same jungseong
+		    compress = hangul_ic_combine(hic, 0x0000, hic->buffer.choseong);
+		}
+	    }
+
+	    if (compress) {
+		if (!hangul_ic_push(hic, compress)) {
 		    return false;
 		}
 	    } else {
-		hangul_ic_save_commit_string(hic);
-		if (!hangul_ic_push(hic, ch)) {
-		    return false;
+		combined = hangul_ic_combine(hic, hic->buffer.jungseong, ch);
+		if (hangul_is_jungseong(combined)) {
+		    if (!hangul_ic_push(hic, combined)) {
+			return false;
+		    }
+		} else {
+		    hangul_ic_save_commit_string(hic);
+		    if (!hangul_ic_push(hic, ch)) {
+			return false;
+		    }
 		}
 	    }
 	} else {
