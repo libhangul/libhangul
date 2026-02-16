@@ -1,0 +1,61 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "*" ]
+
+jobs:
+  check-formatting:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: check-format
+      run: |
+        echo "Checking format of sourcecode..."
+        find . -type f \( -name '*.c' -o -name '*.h' \) -print0 | xargs -r0 clang-format -i
+        git diff --color # --exit-code
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: install dependencies
+      run: sudo apt install autopoint check intltool libexpat1-dev pkg-config
+    - name: configure
+      run: |
+        test -f config.rpath || touch config.rpath
+        sh ./autogen.sh
+        ./configure
+    - name: make
+      run: make
+    - name: make check
+      run: make check
+    - name: make distcheck
+      run: make distcheck
+
+  build-windows:
+    env:
+      SOLUTION_FILE_PATH: .
+      BUILD_CONFIGURATION: Release
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Add MSBuild to PATH
+      uses: microsoft/setup-msbuild@v1.0.2
+
+    - name: Restore NuGet packages
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: nuget restore ${{env.SOLUTION_FILE_PATH}}
+
+    - name: Build
+      working-directory: ${{env.GITHUB_WORKSPACE}}
+      run: |
+        msbuild /m /p:platform=x64 /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
+        msbuild /m /p:platform=x86 /p:Configuration=${{env.BUILD_CONFIGURATION}} ${{env.SOLUTION_FILE_PATH}}
