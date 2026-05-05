@@ -10,7 +10,7 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: install dependencies
-      run: sudo apt install autopoint check intltool libexpat1-dev pkg-config
+      run: sudo apt install autopoint check pkgconf libexpat1-dev
     - name: configure
       run: |
         test -f config.rpath || touch config.rpath
