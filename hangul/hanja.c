@@ -501,7 +501,7 @@ hanja_table_load(const char* filename)
 	return NULL;
 #endif /* LIBHANGUL_DEFAULT_HANJA_DIC */
 
-    file = fopen(filename, "r");
+    file = fopen(filename, "rb");
     if (file == NULL) {
 	return NULL;
     }
