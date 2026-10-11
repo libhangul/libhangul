@@ -26,7 +26,6 @@
 #include <unistd.h>
 #else
 #include <io.h>
-#define strtok_r strtok_s
 #endif
 
 #ifdef HAVE_MMAP
@@ -437,10 +436,32 @@ hanja_table_match(const HanjaTable* table,
 	fseek(table->file, offset, SEEK_SET);
 
 	while (fgets(buf, sizeof(buf), table->file) != NULL) {
-	    char* save = NULL;
-	    char* p = strtok_r(buf, ":", &save);
-	    res = strcmp(p, key);
-	    if (res == 0) {
+            char* k = buf;
+            char* p = strpbrk(k, ":");
+            if (p == NULL) {                    // no key
+                break;
+            }
+
+            p[0] = '\0';
+            p++;
+
+            res = strcmp(k, key);
+            if (res == 0) {
+                char* value = p;
+                p = strpbrk(value, ":");
+                if (p == NULL || p == value) {  // no value
+                    break;
+                }
+
+                p[0] = '\0';
+                p++;
+
+                char* comment = p;
+                p = strpbrk(comment, "\r\n");
+                if (p != NULL) {
+                    p[0] = '\0';
+                }
+
                 if (*list == NULL) {
                     *list = hanja_list_new(key);
                 }
@@ -449,12 +470,8 @@ hanja_table_match(const HanjaTable* table,
                     break;
                 }
 
-		char* value   = strtok_r(NULL, ":", &save);
-		char* comment = strtok_r(NULL, "\r\n", &save);
-
-		Hanja* hanja = hanja_new(p, value, comment);
-
-		hanja_list_append_n(*list, hanja, 1);
+                Hanja* hanja = hanja_new(k, value, comment);
+                hanja_list_append_n(*list, hanja, 1);
 	    } else if (res > 0) {
 		break;
 	    }
@@ -486,7 +503,6 @@ hanja_table_load(const char* filename)
     char buf[512];
     int key_size = 5;
     char last_key[8] = { '\0', };
-    char* save_ptr = NULL;
     char* key;
     long offset;
     unsigned i;
@@ -512,11 +528,12 @@ hanja_table_load(const char* filename)
 	if (buf[0] == '#' || buf[0] == '\r' || buf[0] == '\n' || buf[0] == '\0')
 	    continue;
 
-	save_ptr = NULL;
-	key = strtok_r(buf, ":", &save_ptr);
-
-	if (key == NULL || strlen(key) == 0)
-	    continue;
+        key = buf;
+        char* p = strpbrk(key, ":");
+        if (p == NULL || p == key) {
+            continue;
+        }
+        p[0] = '\0';
 
 	if (strncmp(last_key, key, key_size) != 0) {
 	    nkeys++;
@@ -525,6 +542,8 @@ hanja_table_load(const char* filename)
     }
 
     rewind(file);
+    last_key[0] = '\0';
+
     keytable = malloc(nkeys * sizeof(keytable[0]));
     memset(keytable, 0, nkeys * sizeof(keytable[0]));
 
@@ -535,11 +554,12 @@ hanja_table_load(const char* filename)
 	if (buf[0] == '#' || buf[0] == '\r' || buf[0] == '\n' || buf[0] == '\0')
 	    continue;
 
-	save_ptr = NULL;
-	key = strtok_r(buf, ":", &save_ptr);
-
-	if (key == NULL || strlen(key) == 0)
-	    continue;
+        key = buf;
+        char* p = strpbrk(key, ":");
+        if (p == NULL || p == key) {
+            continue;
+        }
+        p[0] = '\0';
 
 	if (strncmp(last_key, key, key_size) != 0) {
 	    keytable[i].offset = offset;
