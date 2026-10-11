@@ -408,6 +408,9 @@ hanja_table_match(const HanjaTable* table,
     int low, high, mid;
     int res = -1;
 
+    if (table->nkeys == 0 || table->keytable == NULL)
+        return;
+
     low = 0;
     high = table->nkeys - 1;
 
@@ -507,7 +510,7 @@ hanja_table_load(const char* filename)
     long offset;
     unsigned i;
     FILE* file;
-    HanjaIndex* keytable;
+    HanjaIndex* keytable = NULL;
     HanjaTable* table;
 
     if (filename == NULL)
@@ -544,30 +547,32 @@ hanja_table_load(const char* filename)
     rewind(file);
     last_key[0] = '\0';
 
-    keytable = malloc(nkeys * sizeof(keytable[0]));
-    memset(keytable, 0, nkeys * sizeof(keytable[0]));
+    if (nkeys > 0) {
+        keytable = malloc(nkeys * sizeof(keytable[0]));
+        memset(keytable, 0, nkeys * sizeof(keytable[0]));
 
-    i = 0;
-    offset = ftell(file);
-    while (fgets(buf, sizeof(buf), file) != NULL) {
-	/* skip comments and empty lines */
-	if (buf[0] == '#' || buf[0] == '\r' || buf[0] == '\n' || buf[0] == '\0')
-	    continue;
+        i = 0;
+        offset = ftell(file);
+        while (fgets(buf, sizeof(buf), file) != NULL) {
+            /* skip comments and empty lines */
+            if (buf[0] == '#' || buf[0] == '\r' || buf[0] == '\n' || buf[0] == '\0')
+                continue;
 
-        key = buf;
-        char* p = strpbrk(key, ":");
-        if (p == NULL || p == key) {
-            continue;
+            key = buf;
+            char* p = strpbrk(key, ":");
+            if (p == NULL || p == key) {
+                continue;
+            }
+            p[0] = '\0';
+
+            if (strncmp(last_key, key, key_size) != 0) {
+                keytable[i].offset = offset;
+                strncpy(keytable[i].key, key, key_size);
+                strncpy(last_key, key, key_size);
+                i++;
+            }
+            offset = ftell(file);
         }
-        p[0] = '\0';
-
-	if (strncmp(last_key, key, key_size) != 0) {
-	    keytable[i].offset = offset;
-	    strncpy(keytable[i].key, key, key_size);
-	    strncpy(last_key, key, key_size);
-	    i++;
-	}
-	offset = ftell(file);
     }
 
     table = malloc(sizeof(*table));
