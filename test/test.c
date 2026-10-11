@@ -593,6 +593,64 @@ START_TEST(test_hangul_jamo_to_cjamo)
 }
 END_TEST
 
+static int
+test_hanja_table_format_helper(const char* content, const char* key)
+{
+    const char* filename = "test_hanja_format.txt";
+
+    size_t size = strlen(content);
+
+    FILE* fp = fopen(filename, "wb");
+    ck_assert(fp != NULL);
+    fwrite(content, 1, size, fp);
+    fclose(fp);
+
+    HanjaTable* table = hanja_table_load(filename);
+    ck_assert(table != NULL);
+
+    HanjaList* list = hanja_table_match_exact(table, key);
+    int res = hanja_list_get_size(list);
+    hanja_list_delete(list);
+
+    hanja_table_delete(table);
+    remove(filename);
+
+    return res;
+}
+
+START_TEST(test_hanja_table_format)
+{
+    /* https://github.com/libhangul/libhangul/issues/106 */
+    /* malformed entry: missing or incomplete value */
+    ck_assert(test_hanja_table_format_helper("", "key0") == 0);
+    ck_assert(test_hanja_table_format_helper("\n", "key0") == 0);
+    ck_assert(test_hanja_table_format_helper(":\n", "key0") == 0);
+    ck_assert(test_hanja_table_format_helper("::\n", "key0") == 0);
+    ck_assert(test_hanja_table_format_helper(":value0:\n", "key0") == 0);
+    ck_assert(test_hanja_table_format_helper(":value0:comment0\n", "key0") == 0);
+
+    ck_assert(test_hanja_table_format_helper("key0", "key0") == 0);
+    ck_assert(test_hanja_table_format_helper("key0:", "key0") == 0);
+    ck_assert(test_hanja_table_format_helper("key0::", "key0") == 0);
+    ck_assert(test_hanja_table_format_helper("key0::comment0", "key0") == 0);
+
+    ck_assert(test_hanja_table_format_helper("key0:value0", "key0") == 0);
+    ck_assert(test_hanja_table_format_helper("key0:value0\n", "key0") == 0);
+    ck_assert(test_hanja_table_format_helper("key0:value0\r", "key0") == 0);
+    ck_assert(test_hanja_table_format_helper("key0:value0\r\n", "key0") == 0);
+
+    ck_assert(test_hanja_table_format_helper("key0:value0:", "key0") == 1);
+    ck_assert(test_hanja_table_format_helper("key0:value0:\n", "key0") == 1);
+    ck_assert(test_hanja_table_format_helper("key0:value0:\r", "key0") == 1);
+    ck_assert(test_hanja_table_format_helper("key0:value0:\r\n", "key0") == 1);
+
+    ck_assert(test_hanja_table_format_helper("key0:value0:comment0", "key0") == 1);
+    ck_assert(test_hanja_table_format_helper("key0:value0:comment0\n", "key0") == 1);
+    ck_assert(test_hanja_table_format_helper("key0:value0:comment0\r", "key0") == 1);
+    ck_assert(test_hanja_table_format_helper("key0:value0:comment0\r\n", "key0") == 1);
+}
+END_TEST
+
 Suite* libhangul_suite()
 {
     Suite* s = suite_create("libhangul");
@@ -612,6 +670,10 @@ Suite* libhangul_suite()
 #endif /* ENABLE_EXTERNAL_KEYBOARDS */
     tcase_add_test(hangul, test_hangul_jamo_to_cjamo);
     suite_add_tcase(s, hangul);
+
+    TCase* hanja = tcase_create("hanja");
+    tcase_add_test(hanja, test_hanja_table_format);
+    suite_add_tcase(s, hanja);
 
     return s;
 }
