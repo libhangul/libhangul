@@ -1,0 +1,62 @@
+name: build
+on:
+  push:
+    branches:
+      - main
+      - github-actions # temporary
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  CCACHE_DIR: ${{ github.workspace }}/.ccache
+
+jobs:
+  build-autotools:
+    runs-on: ubuntu-26.04
+    steps:
+    - uses: actions/checkout@v7
+    - name: install dependencies
+      run: sudo apt install autopoint ccache check gettext libexpat1-dev pkg-config
+    - name: Cache autoconf config.cache
+      uses: actions/cache@v6
+      with:
+        path: config.cache
+        key: autoconf-${{ runner.os }}-${{ hashFiles('configure.ac') }}
+    - name: configure
+      run: |
+        test -f config.rpath || touch config.rpath
+        sh ./autogen.sh
+        ./configure --config-cache --enable-external-keyboards CC="ccache gcc"
+    - name: Cache ccache
+      uses: actions/cache@v6
+      with:
+        path: ${{ env.CCACHE_DIR }}
+        key: ccache-${{ runner.os }}-${{ github.sha }}
+        restore-keys: |
+          ccache-${{ runner.os }}-
+    - name: Configure ccache
+      run: |
+        ccache --max-size=500M
+        ccache --set-config=compression=true
+        ccache -z
+    - name: build
+      run: make -j$(nproc)
+    - name: test
+      run: make check
+    - name: ccache stats
+      run: ccache -s
+  build-cmake:
+    runs-on: ubuntu-26.04
+    steps:
+    - uses: actions/checkout@v7
+    - name: install dependencies
+      run: sudo apt install cmake check gettext libexpat1-dev pkg-config
+    - name: configure
+      run: cmake -B ${{github.workspace}}/build -S ${{github.workspace}} -DCMAKE_BUILD_TYPE=Release -DENABLE_EXTERNAL_KEYBOARDS=ON
+    - name: build
+      run: cmake --build ${{github.workspace}}/build --config Release
+    - name: test
+      run: ctest -C Release --output-on-failure
+
