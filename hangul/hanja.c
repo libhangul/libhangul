@@ -552,8 +552,9 @@ hanja_table_load(const char* filename)
         memset(keytable, 0, nkeys * sizeof(keytable[0]));
 
         i = 0;
-        offset = ftell(file);
-        while (fgets(buf, sizeof(buf), file) != NULL) {
+        for (offset = ftell(file);
+             fgets(buf, sizeof(buf), file) != NULL;
+             offset = ftell(file)) {
             /* skip comments and empty lines */
             if (buf[0] == '#' || buf[0] == '\r' || buf[0] == '\n' || buf[0] == '\0')
                 continue;
@@ -571,7 +572,6 @@ hanja_table_load(const char* filename)
                 strncpy(last_key, key, key_size);
                 i++;
             }
-            offset = ftell(file);
         }
     }
 
