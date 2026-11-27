@@ -648,6 +648,13 @@ START_TEST(test_hanja_table_format)
     ck_assert(test_hanja_table_format_helper("key0:value0:comment0\n", "key0") == 1);
     ck_assert(test_hanja_table_format_helper("key0:value0:comment0\r", "key0") == 1);
     ck_assert(test_hanja_table_format_helper("key0:value0:comment0\r\n", "key0") == 1);
+
+    /* https://github.com/libhangul/libhangul/issues/110 */
+    ck_assert(test_hanja_table_format_helper("# header\nkey0:value0:\n", "key0") == 1);
+    ck_assert(test_hanja_table_format_helper("\nkey0:value0:\n", "key0") == 1);
+    ck_assert(test_hanja_table_format_helper("invalid\nkey0:value0:\n", "key0") == 1);
+    ck_assert(test_hanja_table_format_helper(
+        "key0:value0:\n# comment\n\nkey1:value1:\n", "key1") == 1);
 }
 END_TEST
 
